@@ -1,0 +1,45 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="main posts-show">
+    <div class="container">
+      <div class="posts-show-item">
+        {% if post.user %}
+        <h4>質問者：{{ post.user }}</h4>
+        {% else %}
+        <h4>質問者：退会済みユーザー</h4>
+        {% endif %}
+        <p>
+          {{ post.title }}
+          {{ post.body | linebreaksbr }}
+        </p>
+        <div class="post-time">
+          <p>#{{ post.tag }}</p>
+          {{ post.date_updated }}
+        </div>
+      </div>
+
+      <div class="posts-index-item">
+        {% if comment.user.name %}
+        <strong><a class="userLink" href="{% url 'userList' comment.user.id %}">{{ comment.user.name }} </a></strong>
+        {{ comment.user.student_status }} {{ comment.date_added }}
+        {% else %}
+        <strong>退会済みユーザー</strong>
+        {{ comment.date_added }}
+        {% endif %}
+        <br>
+        <p>{{ comment.body | linebreaksbr }}</p> 
+      </div>
+
+      <p>コメント</p>
+      <form action="" method="POST">
+          {% csrf_token %}
+
+          {{ form.body }}
+          <input type="submit" class="btn btn-warning" value="返信する">
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="main posts-show">
+    <div class="container">
+      <div class="posts-show-item">
+
+        <form action="" method="POST">
+          {% csrf_token %}
+          <p>質問タイトル</p>
+          {{ form.title }}
+          <p>関連タグ</p>
+          {{ form.tag }}
+          <p>質問内容</p>
+          {{ form.body }}
+              <input type="submit" name="Submit" value="投稿">
+        </form>
+        {{form.errors}}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

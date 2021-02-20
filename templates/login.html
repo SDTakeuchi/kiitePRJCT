@@ -1,0 +1,24 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="main users-new">
+    <div class="container">
+      <div class="form-heading">Log in</div>
+      <div class="form users-form">
+        <div class="form-body">
+          <form method="POST" action="">
+            {% csrf_token %}
+            <p>メールアドレス</p>
+            <input name="email">
+            <p>パスワード</p>
+            <input type="password" name="password">
+            <input type="submit" value="ログイン">
+          </form>       
+          <a href="{% url 'reset_password' %}">パスワードをお忘れですか？</a>
+          <p>アカウント作成は<a href="{% url 'signup' %}">コチラ</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

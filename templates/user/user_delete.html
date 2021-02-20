@@ -1,0 +1,24 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="main posts-show">
+    <div class="container">
+      <div class="posts-show-item">
+
+        <p>本当に退会しますか？</p>
+
+        <p><b>注意</b><br>退会すると全てのユーザーデータが削除されます。<br>削除後のデータは復旧することができません。</p>
+        
+        <form action="{% url 'userDelete' %}" method="POST">
+            {% csrf_token %}
+          
+          <input type="submit" value="退会する" name="Confirm">
+          <a href="{% url 'mypage' %}" class="choice-no">キャンセル</a>
+        </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="main posts-index">
+    <div class="container">
+      <form method="GET">
+        {{ myFilter.form }}
+        <button class="btn btn-primary" type="submit">検索</button>
+      </form>
+      {% for post in posts %}
+        <div class="posts-index-item">
+          <a href="{% url 'postShow' post.id %}">{{ post.title }} #{{ post.tag  }}</a>
+        </div>
+      {% endfor %}
+    </div>
+</div>
+
+<div class="pager">
+  <!-- 前のページへのリンク -->
+  {% if posts.has_previous %}
+      <a href="?p={{ articles.previous_page_number }}">前へ</a>
+  {% endif %}
+
+  <!-- 現在のページ番号と全体のページ数 -->
+  <span>
+      {{ posts.number }} / {{ posts.paginator.num_pages }}
+  </span>
+
+  <!-- 次のページへのリンク -->
+  {% if posts.has_next %}
+      <a href="?p={{ posts.next_page_number }}">次へ</a>
+  {% endif %}
+</div>
+{% endblock %}

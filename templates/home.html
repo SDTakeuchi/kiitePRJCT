@@ -1,0 +1,130 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<!-- home section -->
+<section id="home">
+	<img id="homepic" src="{% static 'images/home-pic4.jpg' %}">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12 col-sm-12">
+				<hr>
+				<div class="fuchidori">
+					<h3><span class="bold">学習院大学 国社生だけのOB・OG相談サイト</h3>
+					<h1 class="heading">Kiite-me<span class="red">!</span></h1>
+					<a href="#about" class="smoothScroll btn btn-default">このサイトについて ↓</a>
+				</div>	
+			</div>
+		</div>
+	</div>		
+</section>
+
+<!-- about section -->
+<section id="about">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12 col-sm-12 text-center">
+				<h1 class="heading bold">Kiite-me<span class="red">!</span> って何？</h1>
+				<br>
+			</div>
+			<div class="wow fadeInUp" data-wow-delay="0.9s">
+				<div class="aboutline">
+					<h3>歴史の浅い学習院大学の国際社会科学部、<br>"国社生" だからこその就活の仕方がわからない...</h3>
+					<br>
+					<h2>そんな在学生の力になりたい！<br>そんな呼びかけに応えてくれた国社1期生を中心に立ち上げた
+						<br>
+						「国社生専用のOB・OG就活相談サイト」がここ、Kiite-me!です！</h2>
+				</div>
+			</div>
+			<hr>
+			<div class="col-md-6 col-sm-6 wow fadeInUp" data-wow-delay="0.8s">
+				<img src="{% static '/images/aboutimg.png' %}" class="img-responsive" alt="about img">
+			</div>
+			<div class="col-md-6 col-sm-6 wow fadeInUp" data-wow-delay="0.9s">
+				<h3>Our Focus</h3>
+				<p>自分がまだ国際社会科学部の学生だった頃、学部の後輩向けの就活相談イベントに参加した時によく聞かれた質問の一つが「国社ならではの就活方法ってありますか？」でした。<br>これって自分が就活していた時に実際に感じていたことだし、今の在学生だって気になっているところなんだと思います。
+					<br>
+					就活を終えて社会人生活をスタートさせた今、自分が国際社会科学部の初めてのOBとして「国社生ならではの就活ができたのか」答えは分からないまま毎日仕事に取り組んでいます。
+					<br>
+					それでも「自分達が育った学部の後輩がよりよい就活をしてもらうために」"何か" がしたくてこのようなウェブサイトを立ち上げました。
+					<br>
+					就活のことでも、授業のことでも、先輩に、在学生に、分からないことがあればなんでも聞いてみてください。
+					困ったら何でもキイテミ！<br>気軽に使ってみてください！
+					<br>
+					<br>
+					代表：武内修平（2019年度卒業生）
+				</p>
+			</div>
+		</div>
+	</div>
+</section>
+
+<!-- team section -->
+<section id="team">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12 col-sm-12">
+				<h1 class="heading bold">OB・OG業界例</h1>
+				<h2 class="subheading">他にも様々な業界のOB・OGが答えてくれます！</h2>
+			</div>
+			<div class="col-md-4 col-sm-4 col-xs-6 wow fadeIn" data-wow-delay="0.9s">
+				<div class="team-wrapper">
+					<img src="{% static 'images/team1.jpg' %}" class="img-responsive" alt="team img">
+						<div class="team-des">
+							<h4>IT業界・エンジニア</h4>
+							<h5>合気道部</h5>
+							<h3>源静香</h3>
+						</div>
+				</div>
+			</div>
+			<div class="col-md-4 col-sm-4 col-xs-6 wow fadeIn" data-wow-delay="1.3s">
+				<div class="team-wrapper">
+					<img src="{% static 'images/team2.jpg' %}" class="img-responsive" alt="team img">
+						<div class="team-des">
+							<h4>自衛隊</h4>
+							<h5>落語研究会</h5>
+							<h3>山田一郎</h3>
+						</div>
+				</div>
+			</div>
+			<div class="col-md-4 col-sm-4 col-xs-6 wow fadeIn" data-wow-delay="1.6s">
+				<div class="team-wrapper">
+					<img src="{% static 'images/team3.jpg' %}" class="img-responsive" alt="team img">
+						<div class="team-des">
+							<h4>航空業界・営業</h4>
+							<h5>他大学インカレ所属</h5>
+							<h3>田中太郎</h3>
+						</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<!-- contact section -->
+<section id="contact">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12 col-sm-12 text-center">
+				<a href="{% url 'signup' %}"> <h1 class="heading bold">今すぐ無料登録！</h1></a>
+				<h2 class="subheading">困ってたらなんでもキイテミ！OB・OGが疑問に答えます！</h2>
+			</div>
+		</div>
+	</div>
+</section>
+
+<!-- copyright section -->
+<section id="copyright">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-8 col-sm-8 col-xs-9">
+				<p>Copyright © 2020 Kiite-me! | Design: <a rel="nofollow" href="http://www.templatemo.com" target="_parent">templatemo</a></p>
+			</div>
+			<div class="col-md-4 col-sm-4 col-xs-3">
+				<a href="#home" class="smoothScroll">▲</a>
+			</div>
+		</div>
+	</div>
+</section>
+{% endblock %}

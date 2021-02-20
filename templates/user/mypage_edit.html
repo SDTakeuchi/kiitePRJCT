@@ -1,0 +1,28 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="main posts-show">
+    <div class="container">
+      <div class="posts-show-item">        
+		<img class="profile-pic" src="{{ request.user.profile_pic.url }}">
+        <form method="POST" action="" enctype="multipart/form-data">
+			{% csrf_token %}
+      <p>ユーザーネーム：</p>
+      {{ form.name }}
+      <p>ご本人様のお名前：</p>
+      {{ form.real_name }}
+      <p>メールアドレス：</p>
+      {{ form.email }}
+      <p>プロフィール画像:</p>
+      {{ form.profile_pic }}
+      <p>自己紹介:</p>   <!----------->
+      {{ form.introduction }}
+      <br>
+		<input class="btn btn-warning" type="submit" value="更新" name="Update Information">
+		</form>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
