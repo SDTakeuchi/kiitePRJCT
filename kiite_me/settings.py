@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 import os
 from pathlib import Path
 #import dj_database_url
-
+from decouple import config
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 
@@ -21,10 +21,10 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'f+9()w&%ysda358ia+zkk)yxvrh2#v_6-7!*rr+w0nj3e319x9'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = config('DEBUG', cast=bool)
 
 # ALLOWED_HOSTS = ['18.180.54.88','10.0.2.12']
 ALLOWED_HOSTS = ['*']
@@ -84,11 +84,11 @@ WSGI_APPLICATION = 'kiite_me.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'sammy',
-        'USER': 'sammy',
-        'PASSWORD': 'krnklp5296',
-        'HOST': '10.0.2.12',
-        'PORT': '5432'
+        'NAME': config('DBNAME'),
+        'USER': config('DBUSER'),
+        'PASSWORD': config('DBPASSWORD'),
+        'HOST': config('DBHOST'),
+        'PORT': config('PORT')
     }
 }
 
@@ -144,29 +144,21 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'kiiteme.info@gmail.com'
-EMAIL_HOST_PASSWORD = '9dh7gh!!??LLJDO'
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 
-#----AWS S3 BUCKETS CONFIG. for this, I did not delete ant line---------------------------------
-
-# AWS_ACCESS_KEY_ID = 'AKIARGOXG5UJPIYJ6CPM'
-# AWS_SECRET_ACCESS_KEY = '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'
-# AWS_STORAGE_BUCKET_NAME = 'dougtake-crm1-bucket'
-
-# AWS_S3_FILE_OVERWRITE = False
-# AWS_LOCATION = 'static'
-# AWS_DEFAULT_ACL = None
+#----AWS S3 BUCKETS CONFIG. for this, I did not delete ant line--------------------------
 # DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 # STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 #db_from_env = dj_database_url.config(conn_max_age=500)
 #DATABASES['default'].update(db_from_env)
-AWS_ACCESS_KEY_ID = 'AKIARGOXG5UJPIYJ6CPM'
-AWS_SECRET_ACCESS_KEY = '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'
+AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
 
-AWS_STORAGE_BUCKET_NAME = 'elasticbeanstalk-ap-northeast-1-082592591122'
-AWS_S3_FILE_OVERWRITE = False
-AWS_LOCATION = 'static'
+AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME')
+AWS_S3_FILE_OVERWRITE = config('AWS_S3_FILE_OVERWRITE', cast=bool)
+AWS_LOCATION = config('AWS_LOCATION')
 
 # AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 # STATIC_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
