@@ -68,7 +68,7 @@ class Tag(models.Model):
 class Post(models.Model):
     title = models.CharField(max_length=100, null=True)
     body = models.TextField(null=True)
-    tag = models.ForeignKey(Tag, null=True,on_delete= models.SET_NULL)
+    tag = models.ForeignKey(Tag, null=True,on_delete= models.SET_NULL, verbose_name='タグ')
     user = models.ForeignKey(CustomUser,null=True, on_delete= models.SET_NULL)
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)

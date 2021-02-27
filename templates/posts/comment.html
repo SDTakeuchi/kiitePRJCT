@@ -6,17 +6,14 @@
     <div class="container">
       <div class="posts-show-item">
         {% if post.user %}
-        <h4>質問者：{{ post.user }}</h4>
+        <h4>質問者：<a class="userLink" href="{% url 'userList' post.user.id %}">{{ post.user.name }}</a></h4>
         {% else %}
         <h4>質問者：退会済みユーザー</h4>
         {% endif %}
-        <p>
-          {{ post.title }}
-          {{ post.body | linebreaksbr }}
-        </p>
+        <p><b>{{ post.title }}</b><br>{{ post.body | linebreaksbr }}</p>
         <div class="post-time">
           <p>#{{ post.tag }}</p>
-          {{ post.date_updated }}
+          {{ post.date_updated|date:"Y/m/d f" }}
         </div>
       </div>
 

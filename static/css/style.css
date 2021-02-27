@@ -499,12 +499,12 @@ footer {
   top: 10px;
   left: 50%;
   transform: translateX(-50%);
-  height: 40px;
+  min-height: 40px;
   padding-top: 6px;
   max-width: 700px;
   background-color: #818181;
   color: #f9f9f9;
-  font-size: 17px;
+  font-size: 16px;
   font-weight: 500;
   text-align: center;
   border-radius: 10px;
@@ -626,7 +626,7 @@ footer {
 }
 
 .posts-show-item p {
-  font-size: 24px;
+  font-size: 19px;
   margin: 20px 0;
 }
 
@@ -664,8 +664,14 @@ footer {
   opacity: 0.5;
 }
 
+.posts-index-item a{
+  font-size: 16px;
+}
+
 .posts-index-item p{
-  font-size: 19px;
+  font-size: 15px;
+  color: #8f8f8f;
+  display: inline;
 }
 
 /* Form ================================ */

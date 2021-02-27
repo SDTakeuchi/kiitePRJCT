@@ -10,12 +10,13 @@
       </form>
       {% for post in posts %}
         <div class="posts-index-item">
-          <a href="{% url 'postShow' post.id %}">{{ post.title }} #{{ post.tag  }}</a>
+          <a href="{% url 'postShow' post.id %}">{{ post.title }}</a><p>　#{{ post.tag  }}</p>
         </div>
       {% endfor %}
     </div>
 </div>
 
+{% if not posts %}
 <div class="pager">
   <!-- 前のページへのリンク -->
   {% if posts.has_previous %}
@@ -32,4 +33,6 @@
       <a href="?p={{ posts.next_page_number }}">次へ</a>
   {% endif %}
 </div>
+{% endif %}
+
 {% endblock %}

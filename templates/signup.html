@@ -7,18 +7,18 @@
       <div class="form-heading">Sign up</div>
       <div class="form users-form">
         <div class="form-body">
+          <i class="bi bi-exclamation-triangle"></i><p>学習院大学の在学生および卒業生でない方の利用はご遠慮ください。</p>
   
           <form method="POST" action="">
             {% csrf_token %}
-            
+              <p>メールアドレス</p>
+              {{ form.email }}
+
               <p>ご本人様のお名前</p>
               {{ form.real_name }}
               
               <p>ユーザーネーム</p>
               {{ form.name }}
-
-              <p>メールアドレス</p>
-              {{ form.email }}
 
               <p>パスワード</p>
               {{ form.password1 }}
@@ -32,7 +32,7 @@
               <p>在籍状況</p>
               {{ form.student_status }}
 
-              <p>--------下記は卒業生のみご記入ください--------</p>
+              <br><p>--------下記は卒業生のみご記入ください--------</p>
 
               <p>業界</p>
               {{ form.industry }}

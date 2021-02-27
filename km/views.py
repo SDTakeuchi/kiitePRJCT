@@ -14,7 +14,6 @@ from kiite_me.settings import EMAIL_HOST_USER
 from . import forms
 
 # Create your views here.
-@unauthenticated_user
 def homeView (request):
 	return render(request, 'home.html')
 	
@@ -48,8 +47,8 @@ def loginView (request):
 
 		if user is not None:
 			login(request, user)
-			if user.introduction == "まだプロフィールを記入していないようです、、、":
-				messages.success(request,"おっとプロフィールの記入がまだのようです！マイページから早速記入しましょう！")   ###########
+			if user.introduction == "まだプロフィールを記入していないようです、、、" or "":
+				messages.success(request,"おっとプロフィールの記入がまだのようです！マ")   ###########
 			return redirect('postIndex')
 		else:
 			messages.info(request, "ユーザーネームかパスワードが誤っています。")
