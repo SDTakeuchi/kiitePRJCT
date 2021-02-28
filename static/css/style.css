@@ -466,6 +466,17 @@ footer {
 @media screen and (max-width: 767px) {
   .contact-info-box { margin-bottom: 20px; }
   .contact-info-box:last-child { margin-bottom: 0; }
+  #kensaku {
+    margin:5px auto 19px;
+    padding:7px 42%;
+    display:block;
+    font-size: 15px;
+    align-self: center;
+  }
+  .kensakutag {
+    display: block;
+    margin: 6px 0px 4px;
+  }
 }
 
 @media (max-width: 450px) {
@@ -544,6 +555,16 @@ footer {
   width: 90%;
   padding-left: 25px;
   text-align: left;
+}
+
+.kensakutag {
+  display: inline-block;
+  margin-bottom:24px;
+}
+
+#kensaku {
+  margin-left: 40px;
+  margin-bottom: 5px;
 }
 
 /* posts/show ================================ */

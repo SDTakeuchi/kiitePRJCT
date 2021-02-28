@@ -5,8 +5,13 @@
 <div class="main posts-index">
     <div class="container">
       <form method="GET">
-        {{ myFilter.form }}
-        <button class="btn btn-primary" type="submit">検索</button>
+        {{ myFilter.form.title.label_tag }}
+        {{ myFilter.form.title }}
+        <div class="kensakutag">
+        {{ myFilter.form.tag.label_tag }}
+        {{ myFilter.form.tag }}
+        </div>
+        <button id="kensaku" class="btn btn-primary" type="submit">検索</button>
       </form>
       {% for post in posts %}
         <div class="posts-index-item">
