@@ -8,4 +8,4 @@
 Webサーバー 　：NginX<br>
 
 ドメイン取得　：お名前ドットコム<br>
-https照明書　 ：Let's Encrypt (Certbot)
+https照明書   ：Let's Encrypt (Certbot)
