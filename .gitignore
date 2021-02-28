@@ -1,5 +1,0 @@
-.env
-uwsgi_params
-runtime.txt
-mysite_nginx.conf
-hello_uwsgi.ini
