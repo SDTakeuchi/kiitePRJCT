@@ -467,7 +467,7 @@ footer {
   .contact-info-box { margin-bottom: 20px; }
   .contact-info-box:last-child { margin-bottom: 0; }
   #kensaku {
-    margin:5px auto 19px;
+    margin: 5px auto 19px!important;
     padding:7px 42%;
     display:block;
     font-size: 15px;
