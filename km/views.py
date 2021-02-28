@@ -51,7 +51,7 @@ def loginView (request):
 				messages.success(request,"プロフィールの記入がまだのようです！マイページから記入しましょう！")   ###########
 			return redirect('postIndex')
 		else:
-			messages.info(request, "ユーザーネームかパスワードが誤っています。")
+			messages.info(request, "メールアドレスかパスワードが誤っています。")
 
 	context={}
 	return render(request, 'login.html', context)
