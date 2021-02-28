@@ -1,5 +1,4 @@
-# kiite-me# kiite-meSQLite-master
-
+# kiite-me
 Vars
 
 venv = myprojectenv
