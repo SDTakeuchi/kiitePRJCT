@@ -7,5 +7,5 @@
 インフラ　　　：AWS （VPC, EC2, S3, Route53）<br>
 Webサーバー 　：NginX<br>
 
-ドメイン取得　：お名前ドットコム
+ドメイン取得　：お名前ドットコム<br>
 https照明書　 ：Let's Encrypt (Certbot)
