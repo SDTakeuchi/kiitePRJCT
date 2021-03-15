@@ -1,0 +1,49 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="main posts-show">
+    <div class="container">
+      <div class="posts-show-item">
+        <div class="asker">
+          {% if post.user.name %}
+          <img class="profile-pic" alt="profile image" src="{{ post.user.profile_pic.url }}">
+          <h4><a class="userLink" href="{% url 'userList' post.user.id %}">{{ post.user.name }}</a></h4> <!-- ####### -->
+          {% else %}
+          <img class="profile-pic" alt="profile image" src="/static/images/profile-icon-png-898.png">
+          <h4>退会済みユーザー</h4>
+          {% endif %}
+        </div>
+        <p>
+          {{ post.title }}
+          {{ post.body | linebreaksbr }}
+        </p>
+        <div class="post-time">
+          <p>#{{ post.tag }}</p>
+          {{ post.date_updated|date:"Y/m/d H:i" }}
+        </div>
+      </div>
+
+      <div class="posts-index-item">
+        {% if comment.user.name %}
+        <strong><a class="userLink" href="{% url 'userList' comment.user.id %}">{{ comment.user.name }} </a></strong>
+        {{ comment.user.student_status }} {{ comment.date_added|date:"Y/m/d H:i" }}
+        {% else %}
+        <strong>退会済みユーザー</strong>
+        {{ comment.date_added|date:"Y/m/j H:i" }}
+        {% endif %}
+        <br>
+        <p>{{ comment.body | linebreaksbr }}</p> 
+      </div>
+
+      <p id="commentbackhere">コメント</p>
+      <form action="" method="POST">
+          {% csrf_token %}
+          <textarea name="body" cols="40" rows="10" required="" id="id_comment_body"></textarea>
+          <input type="submit" class="btn btn-warning" value="返信する">
+      </form>
+
+    </div>
+  </div>
+  <div class="emptybox"></div>
+{% endblock %}

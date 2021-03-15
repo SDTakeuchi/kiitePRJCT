@@ -1,0 +1,48 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="main posts-index">
+    <div class="container">
+      <form method="GET">
+        {{ myFilter.form.title.label_tag }}
+        {{ myFilter.form.title }}
+        <div class="kensakutag">
+        {{ myFilter.form.tag.label_tag }}
+        {{ myFilter.form.tag }}
+        </div>
+        <button id="kensaku" class="btn btn-primary" type="submit">検索</button>
+      </form>
+      <div class="hitnum">
+        <p>検索結果：{{ all_posts|length }} 件 ( {{ posts|length }} 件表示)</p>
+      </div>
+      {% for post in posts %}
+        <div class="posts-index-item">
+          <a href="{% url 'postShow' post.id %}">{{ post.title }}</a><p>　#{{ post.tag  }}</p>
+        </div>
+      {% endfor %}
+    </div>
+</div>
+
+<div class="pager">
+  <!-- 前のページへのリンク -->
+  {% if posts.has_previous %}
+      <a href="?p={{ articles.previous_page_number }}">前へ</a>
+  {% endif %}
+
+  <!-- 現在のページ番号と全体のページ数 -->
+  <span>
+      {{ posts.number }} / {{ posts.paginator.num_pages }}
+  </span>
+
+  <!-- 次のページへのリンク -->
+  {% if posts.has_next %}
+      <a href="?p={{ posts.next_page_number }}">次へ</a>
+  {% endif %}
+</div>
+<a href="{% url 'postNew' %}" class="newpostlink">
+  <svg xmlns="http://www.w3.org/2000/svg" width="33" height="33" fill="currentColor" class="bi bi-plus-square-fill spver" viewBox="0 0 16 16">
+    <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3a.5.5 0 0 1 1 0z"/>
+  </svg>
+</a>
+{% endblock %}

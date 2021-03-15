@@ -1,0 +1,211 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<!-- home section -->
+<section id="home">
+	<img id="homepic" src="{% static 'images/home-pic4.jpg' %}">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12 col-sm-12">
+				<hr>
+				<div class="fuchidori">
+					<h3><span class="bold">学習院大学 国社生だけのOB・OG相談サイト</h3>
+					<h1 class="heading">Kiite-me<span class="red">!</span></h1>
+					<!-- <a href="#about" class="smoothScroll btn btn-default">このサイトについて ↓</a> -->
+				</div>	
+			</div>
+		</div>
+	</div>		
+</section>
+
+<!-- about section -->
+<section id="about">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12 col-sm-12 text-center">
+				<h1 class="heading bold">Kiite-me<span class="red">!</span><br class="br-sp"> って何？</h1>
+				<br>
+			</div>
+			<div class="wow fadeInUp" data-wow-delay="0.9s">
+				<div class="aboutline">
+					<h3>歴史の浅い学習院大学の国際社会科学部、<br><br>国社生らしい就活の仕方がわからない...<br>でも就活の相談ができる先輩もいない...</h3>
+					<br>
+					<h2>そんな国社の在学生専用の<br>
+						「OB・OG就活相談サイト」<br class="br-sp">がここ、Kiite-me<span class="red">!</span>です！</h2>
+				</div>
+			</div>
+			<hr>
+		</div>
+	</div>
+</section>
+
+
+<section id="howto">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12 col-sm-12">
+				<h1 class="heading bold">使い方</h1>
+				<h2 class="subheading">ようするに、知恵袋サイトなんです</h2>
+				<div class="flexdiv">
+					<div class="docspace">
+						<p>使い方はカンタン！</p>
+						<p>質問系サイトのように、</p>
+						<ul>
+							<li>質問のタイトル (概要)</li>
+							<li>ハッシュタグ</li>
+							<li>詳細内容</li>
+						</ul>
+						<p>の3つを記入して投稿するだけ！</p>
+						<br>
+						<p>卒業生だけでなく、在学生同士のやりとりも可能です<br>なんでも聞いてみましょう！</p>
+					</div>
+					<div class="imgspace">
+						<img src="{%static 'images/howto.png' %}" alt="image showing how to use">
+					</div>
+				</div>
+			</div>
+		</div>
+		<hr>
+	</div>
+</section>
+			
+<section id="faq">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12 col-sm-12 text-center">
+				<h1 class="heading bold">よくある質問</h1>
+				<h2 class="subheading">やっぱり気になりますよね、ソコ</h2>
+				<br>
+			</div>
+			<div class="wow fadeInUp" data-wow-delay="0.9s">
+					<div class="cp_actab">
+					<input id="tab-one" type="checkbox" name="tabs">
+					<label for="tab-one">質問していいのは就活のことだけ？</label>
+						<div class="cp_actab-content">
+							<p>そんなことはないです！<br>
+								就活以外にも授業や留学のことなどなんでもお聞きください。<br>
+								質問内容に合わせたハッシュタグを用意しているのでぜひ活用してください！</p>
+						</div>
+					</div>
+					
+					<div class="cp_actab">
+					<input id="tab-two" type="checkbox" name="tabs">
+					<label for="tab-two">お金はかかりますか？</label>
+						<div class="cp_actab-content">
+							<p>いいえ！<br>
+								完全無料なので有料プランも課金システムもないです。<br>
+								学生時代に学部事務室のお手伝いをしていた卒業生が中心となって始めたボランティアサービスなので、<br>
+								安心してご利用いただけます！</p>
+						</div>
+					</div>
+			
+					<div class="cp_actab">
+					<input id="tab-three" type="checkbox" name="tabs">
+					<label for="tab-three">質問に答える卒業生はどんな人？</label>
+						<div class="cp_actab-content">
+							<p>国社の1期生と2期生を中心にメーカー、商社、IT、通信、広告業界などなど、<br>
+								業界も会社規模も多様なメンバーが卒業生として参加しています！</p>
+						</div>
+					</div>
+			</div>
+			<hr>
+		</div>
+	</div>
+</section>
+
+
+<!-- team section -->
+<section id="team">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12 col-sm-12">
+				<h1 class="heading bold">OB・OG紹介</h1>
+				<h2 class="subheading">他にも様々な業界のOB・OGが答えてくれます！</h2>
+			</div>
+			<div class="col-md-4 col-sm-4 col-xs-6 wow fadeIn" data-wow-delay="0.9s">
+				<div class="team-wrapper">
+					<img src="{% static 'images/team1.jpg' %}" class="img-responsive" alt="team img">
+					<div class="team-des">
+						<h4>IT業界・エンジニア</h4>
+						<h5>2020年度卒業生</h5>
+						<h3>源静香</h3>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4 col-sm-4 col-xs-6 wow fadeIn" data-wow-delay="1.3s">
+				<div class="team-wrapper">
+					<img src="{% static 'images/dougpic.jpg' %}" class="img-responsive" alt="team img">
+					<div class="team-des">
+						<h4>広告代理店</h4>
+						<h5>2019年度卒業生</h5>
+						<h3>武内修平</h3>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4 col-sm-4 col-xs-6 wow fadeIn" data-wow-delay="1.6s">
+				<div class="team-wrapper">
+					<img src="{% static 'images/toda1.jpg' %}" class="img-responsive" alt="team img">
+					<div class="team-des">
+						<h4>航空系商社</h4>
+						<h5>2019年度卒業生</h5>
+						<h3>戸田健太郎</h3>
+					</div>
+				</div>
+			</div>
+		</div><hr>
+	</div>
+</section>
+
+
+	<div class="container">
+		<div class="row">
+			<div class="col-md-6 col-sm-6 wow fadeInUp" data-wow-delay="0.8s">
+				<img src="{% static 'images/homepic6vert.jpg' %}" class="pcver img-responsive" alt="about img">
+			</div>
+			<div class="col-md-6 col-sm-6 wow fadeInUp" data-wow-delay="0.9s">
+				<h3>Message</h3>
+				<p>自分がまだ国社の学生だった頃、学部の後輩向けの就活相談イベントに参加した時によく聞かれた質問の一つが「国社ならではの就活方法ってありますか？」でした。<br>
+					これって自分が就活していた時に実際に感じていたことだし、今の在学生だって気になっているところなんだと思います。<br>
+					就活を終えて社会人生活をスタートさせた今、自分が国際社会科学部の初めてのOBとして「国社生ならではの就活ができたのか」答えは分からないまま毎日仕事に取り組んでいます。<br>
+					新型ウイルスの影響でＯＢ・ＯＧ訪問や先輩談をする機会が減ってしまった今こそ、<br>
+					自分達が育った学部の後輩のために "何か" がしたくてこのウェブサイトを立ち上げました。
+					<br>
+					就活のことでも、授業のことでも、先輩に、在学生に、分からないことがあればなんでも聞いてみてください。
+					困ったら何でもキイテミ！<br>気軽に使ってみてください！
+					<br>
+					<br>
+					代表：武内修平（2019年度卒業生）
+				</p>
+				<img src="{% static 'images/homepic6hori.jpg' %}" class="spver img-responsive" alt="about img">
+			</div>
+		</div>
+	</div>
+
+<!-- contact section -->
+<section id="contact">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12 col-sm-12 text-center">
+				<a href="{% url 'signup' %}"><h2 class="heading bold">登録はコチラ!</h2></a>
+				<h2 class="subheading">困ったらなんでもキイテミ！<br class="br-sp">OB・OGが疑問に答えます！</h2>
+			</div>
+		</div>
+	</div>
+</section>
+
+<!-- copyright section -->
+<section id="copyright">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-8 col-sm-8 col-xs-9">
+				<p>Copyright © {% now 'Y' %} Kiite-me! | Design: <a rel="nofollow" href="http://www.templatemo.com" target="_parent">templatemo</a></p>
+			</div>
+			<div class="col-md-4 col-sm-4 col-xs-3">
+				<a href="#home" class="smoothScroll">▲</a>
+			</div>
+		</div>
+	</div>
+</section>
+{% endblock %}

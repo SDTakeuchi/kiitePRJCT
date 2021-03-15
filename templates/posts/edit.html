@@ -1,0 +1,23 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block content %}
+<div class="main posts-show">
+    <div class="container">
+      <div class="posts-show-item">
+        <form action="" method="POST">
+          {% csrf_token %}
+          <p>質問タイトル</p>
+          {{ form.title|add_class:"newpost-title" }}
+          <p>関連タグ</p>
+          {{ form.tag|add_class:"newpost-tag" }}
+          <p>質問内容</p>
+          {{ form.body|add_class:"newpost-body" }}
+              <input type="submit" value="投稿" name="Submit">
+        </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

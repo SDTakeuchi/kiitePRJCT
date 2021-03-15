@@ -1,0 +1,36 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block content %}
+
+    <div class="main users-new">
+        <div class="container">
+        <div class="form-heading">Contact us</div>
+        <div class="form users-form">
+            <div class="form-body">
+    
+            <form method="POST" action="">
+                {% csrf_token %}
+                
+                <p>連絡先メールアドレス</p>
+                {% if request.user.is_authenticated %}
+                    <input type="email" name="toEmail" required id="id_toEmail" value="{{ request.user.email }}">
+                {% else %}
+                    {{ form.toEmail }}
+                {% endif %}
+
+                <p>お問い合わせ内容</p>
+                {{ form.title }}
+
+                <p>内容</p>
+                {{ form.body }}
+
+                <input type="submit" name="ContactForm" value="送信">
+            </form>
+            {{ form.errors }}
+            </div>
+        </div>
+        </div>
+    </div>
+
+{% endblock %}

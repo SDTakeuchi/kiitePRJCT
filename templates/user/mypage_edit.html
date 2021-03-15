@@ -1,0 +1,261 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="main posts-show">
+    <div class="container">
+      <div class="posts-show-item">
+        <div class="image-container" id="id_image_container">
+		      <img id="edit-profile-pic" src="{{ request.user.profile_pic.url }}" alt="profile picture">
+          <div class="middle" id="id_middle_container">
+            <div class="text" id="id_text">
+              <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-camera" viewBox="0 0 16 16">
+                <path d="M15 12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h1.172a3 3 0 0 0 2.12-.879l.83-.828A1 1 0 0 1 6.827 3h2.344a1 1 0 0 1 .707.293l.828.828A3 3 0 0 0 12.828 5H14a1 1 0 0 1 1 1v6zM2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4H2z"/>
+                <path d="M8 11a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5zm0 1a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM3 6.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+        
+
+        <div class="mb-2" id="id_image_crop_confirm">
+          <span id="id_cancel" class="cancelbtn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-x-octagon" viewBox="0 0 16 16">
+              <path d="M4.54.146A.5.5 0 0 1 4.893 0h6.214a.5.5 0 0 1 .353.146l4.394 4.394a.5.5 0 0 1 .146.353v6.214a.5.5 0 0 1-.146.353l-4.394 4.394a.5.5 0 0 1-.353.146H4.893a.5.5 0 0 1-.353-.146L.146 11.46A.5.5 0 0 1 0 11.107V4.893a.5.5 0 0 1 .146-.353L4.54.146zM5.1 1L1 5.1v5.8L5.1 15h5.8l4.1-4.1V5.1L10.9 1H5.1z"/>
+              <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+            </svg>
+          </span>
+          <span id="id_confirm" class="confirmbtn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-check-square" viewBox="0 0 16 16">
+            <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+            <path d="M10.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.235.235 0 0 1 .02-.022z"/>
+            </svg>
+          </span>
+        </div>
+        <form method="POST" action="" enctype="multipart/form-data">
+			{% csrf_token %}
+      <!-- <p>プロフィール画像:</p> -->
+      <input type="file" name="profile_pic" style="display:none;" id="id_profile_image" onchange="readURL(this)">
+      <p>ユーザーネーム：</p>
+      {{ form.name }}
+      <p>ご本人様のお名前：</p>
+      {{ form.real_name }}
+      <p>メールアドレス：</p>
+      {{ form.email }}
+      {% if request.user.student_status == '卒業生' %}
+      <p>業界：</p>
+      {{ form.industry }}
+      <p>職種：</p>
+      {{ form.job_type }}
+      {% endif %}
+      <p>自己紹介:</p>   <!----------->
+      {{ form.introduction }}
+      <br>
+		<input class="btn btn-warning" type="submit" value="更新" name="Update Information">
+		</form>
+      </div>
+    </div>
+  </div>
+
+<script type="text/javascript">
+  var cropper;
+	var imageFile;
+	var base64ImageString;
+	var cropX;
+	var cropX;
+	var cropWidth;
+	var cropHeight;
+
+  enableImgageOverLay()
+
+  function readURL(input){
+    if(input.files && input.files[0]){
+      var reader = new FileReader();
+      reader.onload = function(e){
+        disableImageOverLay()
+        var image = e.target.result
+        var imageField = document.getElementById("edit-profile-pic")
+        imageField.src = image
+        cropper = new Cropper(imageField, {
+					aspectRatio: 1/1,
+					crop(event) {
+						// console.log("CROP START")
+						// console.log("x: " + event.detail.x);
+						// console.log("y: " + event.detail.y);
+						// console.log("width: " + event.detail.width);
+						// console.log("height: " + event.detail.height);
+						setImageCropProperties(
+							image,
+							event.detail.x,
+							event.detail.y,
+							event.detail.width,
+							event.detail.height
+						)
+					},
+				});
+      };
+      reader.readAsDataURL(input.files[0]);
+    }
+  };
+
+  function setImageCropProperties(image, x, y, width, height){
+		imageFile = image
+		cropX = x
+		cropY = y
+		cropWidth = width
+		cropHeight = height
+	}
+
+  function enableImgageOverLay(){
+    var text = document.getElementById("id_text")
+    text.style.backgroundColor = "gray"
+    text.style.color = "white"
+    text.style.fontSize = "16px"
+    text.style.padding = "8px 14px"
+    text.style.borderRadius = "15%"
+    text.style.cursor = "pointer"
+
+    var profileImage = document.getElementById("edit-profile-pic")
+    profileImage.style.opacity = "1"
+    profileImage.style.display = "block"
+    profileImage.style.width = "100%"
+    profileImage.style.height = "auto"
+    profileImage.style.transition = ".5s ease"
+    profileImage.style.backfaceVisibility = "hidden"
+    profileImage.style.cursor = "pointer"
+
+    var middleContainer = document.getElementById("id_middle_container")
+    middleContainer.style.opacity = ".3"
+    middleContainer.style.position = "absolute"
+    middleContainer.style.top = "50%"
+    middleContainer.style.left = "50%"
+    middleContainer.style.transform = "translate(-50%, -50%)"
+
+    var imageContainer = document.getElementById("id_image_container")
+    imageContainer.style.position = "relative"
+    imageContainer.style.width = "100px"
+    imageContainer.addEventListener("mouseover", function(event){
+      profileImage.style.opacity = "0.3"
+      middleContainer.style.opacity = "1"
+    })
+    imageContainer.addEventListener("mouseout", function(event){
+      profileImage.style.opacity = "1"
+      middleContainer.style.opacity = "0.3"
+    });
+    imageContainer.addEventListener("click", function(event){
+      document.getElementById("id_profile_image").click()
+    })
+    var cropConfirm = document.getElementById("id_image_crop_confirm")
+    cropConfirm.style.display = "none"
+  }
+  function disableImageOverLay(){
+      var profileImage = document.getElementById("edit-profile-pic")
+      profileImage.style.borderRadius = "0%"
+      var text = document.getElementById("id_text")
+      var imageContainer = document.getElementById("id_image_container")
+      imageContainer.style.width = "80%"
+      imageContainer.style.maxWidth = "550px"
+      imageContainer.style.height = "auto"
+
+      var middleContainer = document.getElementById("id_middle_container")
+
+      imageContainer.removeEventListener("mouseover",function(event){
+      // profileImage.style.opacity = "0.3"
+      // middleContainer.style.opacity = "1"
+      })
+      imageContainer.removeEventListener("mouseout",function(event){
+      // profileImage.style.opacity = "1"
+      // middleContainer.style.opacity = "0.2"
+      })
+      profileImage.style.opacity = "1"
+      middleContainer.style.opacity = "0.3"
+      text.style.opacity = "0"
+      text.style.cursor= "default"
+
+      document.getElementById('id_image_container').removeEventListener("click", function(event){
+        // event.preventDefault();
+      })
+
+      document.getElementById("id_profile_image"),addEventListener("click", function(event){
+        event.preventDefault();
+      })
+
+      var cropConfirm = document.getElementById("id_image_crop_confirm")
+      cropConfirm.style.display = "inline-block"
+
+      var confirm = document.getElementById("id_confirm")
+      confirm.addEventListener("click", function(event){
+        confirm.style.boxShadow="none"
+        console.log("Sending crop data for processing...")
+        cropImage(
+          imageFile, 
+          cropX, 
+          cropY, 
+          cropWidth,
+          cropHeight
+        )
+      })
+      var cancel = document.getElementById("id_cancel")
+      cancel.addEventListener("click", function(event){
+        cancel.style.boxShadow="none"
+        //todo
+        console.log("reloading window...")
+        window.location.reload();
+      })
+    }
+
+    function isImageSizeValid(image){
+      console.log("max size: {{DATA_UPLOAD_MAX_MEMORY_SIZE}}")
+      var startIndex = image.indexOf("base64,") + 7;
+      var base64str = image.substr(startIndex);
+      var decoded = atob(base64str);
+      console.log("FileSize: " + decoded.length);
+      if(decoded.length>= "{{DATA_UPLOAD_MAX_MEMORY_SIZE}}"){
+        return null
+      }
+      return base64str
+    }
+
+    function cropImage(image, x, y, width, height){
+      base64ImageString = isImageSizeValid(image)
+
+      if(base64ImageString != null){
+        var requestData = {
+          "csrfmiddlewaretoken": "{{ csrf_token }}",
+          "image": base64ImageString,
+          "cropX": cropX,
+          "cropY": cropY,
+          "cropWidth": cropWidth,
+          "cropHeight": cropHeight
+        }
+        // displayLoadingSpinner(true)
+        $.ajax({
+          type: 'POST',
+          dataType: "json",
+          url: "{% url 'crop_image' user_id=form.initial.id %}",
+          data: requestData,
+          timeout: 10000,
+          success: function(data) {
+            if(data.result == "success"){
+              document.getElementById("id_cancel").click()
+            }
+            else if(data.result == "error"){
+              alert(data.exception)
+              document.getElementById("id_cancel").click()
+            }
+          },
+          error: function(data) {
+            console.error("ERROR...", data)
+          },
+          complete: function(data){
+            // displayLoadingSpinner(false)
+          }
+        });
+      }
+      else{
+        alert("10 MB 以下の画像ファイルをご使用ください");
+        document.getElementById("id_cancel").click()
+      }
+    }
+</script>
+{% endblock %}

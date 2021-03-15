@@ -1,0 +1,33 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="main mypage-show">
+    <div class="container">
+      <div class="mypage-show-item">
+        
+		<img class="profile-pic" src="{{ user.profile_pic.url }}">
+		<div class="user-info">
+			<h2>{{ user.name }}</h2>
+			{{ user.student_status }}
+			<p>{{ user.entry_year }}年度入学</p>
+			{% if user.student_status == "卒業生" %}
+				<p>業界：{{ user.industry }}</p>
+				<p>職種：{{ user.job_type }}</p>
+			{% endif %}
+			<p>{{ user.introduction }}</p> 
+		</div>
+
+      </div>
+    </div>
+  </div>
+
+
+<br>
+<!-- <div class="col-md-3">
+	<div class="card card-body">
+		<a class="btn btn-warning" href="{% url 'mypageEdit' %}">プロフィール情報を更新する</a>
+	</div>
+</div> -->
+
+{% endblock %}
