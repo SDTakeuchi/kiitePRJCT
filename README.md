@@ -162,7 +162,7 @@ Please DO NOT sign up, since this service is limited to the Gakushuin University
 
 Please check out the demo site below instead, thank you.
 
-<p>Demo ver.：ttp://18.177.150.91:8000 （Authentication is disabled, you can walk around the website.）</p>
+<p>Demo ver.：htp://18.177.150.91:8000 （Authentication is disabled, you can walk around the website.）</p>
 
 # Features
 
