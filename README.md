@@ -70,6 +70,7 @@
 - Django==3.1.4
 - django-filter==2.4.0
 - django-storages==1.11.1
+- django-widget-tweaks==1.4.8
 - Eel==0.12.4
 - future==0.18.2
 - gevent==21.1.0
@@ -186,6 +187,7 @@ Please check out the demo site below instead, thank you.
 - Django==3.1.4
 - django-filter==2.4.0
 - django-storages==1.11.1
+- django-widget-tweaks==1.4.8
 - Eel==0.12.4
 - future==0.18.2
 - gevent==21.1.0
