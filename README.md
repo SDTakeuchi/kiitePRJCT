@@ -169,7 +169,7 @@ Please check out the demo site below instead, thank you.
 
 <p>Python / Django</p>
 <p>Cropperjs for avater image edit</p>
-<p>PostgreSQL (Please note that SQLite is used on Demo site.)</p>
+<p>PostgreSQL (Please note that SQLite is used on Demo site instead.)</p>
 <p>AWS （VPC, EC2, S3, Route53）</p>
 <p>NginX</p>
 <p>Google Anaytics 4</p>
