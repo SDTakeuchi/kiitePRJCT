@@ -49,7 +49,7 @@
 <p>言語　　　　　：Python</p>
 <p>フレームワーク：Django</p>
 <p>JSライブラリ　：Croppperjs（プロフィール画像のトリミング）</p>
-<p>データベース　：PostgreSQL</p>
+<p>データベース　：PostgreSQL（なおデモ環境ではSQLiteを使用しております。）</p>
 <p>インフラ　　　：AWS （VPC, EC2, S3, Route53）</p>
 <p>Webサーバー 　：NginX</p>
 
@@ -169,7 +169,7 @@ Please check out the demo site below instead, thank you.
 
 <p>Python / Django</p>
 <p>Cropperjs for avater image edit</p>
-<p>PostgreSQL</p>
+<p>PostgreSQL (Please note that SQLite is used on Demo site.)</p>
 <p>AWS （VPC, EC2, S3, Route53）</p>
 <p>NginX</p>
 <p>Google Anaytics 4</p>
