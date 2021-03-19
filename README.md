@@ -56,7 +56,7 @@
 <p>ドメイン取得　：お名前ドットコム</p>
 <p>SSL照明書　 　：Let's Encrypt (Certbot)</p>
 
-<p>計測ツール　　：Google Anaytics 4</p>
+<p>計測ツール　　：Google Anaytics 4, UserHeat</p>
 
 # Requirement
 
@@ -173,6 +173,7 @@ Please check out the demo site below instead, thank you.
 <p>AWS （VPC, EC2, S3, Route53）</p>
 <p>NginX</p>
 <p>Google Anaytics 4</p>
+<p>UserHeat</p>
 
 
 # Requirement
