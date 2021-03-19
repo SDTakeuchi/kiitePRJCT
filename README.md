@@ -114,6 +114,9 @@ python manage.py migrate
 python manage.py runserver
 ```
 
+※requirements.txtをpip installする際にuwsgiのインストールが上手くいかない場合があります。
+その際にはお手数ですが、requirements.txtより「uWSGI==2.0.19.1」の記載を消去していただくとpip installが完了されるようになります。ご確認の程よろしくお願いいたします。
+
 # Author
 
 作成者 : 武内修平 / [Douglas Shuhei Takeuchi](https://github.com/SDTakeuchi)
@@ -231,6 +234,8 @@ pip install -r requirements.txt
 python manage.py migrate
 python manage.py runserver
 ```
+! There may be issuses when you run "pip install -r requirements.txt".
+  In that case, I kindly ask you to erace "uWSGI==2.0.19.1" in requirements.txt, then re-run "pip install -r requirements.txt".
 
 # Author
 
