@@ -831,7 +831,7 @@ footer {
 .posts-index-item p{
   font-size: 15px;
   color: #8f8f8f;
-  display: inline;
+  display: inline !important;
 }
 .newpost-title{
   height: 55px;

@@ -1,5 +1,5 @@
 # Kiite-me!（学部密着型の就活相談サイト） 
-<h4>ENG is below Japanese</h4>
+<h4>English is below Japanese</h4>
 
 # Description
 
@@ -58,6 +58,18 @@
 
 <p>計測ツール　　：Google Analytics 4, UserHeat</p>
 
+【機能一覧】
+
+☆知恵袋サイトを参考に質問投稿、コメントの投稿、プロフィールの編集が可能
+
+☆運営スタッフが特定のユーザーグループ（卒業生のみ、在学生のみなど）へのメールでのお知らせが可能となる簡易フォームを作成　
+
+　※デモ環境 ログイン後に[http://18.177.150.91:8000/staff_only]にて確認可能
+　　
+☆メールアドレスによる二段階認証
+
+　※なおデモ環境、およびgit cloneによるローカル環境においては[http://18.177.150.91:8000/signup]にて仮登録を飛ばしての本登録が可能となっております。
+
 # Requirement
 
 - asgiref==3.3.1
@@ -84,6 +96,7 @@
 - Pillow==7.2.0
 - psycopg2==2.8.6
 - python-dateutil==2.8.1
+- python-decouple==3.4
 - pytz==2020.5
 - requests==2.25.1
 - requests-oauthlib==1.3.0
@@ -178,6 +191,17 @@ Please check out the demo site below instead, thank you.
 <p>Google Analytics 4</p>
 <p>UserHeat</p>
 
+<h3>Functions</h3>
+
+☆You can post your questions, and answer and comment to other users' qustions. Plus you can customize your profile page as well.
+
+☆Small form is provided so that the members of management team can send email to specific user groups including alumni, and graduates.
+
+　※After login, move to [http://18.177.150.91:8000/staff_only]
+　　
+☆two-step verification
+
+　※on Demp site and your local environment,you can go to [http://18.177.150.91:8000/signup] to sign up without two-step verification.
 
 # Requirement
 
@@ -205,6 +229,7 @@ Please check out the demo site below instead, thank you.
 - Pillow==7.2.0
 - psycopg2==2.8.6
 - python-dateutil==2.8.1
+- python-decouple==3.4
 - pytz==2020.5
 - requests==2.25.1
 - requests-oauthlib==1.3.0

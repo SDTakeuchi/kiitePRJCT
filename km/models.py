@@ -38,6 +38,9 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     #----for-alumni-------------
     industry = models.CharField(max_length=50, blank=True, null=True)
     job_type = models.CharField(max_length=50, blank=True, null=True)
+    #----for-new-user---------------
+    key = models.CharField(max_length=255, unique=True, null=True)
+    expiration_date = models.DateTimeField(blank=True, null=True)
     #--------------------------------
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)

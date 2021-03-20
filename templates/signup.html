@@ -35,7 +35,7 @@
               <p>在籍状況</p>
               {{ form.student_status }}
 
-              <br><p>--------下記は卒業生のみご記入ください--------</p>
+              <p><br>--------下記は卒業生のみご記入ください--------</p>
 
               <p>業界</p>
               {{ form.industry }}
@@ -43,11 +43,11 @@
               <p>職種</p>
               {{ form.job_type }}
 
+              {{ form.errors }}
               <p>登録することで、<a href="{% url 'terms_of_use' %}" target="_blank" rel="noopener noreferrer">利用規約</a>と<a href="{% url 'privacy_policy' %}" target="_blank" rel="noopener noreferrer">プライバシーポリシー</a>に同意したものとみなされます。</p>
 
             <input type="submit"  id="submit" name="Create User" value="登録">
           </form>
-          {{ form.errors }}
           <p>すでにアカウントをお持ちの方は<a href="{% url 'login'%}">コチラ</a></p>
         </div>
       </div>

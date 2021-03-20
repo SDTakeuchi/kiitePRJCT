@@ -1,9 +1,11 @@
 from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django import  forms
 from .models import *
 
+User = get_user_model()
 
 # maybe not needed anymore
 class StudentForm(ModelForm):
@@ -16,6 +18,11 @@ class CustomUserCreationForm(UserCreationForm):
     class Meta(UserCreationForm):
         model = CustomUser
         fields = ('real_name','name','email','entry_year','industry', 'job_type','student_status')
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        User.objects.filter(email=email, is_active=False).delete()
+        return email
 
 class CustomUserChangeForm(UserChangeForm):
     class Meta:

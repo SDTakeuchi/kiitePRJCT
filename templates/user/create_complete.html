@@ -1,0 +1,15 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="main mypage-show">
+    <div class="container">
+        <div class="mypage-show-item">
+            <h2>本登録が完了しました!</h2>
+            
+            <p>引き続きKiite-me!をお楽しみください。</p>
+            <a class="" href="{% url 'login' %}">ログインに進む</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
