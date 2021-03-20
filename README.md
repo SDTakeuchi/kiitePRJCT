@@ -197,7 +197,7 @@ Please check out the demo site below instead, thank you.
 
 ☆Small form is provided so that the members of management team can send email to specific user groups including alumni, and graduates.
 
-　※After login, move to [http://18.177.150.91:8000/staff_only]
+　※After login, move to [http://18.177.150.91:8000/staff_only] to see the form.
 　　
 ☆two-step verification
 
