@@ -34,7 +34,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     )
     student_status = models.CharField(max_length=3, choices=STUDENT_STATUS_CHOICES)
     #----for-undergraduate-------------
-    entry_year = models.IntegerField(_('year'), max_length=4, validators=[MinValueValidator(2016), max_value_current_year], choices=YEAR_CHOICES, default=datetime.datetime.now().year)
+    entry_year = models.IntegerField(_('year'), validators=[MinValueValidator(2016), max_value_current_year], choices=YEAR_CHOICES, default=datetime.datetime.now().year)
     #----for-alumni-------------
     industry = models.CharField(max_length=50, blank=True, null=True)
     job_type = models.CharField(max_length=50, blank=True, null=True)
