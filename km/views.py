@@ -460,7 +460,7 @@ class UserCreateComplete(generic.TemplateView):
             try:
                 user = User.objects.get(pk=user_pk)
             except User.DoesNotExist:
-                return HttpResponseBadRequest()
+                return render (request, 'user/went_wrong.html', context)
             else:
                 if not user.is_active:
                     # 問題なければ本登録とする
@@ -468,4 +468,4 @@ class UserCreateComplete(generic.TemplateView):
                     user.save()
                     return super().get(request, **kwargs)
 
-        return HttpResponseBadRequest()
+        return render (request, 'user/went_wrong.html', context)
