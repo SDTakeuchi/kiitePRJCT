@@ -68,6 +68,9 @@ class Post(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
 
+    def get_comments_count(self):
+        return Comment.objects.filter(post=self).count()
+
     def __str__(self):
         return self.title
 
