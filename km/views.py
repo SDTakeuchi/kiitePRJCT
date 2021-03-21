@@ -164,15 +164,16 @@ def commentView (request, pk):
 			comment_instance.post = post
 			comment_instance.save()
 			
-			comment_body = comment_instance.body
-			context={'post':post,'comment_instance': comment_instance,'comment_body':comment_body}
+			if comment_instance.user != post.user:
+				comment_body = comment_instance.body
+				context={'post':post,'comment_instance': comment_instance,'comment_body':comment_body}
 
-			subject = render_to_string('email_template/newcomment/subject.txt')
-			message = render_to_string('email_template/newcomment/message.txt',context)
-		
-			recepient = str(post.user.email)
-			# msg = EmailMessage(subject, message, EMAIL_HOST_USER, [recepient])
-			# msg.send()
+				subject = render_to_string('email_template/newcomment/subject.txt')
+				message = render_to_string('email_template/newcomment/message.txt',context)
+			
+				recepient = str(post.user.email)
+				# msg = EmailMessage(subject, message, EMAIL_HOST_USER, [recepient])
+				# msg.send()
 
 			messages.info(request, "コメントが投稿されました")
 			return redirect('postShow', pk=post.id)
