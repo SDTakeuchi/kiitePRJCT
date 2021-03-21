@@ -23,14 +23,24 @@ class Command(BaseCommand):
             subject = render_to_string('email_template/dailymail/subject.txt', context)
             message = render_to_string('email_template/dailymail/upper_message.txt', context)
             
+            def truncate(string, length, ellipsis='...'):
+                '''文字列を切り詰める
+                string: 対象の文字列
+                length: 切り詰め後の長さ
+                ellipsis: 省略記号
+                '''
+                return string[:length] + (ellipsis if string[length:] else '')
+
             for question in posts:
                 message += "-----------------------------------------------------"
                 message += '\n'
                 message += question.user.name 
                 message += '\n'
-                message += question.title
+                message += truncate(question.title, 20)
                 message += '\n'
-                message += question.body
+                message += truncate(question.body, 80)
+                message += '\n'
+                message += 'http://18.177.150.91:8000/posts/show/' + str(question.id)
                 message += '\n'
                 message += '\n'
             
