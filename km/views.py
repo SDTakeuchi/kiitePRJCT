@@ -86,7 +86,7 @@ def logoutView (request):
 
 @login_required(login_url='login')
 def indexView (request):
-    post_list = Post.objects.all().order_by('-date_updated')
+    post_list = Post.objects.all().order_by('-date_created')
     page = request.GET.get('page', 1)
 
     myFilter = PostFilter(request.GET, queryset=post_list)
