@@ -656,7 +656,7 @@ footer {
 }
 /* posts/index ================================ */
 .posts-index-item {
-  padding: 20px 30px;
+  padding: 17px 26px;
   background-color: white;
   overflow: hidden;
   box-shadow: 0 2px 6px #c1ced7;
@@ -746,7 +746,7 @@ footer {
   font-weight: 500;
   padding-top: 9px;
   background-color: #e7e7e7;
-  font-size: 18px;
+  font-size: 16px;
   border: 2px solid #808080;
   transition-duration:400ms;
 }
