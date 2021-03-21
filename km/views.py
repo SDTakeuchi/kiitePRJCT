@@ -7,7 +7,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.contrib.auth.models import Group
 from django.contrib.auth.decorators import login_required
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .decorators import unauthenticated_user, allowed_users
 from django.core.mail import EmailMessage
 from kiite_me.settings import EMAIL_HOST_USER
@@ -86,17 +86,29 @@ def logoutView (request):
 
 @login_required(login_url='login')
 def indexView (request):
-	all_posts = Post.objects.all().order_by('-date_updated')
+    post_list = Post.objects.all().order_by('-date_updated')
+    page = request.GET.get('page', 1)
 
-	myFilter = PostFilter(request.GET, queryset=all_posts)
-	all_posts = myFilter.qs
+    myFilter = PostFilter(request.GET, queryset=post_list)
+    post_list = myFilter.qs
 
-	paginator = Paginator(all_posts, 10) # 1ページに10件表示
-	p = request.GET.get('p') # URLのパラメータから現在のページ番号を取得
-	posts = paginator.get_page(p) # 指定のページのPostを取得
+    numOneView = 10
+    paginator = Paginator(post_list, numOneView)
+    try:
+        posts = paginator.page(page)
+    except PageNotAnInteger:
+        posts = paginator.page(1)
+    except EmptyPage:
+        posts = paginator.page(paginator.num_pages)
 
-	context = {'posts':posts, 'myFilter':myFilter, 'all_posts':all_posts}
-	return render(request, 'posts/index.html', context)
+    pageNum = int(page)
+    fromNum = pageNum * numOneView - numOneView + 1
+    toNum = pageNum * numOneView
+    if toNum > len(post_list):
+        toNum = int(len(post_list))
+
+    context = {'posts':posts, 'myFilter':myFilter, 'post_list':post_list, 'fromNum':fromNum, 'toNum':toNum}
+    return render(request, 'posts/index.html', context)
 
 @login_required(login_url='login')
 def showView (request, pk):
@@ -151,11 +163,14 @@ def commentView (request, pk):
 			comment_instance.user = current_user
 			comment_instance.post = post
 			comment_instance.save()
+			
+			comment_body = comment_instance.body
+			context={'post':post,'comment_instance': comment_instance,'comment_body':comment_body}
 
-			# subject = '【kiite-me】質問にコメントがつきました！'
-			# message = str(f'{post.user.name}さんの質問「{post.title}」に{comment_instance.user.name}さんからのコメントがつきました！\n\nログインして確認してください。\nhttps://kiite-me.site/login/')
-			# message += '\n\n--\n====================================\n● 配信元：キイテミ運営事務局\n\n▼お問い合わせは下記までお願いいたします。\nキイテミ運営事務局\nkiiteme.info@gmail.com\n===================================='#署名
-			# recepient = str(post.user.email)
+			subject = render_to_string('email_template/newcomment/subject.txt')
+			message = render_to_string('email_template/newcomment/message.txt',context)
+		
+			recepient = str(post.user.email)
 			# msg = EmailMessage(subject, message, EMAIL_HOST_USER, [recepient])
 			# msg.send()
 
@@ -203,13 +218,22 @@ def commentBackView (request, pk):
 			comment_instance.post = post
 			comment_instance.save()
 
-			# subject = '【kiite-me】コメントに返信がつきました！'
-			# message = str(f'{comment.user.name}さんの「{post.title}」へのコメントに{comment_instance.user.name}さんから返信が届きました！\n\nログインして確認してください。\nhttps://kiite-me.site/login/')
-			# message += '\n\n--\n====================================\n● 配信元：キイテミ運営事務局\n\n▼お問い合わせは下記までお願いいたします。\nキイテミ運営事務局\nkiiteme.info@gmail.com\n===================================='#署名
-			# recepient = str(post.user.email)
+			comment_body = '\n'.join(comment_instance.body.splitlines()[1:])
+			context={'post':post,'comment':comment,'comment_instance': comment_instance,'comment_body':comment_body}
+
+			recepient = str(comment.user.email)
+			subject = render_to_string('email_template/commentback/subject.txt')
+			message = render_to_string('email_template/commentback/message.txt',context)
 			# msg = EmailMessage(subject, message, EMAIL_HOST_USER, [recepient])
 			# msg.send()
 
+			if comment_instance.user != post.user and comment.user != post.user:
+				recepient = str(post.user.email)
+				subject = render_to_string('email_template/newcomment/subject.txt')
+				message = render_to_string('email_template/newcomment/message.txt',context)
+				# msg = EmailMessage(subject, message, EMAIL_HOST_USER, [recepient])
+				# msg.send()
+			
 			messages.info(request, "コメントへの返信が投稿されました")
 			return redirect('postShow', pk=post.id)
 

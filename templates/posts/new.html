@@ -9,11 +9,11 @@
 
         <form action="" method="POST">
           {% csrf_token %}
-          <p>質問タイトル</p>
+          <p>質問タイトル*</p>
           {{ form.title|add_class:"newpost-title" }}
-          <p>関連タグ</p>
+          <p>関連タグ*</p>
           {{ form.tag|add_class:"newpost-tag" }}
-          <p>質問内容</p>
+          <p>質問内容*</p>
           {{ form.body|add_class:"newpost-body" }}
               <input type="submit" name="Submit" value="投稿">
         </form>

@@ -14,7 +14,7 @@
         <button id="kensaku" class="btn btn-primary" type="submit">検索</button>
       </form>
       <div class="hitnum">
-        <p>検索結果：{{ all_posts|length }} 件 ( {{ posts|length }} 件表示)</p>
+        <p>検索結果：{{ post_list|length }} 件 ( {{fromNum}}~{{toNum}}件表示 )</p>
       </div>
       {% for post in posts %}
         <div class="posts-index-item">
@@ -25,21 +25,29 @@
 </div>
 
 <div class="pager">
-  <!-- 前のページへのリンク -->
-  {% if posts.has_previous %}
-      <a href="?p={{ articles.previous_page_number }}">前へ</a>
-  {% endif %}
-
-  <!-- 現在のページ番号と全体のページ数 -->
-  <span>
-      {{ posts.number }} / {{ posts.paginator.num_pages }}
-  </span>
-
-  <!-- 次のページへのリンク -->
-  {% if posts.has_next %}
-      <a href="?p={{ posts.next_page_number }}">次へ</a>
+  {% if posts.has_other_pages %}
+  <ul class="pagination">
+    {% if posts.has_previous %}
+      <li><a href="?page={{ posts.previous_page_number }}">&laquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&laquo;</span></li>
+    {% endif %}
+    {% for i in posts.paginator.page_range %}
+      {% if posts.number == i %}
+        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+      {% else %}
+        <li><a href="?page={{ i }}">{{ i }}</a></li>
+      {% endif %}
+    {% endfor %}
+    {% if posts.has_next %}
+      <li><a href="?page={{ posts.next_page_number }}">&raquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&raquo;</span></li>
+    {% endif %}
+  </ul>
   {% endif %}
 </div>
+
 <a href="{% url 'postNew' %}" class="newpostlink">
   <svg xmlns="http://www.w3.org/2000/svg" width="33" height="33" fill="currentColor" class="bi bi-plus-square-fill spver" viewBox="0 0 16 16">
     <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3a.5.5 0 0 1 1 0z"/>
