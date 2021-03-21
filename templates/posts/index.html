@@ -18,7 +18,8 @@
       </div>
       {% for post in posts %}
         <div class="posts-index-item">
-          <a href="{% url 'postShow' post.id %}">{{ post.title|truncatechars:45 }}</a><p><br> #{{ post.tag  }}</p>
+          <a href="{% url 'postShow' post.id %}">{{ post.title|truncatechars:45 }}</a>
+          <p><br> #{{ post.tag  }} </p><p>　　コメント：{{ post.get_comments_count }} 件</p>
         </div>
       {% endfor %}
     </div>
