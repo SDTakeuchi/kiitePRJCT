@@ -321,7 +321,7 @@ def adminNotificationView(request):
 	notiForm = forms.adminNotificationForm()
 	if request.method == 'POST':
 		# notiForm = forms.adminNotificationForm(request.POST)
-		# subject = '【kiite-me】' + str(notiForm['title'].value())
+		# subject = '【Kiite-me!】' + str(notiForm['title'].value())
 		# message = str(notiForm['toGroup'].value())
 		# message += '\n'
 		# message += str(notiForm['body'].value())
