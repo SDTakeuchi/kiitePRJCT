@@ -496,6 +496,7 @@ footer {
 #id_comment_body{
   width: 380px;
   margin-right: 15px;
+  height: clamp(180px,50vw,206px);
 }
 @media (max-width: 450px) {
   .heading {
