@@ -556,6 +556,11 @@ footer {
   margin-top: 80px;
 }
 
+#post_tag_index {
+  position:absolute;
+  left:125px;
+}
+
 .flash-message {
   position: absolute;
   top: 43px;
@@ -833,6 +838,9 @@ footer {
   font-size: 15px;
   color: #8f8f8f;
   display: inline !important;
+}
+.gray-color {
+  color: #8f8f8f;
 }
 .newpost-title{
   height: 55px;
