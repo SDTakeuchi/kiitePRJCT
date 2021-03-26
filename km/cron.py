@@ -41,6 +41,7 @@ def dailymail():
             message += '\n'
             message += '\n'
 
+        message += render_to_string('email_template/dailymail/upper_message.txt')
         # recepient = list(toUser) #in actual page, the mail is delivered to all alumni
         recepient = ["kuranku191952996@gmail.com"] #erace this line for actual environment
         

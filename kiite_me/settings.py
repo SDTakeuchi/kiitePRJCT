@@ -110,7 +110,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 CRONJOBS = [
-    ('* 20 * * *', 'km.cron.dailymail')
+    ('30 19 * * *', 'km.cron.dailymail')
 ]
 
 # Internationalization
