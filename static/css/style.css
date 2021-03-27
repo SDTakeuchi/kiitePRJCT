@@ -1039,3 +1039,6 @@ select#id_title {
   right: 22px;
   bottom: 28px;
 }
+#commenthere, #commentbackhere{
+  padding-top: 9px;
+}
