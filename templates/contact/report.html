@@ -1,0 +1,28 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="main posts-show">
+    <div class="container">
+      <div class="posts-show-item">
+        <div class="asker">
+          {% if post_or_comment.user.name %}
+          <h4><a class="userLink" href="{% url 'userList' post.user.id %}">{{ post.user.name }}</a></h4> <!-- ####### -->
+          {% else %}
+          <h4>退会済みユーザー</h4>
+          {% endif %}
+        </div>
+        <p><b>{{ post_or_comment.title }}</b><br>{{ post_or_comment.body | linebreaksbr }}</p>
+      </div>
+
+      <p id="commenthere">通報内容*</p>
+      <form action="" method="POST">
+          {% csrf_token %}
+          {{ form.body }}
+          <input type="submit" class="btn btn-warning" value="送信">
+      </form>
+
+    </div>
+  </div>
+  <div class="emptybox"></div>
+{% endblock %}

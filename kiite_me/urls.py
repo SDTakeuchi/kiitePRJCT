@@ -4,7 +4,7 @@ from django.urls import path
 from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib.auth import views as auth_views
-from km.views import homeView, loginView, signupView, logoutView, indexView,showView, newView, editView, deleteCommentView, deleteView, commentView, userListView, userMypageView, userMypageEditView, termsOfUseView, privacyPolicyView, contactFormView, userDeleteView, commentBackView, adminNotificationView, crop_image, UserCreate, UserCreateDone,UserCreateComplete
+from km.views import homeView, loginView, signupView, logoutView, indexView,showView, newView, editView, deleteCommentView, deleteView, commentView, userListView, userMypageView, userMypageEditView, termsOfUseView, privacyPolicyView, contactFormView, userDeleteView, commentBackView, adminNotificationView, crop_image, UserCreate, UserCreateDone, UserCreateComplete, reportPostView, reportCommentView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,6 +26,9 @@ urlpatterns = [
     path('posts/comment/delete/<str:pk>', deleteCommentView, name='postCommentDelete'),
     path('posts/delete/<str:pk>', deleteView, name='postDelete'),
     path('posts/comment/back/<str:pk>', commentBackView, name='postCommentBack'),
+
+    path('posts/report/<str:pk>', reportPostView, name='reportPost'),
+    path('posts/comment/report/<str:pk>', reportCommentView, name='reportComment'),
 
     path('user/list/<str:pk>', userListView, name="userList" ),  #######################
     path('user/mypage/', userMypageView, name="mypage" ),

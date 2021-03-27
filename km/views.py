@@ -249,14 +249,53 @@ def commentBackView (request, pk):
 	context={'post':post,'comment':comment,'form':form}
 	return render(request, 'posts/comment_back.html', context)
 
+@login_required(login_url='login')
+def reportPostView(request,pk):
+	post = Post.objects.get(id = pk)
+	form = forms.ContactForm()
+	current_user = request.user
+
+	if request.method == 'POST':
+		form = forms.ContactForm(request.POST)
+		context={'form':form}
+		context={'post_or_comment':post, 'post':post, 'form':form,'current_user':current_user}
+		subject = render_to_string('email_template/report/subject.txt')
+		message = render_to_string('email_template/report/message.txt', context)
+		# msg = EmailMessage(subject, message, EMAIL_HOST_USER, [EMAIL_HOST_USER])
+		# msg.send()
+		messages.info(request, "運営にメッセージが送信されました")
+		return redirect('postShow', pk=post.id)
+
+	context={'post_or_comment':post, 'post':post, 'form':form,'current_user':current_user}
+	return render(request, 'contact/report.html', context)
+
+@login_required(login_url='login')
+def reportCommentView(request,pk):
+	comment = Comment.objects.get(id = pk)
+	post = comment.post
+	form = forms.ContactForm()
+	current_user = request.user
+
+	if request.method == 'POST':
+		form = forms.ContactForm(request.POST)
+		context={'post_or_comment':comment, 'post':post, 'form':form,'current_user':current_user}
+		subject = render_to_string('email_template/report/subject.txt')
+		message = render_to_string('email_template/report/message.txt', context)
+		# msg = EmailMessage(subject, message, EMAIL_HOST_USER, [EMAIL_HOST_USER])
+		# msg.send()
+		messages.info(request, "運営にメッセージが送信されました")
+		return redirect('postShow', pk=post.id)
+
+	context={'post_or_comment':comment, 'post':post, 'form':form,'current_user':current_user}
+	return render(request, 'contact/report.html', context)
 	
 #-----user section------------------------------------------------------
 
-@login_required(login_url='login')           ####################
+@login_required(login_url='login')
 def userListView(request,pk):
 	user  = CustomUser.objects.get(id=pk)   
 	context={'user':user}
-	return render(request, 'user/user_list.html', context)           ####################
+	return render(request, 'user/user_list.html', context)
 
 @login_required(login_url='login')
 def userMypageView(request):
