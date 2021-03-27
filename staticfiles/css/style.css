@@ -462,6 +462,22 @@ footer {
   }
 }
 
+#mypage_edit_btn {
+  position:absolute;
+  top: 7%;
+  right: 9%;
+}
+
+.below-mypage {
+  padding-top:15px;
+  max-width: 630px;
+  margin: 0 auto;
+  text-align: right;
+}
+.mypage-btn{
+  margin-right: 7px;
+}
+
 @media screen and (max-width: 767px) {
   .contact-info-box { margin-bottom: 20px; }
   .contact-info-box:last-child { margin-bottom: 0; }
@@ -470,6 +486,12 @@ footer {
     padding:7px 42%;
     display:block;
     font-size: 15px;
+    align-self: center;
+  }
+  .mypage-btn {
+    margin: 10px auto!important;
+    width: 96%;
+    display:block;
     align-self: center;
   }
   .kensakutag {
@@ -777,7 +799,7 @@ footer {
   width: 420px;
 }
 
-.posts-show-item img, .posts-index-item img {
+.posts-show-item img {
   width: 60px;
   height: 60px;
   border-radius: 40%;
@@ -840,6 +862,17 @@ footer {
   color: #8f8f8f;
   display: inline !important;
 }
+
+.posts-index-item img{
+  width: 49px;
+  height: 49px;
+  border-radius: 44%;
+  box-shadow: 0 2px 6px #c1ced7;
+  vertical-align: middle;
+  object-fit: cover;
+  margin-bottom: 6px;
+}
+
 .gray-color {
   color: #8f8f8f;
 }
@@ -936,6 +969,7 @@ footer {
   background-color: white;
   box-shadow: 0 2px 6px #c1ced7;
   text-align: center;
+  position: relative;
 }
 
 .col-md-3 {
