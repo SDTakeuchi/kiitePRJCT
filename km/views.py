@@ -184,9 +184,17 @@ def commentView (request, pk):
 @login_required(login_url='login')
 def deleteCommentView(request, pk):
 	comment = Comment.objects.get(id = pk)
-	comment.delete()
-	messages.info(request, "コメントが削除されました")
-	return redirect('postShow', pk=comment.post.id)
+
+	if comment.user != request.user:
+		return redirect('postIndex')
+		
+	if request.method == 'POST':
+		comment.delete()
+		messages.info(request, "コメントが削除されました")
+		return redirect('postShow', pk=comment.post.id)
+
+	context={'comment':comment}
+	return render(request, 'posts/comment_delete.html', context)
 
 @login_required(login_url='login')
 def deleteView(request, pk):

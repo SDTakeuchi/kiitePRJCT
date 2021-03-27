@@ -69,7 +69,7 @@
 
 　※なおデモ環境、およびgit cloneによるローカル環境においては [http://18.177.150.91:8000/signup] にて仮登録を飛ばしての本登録が可能となっております。
 
-☆前日の20:00~当日の19:59までに投稿された質問を卒業生ユーザーにお知らせする機能(cron設定)
+☆前日の20:00~当日の19:59までに投稿された質問を卒業生ユーザーにお知らせする機能(django-crontabを使用)
 
 # Requirement
 
@@ -81,6 +81,7 @@
 - certifi==2020.12.5
 - chardet==4.0.0
 - Django==3.1.4
+- django-crontab==0.7.1
 - django-filter==2.4.0
 - django-storages==1.11.1
 - django-widget-tweaks==1.4.8

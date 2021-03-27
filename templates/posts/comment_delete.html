@@ -1,0 +1,24 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="main posts-show">
+    <div class="container">
+      <div class="posts-show-item">
+
+        <p>本当にこのコメントを削除しますか？</p>
+
+        <p>{{ comment.title }}</p>
+        <p>{{ comment.body | linebreaksbr }}</p>
+
+        <form action="{% url 'postCommentDelete' comment.id %}" method="POST">
+        {% csrf_token %}
+          <input type="submit" value="はい" name="Confirm">
+          <a href="{% url 'postShow' comment.post.id %}" class="choice-no">いいえ</a>
+        </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
