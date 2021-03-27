@@ -164,16 +164,17 @@ def commentView (request, pk):
 			comment_instance.post = post
 			comment_instance.save()
 			
-			if comment_instance.user != post.user:
-				comment_body = comment_instance.body
-				context={'post':post,'comment_instance': comment_instance,'comment_body':comment_body}
+			if post.user != None:
+				if comment_instance.user != post.user:
+					comment_body = comment_instance.body
+					context={'post':post,'comment_instance': comment_instance,'comment_body':comment_body}
 
-				subject = render_to_string('email_template/newcomment/subject.txt')
-				message = render_to_string('email_template/newcomment/message.txt',context)
-			
-				recepient = str(post.user.email)
-				# msg = EmailMessage(subject, message, EMAIL_HOST_USER, [recepient])
-				# msg.send()
+					subject = render_to_string('email_template/newcomment/subject.txt')
+					message = render_to_string('email_template/newcomment/message.txt',context)
+				
+					recepient = str(post.user.email)
+					# msg = EmailMessage(subject, message, EMAIL_HOST_USER, [recepient])
+					# msg.send()
 
 			messages.info(request, "コメントが投稿されました")
 			return redirect('postShow', pk=post.id)
@@ -222,7 +223,10 @@ def commentBackView (request, pk):
 		form = CommentForm(request.POST)
 		if form.is_valid():
 			comment_instance = form.save(commit=False)
-			comment_instance.body = str(f' > {comment.user.name}\r\n') + comment_instance.body
+			if comment.user != None:
+				comment_instance.body = str(f' > {comment.user.name}\r\n') + comment_instance.body
+			else:
+				comment_instance.body = ' > 退会済みユーザー\r\n' + comment_instance.body
 			comment_instance.user = current_user
 			comment_instance.post = post
 			comment_instance.save()
@@ -230,18 +234,19 @@ def commentBackView (request, pk):
 			comment_body = '\n'.join(comment_instance.body.splitlines()[1:])
 			context={'post':post,'comment':comment,'comment_instance': comment_instance,'comment_body':comment_body}
 
-			recepient = str(comment.user.email)
-			subject = render_to_string('email_template/commentback/subject.txt')
-			message = render_to_string('email_template/commentback/message.txt',context)
-			# msg = EmailMessage(subject, message, EMAIL_HOST_USER, [recepient])
-			# msg.send()
-
-			if comment_instance.user != post.user and comment.user != post.user:
-				recepient = str(post.user.email)
-				subject = render_to_string('email_template/newcomment/subject.txt')
-				message = render_to_string('email_template/newcomment/message.txt',context)
+			if comment.user != None:
+				recepient = str(comment.user.email)
+				subject = render_to_string('email_template/commentback/subject.txt')
+				message = render_to_string('email_template/commentback/message.txt',context)
 				# msg = EmailMessage(subject, message, EMAIL_HOST_USER, [recepient])
 				# msg.send()
+
+				if comment_instance.user != post.user and comment.user != post.user:
+					recepient = str(post.user.email)
+					subject = render_to_string('email_template/newcomment/subject.txt')
+					message = render_to_string('email_template/newcomment/message.txt',context)
+					# msg = EmailMessage(subject, message, EMAIL_HOST_USER, [recepient])
+					# msg.send()
 			
 			messages.info(request, "コメントへの返信が投稿されました")
 			return redirect('postShow', pk=post.id)

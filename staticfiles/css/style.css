@@ -777,7 +777,7 @@ footer {
   width: 420px;
 }
 
-.posts-show-item img {
+.posts-show-item img, .posts-index-item img {
   width: 60px;
   height: 60px;
   border-radius: 40%;

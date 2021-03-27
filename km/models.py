@@ -76,7 +76,7 @@ class Post(models.Model):
 
 class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments")
-    user = models.ForeignKey(CustomUser,null=True, on_delete= models.SET_NULL)
+    user = models.ForeignKey(CustomUser, null=True, on_delete= models.SET_NULL)
     body = models.TextField()
     date_added = models.DateTimeField(auto_now_add=True)
 
