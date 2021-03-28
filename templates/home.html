@@ -30,7 +30,7 @@
 			</div>
 			<div class="wow fadeInUp" data-wow-delay="0.9s">
 				<div class="aboutline">
-					<h3>歴史の浅い学習院大学の国際社会科学部、<br><br>国社生らしい就活の仕方がわからない...<br>でも就活の相談ができる先輩もいない...</h3>
+					<h3>歴史の浅い学習院大学の国際社会科学部<br><br>国社生らしい就活の仕方がわからない...<br>でも就活の相談ができる先輩もいない...</h3>
 					<br>
 					<h2>そんな国社の在学生専用の<br>
 						「OB・OG就活相談サイト」<br class="br-sp">がここ、Kiite-me<span class="red">!</span>です！</h2>
@@ -200,7 +200,7 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-md-8 col-sm-8 col-xs-9">
-				<p>Copyright © {% now 'Y' %} Kiite-me! | Design: <a rel="nofollow" href="http://www.templatemo.com" target="_parent">templatemo</a></p>
+				<p>Copyright © {% now 'Y' %} Kiite-me!</p>
 			</div>
 			<div class="col-md-4 col-sm-4 col-xs-3">
 				<a href="#home" class="smoothScroll">▲</a>
@@ -208,4 +208,9 @@
 		</div>
 	</div>
 </section>
+{% if not user.is_authenticated %}
+<div class="spver signup-btn">
+	<a href="{% url 'signup' %}"><button type="button" class="btn btn-default btn-lg">Sign up here!</button></a>
+</div>
+{% endif %}
 {% endblock %}

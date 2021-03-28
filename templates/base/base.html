@@ -54,19 +54,18 @@ http://www.templatemo.com/tm-472-blaster
 			<ul class="nav navbar-nav navbar-right">
 				
 				{% if request.user.is_anonymous %}
-				<li><a href="{% url 'home' %}#home" class="smoothScroll">ホーム</a></li>
 				<li><a href="{% url 'postIndex' %}" class="smoothScroll">TOP</a></li>
-				<li><a href="{% url 'postNew' %}" class="smoothScroll">質問作成</a></li>
-				<li><a href="{% url 'login' %}" class="smoothScroll">ログイン</a></li>
-				<li><a href="{% url 'signup' %}" class="smoothScroll">無料登録</a></li>
-				<li><a href="{% url 'contactForm' %}" class="smoothScroll">お問い合わせ</a></li>				`
+				<li><a href="{% url 'postNew' %}">質問作成</a></li>
+				<li><a href="{% url 'login' %}">ログイン</a></li>
+				<li><a href="{% url 'signup' %}">無料登録</a></li>
+				<li><a href="{% url 'contactForm' %}">お問い合わせ</a></li>				`
 				{% endif %}
 
 				{% if request.user.is_authenticated %}
 				<li><a href="{% url 'postIndex' %}" class="smoothScroll">TOP</a></li>
-				<li><a href="{% url 'postNew' %}" class="smoothScroll">質問作成</a></li>
-				<li><a href="{% url 'mypage' %}" class="smoothScroll">マイページ</a></li>
-				<li><a href="{% url 'logout' %}" class="smoothScroll">ログアウト</a></li>	
+				<li><a href="{% url 'postNew' %}">質問作成</a></li>
+				<li><a href="{% url 'mypage' %}">マイページ</a></li>
+				<li><a href="{% url 'logout' %}" onclick="return confirm('ログアウトします。よろしいですか？')">ログアウト</a></li>	
 				{% endif %}
 			</ul>  
 		</div>
@@ -78,11 +77,8 @@ http://www.templatemo.com/tm-472-blaster
 	</div>
 </section>
 
-
-
     {% block content %}
     {% endblock %}
-
 
 <!-- JAVASCRIPT JS FILES -->	
 <script src="{% static 'js/jquery.js' %}"></script>
@@ -94,6 +90,7 @@ http://www.templatemo.com/tm-472-blaster
 <script src="{% static 'js/nivo-lightbox.min.js' %}"></script>
 <script src="{% static 'js/wow.min.js' %}"></script>
 <script src="{% static 'js/custom.js' %}"></script>
+
 
 </body>
 </html>

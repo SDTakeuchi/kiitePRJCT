@@ -478,6 +478,12 @@ footer {
   margin-right: 7px;
 }
 
+.signup-btn{
+  position: fixed;
+  bottom: 27px;
+  right: 32px;
+}
+
 @media screen and (max-width: 767px) {
   .contact-info-box { margin-bottom: 20px; }
   .contact-info-box:last-child { margin-bottom: 0; }
@@ -674,10 +680,8 @@ footer {
   max-width: 94%;
 }
 .docspace{
-  width :44%
-}
-.docspace p li{
-  font-size:16px;
+  width :44%;
+  font-size: 15px;
 }
 .imgspace{
   width: 52%;

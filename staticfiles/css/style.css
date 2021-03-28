@@ -478,6 +478,12 @@ footer {
   margin-right: 7px;
 }
 
+.signup-btn{
+  position: fixed;
+  bottom: 29px;
+  right: 36px;
+}
+
 @media screen and (max-width: 767px) {
   .contact-info-box { margin-bottom: 20px; }
   .contact-info-box:last-child { margin-bottom: 0; }
@@ -674,10 +680,8 @@ footer {
   max-width: 94%;
 }
 .docspace{
-  width :44%
-}
-.docspace p li{
-  font-size:16px;
+  width :44%;
+  font-size: 15px;
 }
 .imgspace{
   width: 52%;
@@ -865,7 +869,7 @@ footer {
 .posts-index-item img{
   width: 49px;
   height: 49px;
-  border-radius: 44%;
+  border-radius: 45%;
   box-shadow: 0 2px 6px #c1ced7;
   vertical-align: middle;
   object-fit: cover;
@@ -973,6 +977,10 @@ footer {
 
 .col-md-3 {
   float: right;
+}
+
+.profile-pic {
+  border-radius: 45%;
 }
 
 .mypage-show .profile-pic{
