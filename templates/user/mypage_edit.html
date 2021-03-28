@@ -79,11 +79,6 @@
         cropper = new Cropper(imageField, {
 					aspectRatio: 1/1,
 					crop(event) {
-						// console.log("CROP START")
-						// console.log("x: " + event.detail.x);
-						// console.log("y: " + event.detail.y);
-						// console.log("width: " + event.detail.width);
-						// console.log("height: " + event.detail.height);
 						setImageCropProperties(
 							image,
 							event.detail.x,

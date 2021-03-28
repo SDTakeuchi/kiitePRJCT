@@ -694,7 +694,7 @@ footer {
 .post-left img {
   width: 50px;
   height: 50px;
-  border-radius: 40%;
+  border-radius: 45%;
   box-shadow: 0 2px 6px #c1ced7;
   object-fit: cover;
 }
@@ -802,7 +802,6 @@ footer {
 .posts-show-item img {
   width: 60px;
   height: 60px;
-  border-radius: 40%;
   box-shadow: 0 2px 6px #c1ced7;
   vertical-align: middle;
   object-fit: cover;
@@ -866,7 +865,7 @@ footer {
 .posts-index-item img{
   width: 49px;
   height: 49px;
-  border-radius: 44%;
+  border-radius: 45%;
   box-shadow: 0 2px 6px #c1ced7;
   vertical-align: middle;
   object-fit: cover;
@@ -976,10 +975,14 @@ footer {
   float: right;
 }
 
+.profile-pic {
+  border-radius: 45%;
+}
+
 .mypage-show .profile-pic{
   width: 95px;
   height: 95px;
-  border-radius: 40%;
+  border-radius: 45%;
   box-shadow: 0 2px 6px #c1ced7;
 }
 
