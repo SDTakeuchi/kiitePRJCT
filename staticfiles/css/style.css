@@ -480,8 +480,8 @@ footer {
 
 .signup-btn{
   position: fixed;
-  bottom: 29px;
-  right: 36px;
+  bottom: 27px;
+  right: 32px;
 }
 
 @media screen and (max-width: 767px) {
@@ -862,7 +862,6 @@ footer {
 
 .posts-index-item p{
   font-size: 15px;
-  color: #8f8f8f;
   display: inline !important;
 }
 
