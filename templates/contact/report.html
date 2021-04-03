@@ -7,7 +7,7 @@
       <div class="posts-show-item">
         <div class="asker">
           {% if post_or_comment.user.name %}
-          <h4><a class="userLink" href="{% url 'userList' post.user.id %}">{{ post.user.name }}</a></h4> <!-- ####### -->
+          <h4><a class="userLink" href="{% url 'userList' post_or_comment.user.id %}">{{ post_or_comment.user.name }}</a></h4> <!-- ####### -->
           {% else %}
           <h4>退会済みユーザー</h4>
           {% endif %}

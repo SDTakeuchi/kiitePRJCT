@@ -40,6 +40,10 @@
       {{ form.name }}
       <p>ご本人様のお名前：</p>
       {{ form.real_name }}
+      <p>入学年度：</p>
+      {{ form.entry_year }}
+      <p>在籍状況：</p>
+      {{ form.student_status }}
       <p>メールアドレス：</p>
       {{ form.email }}
       {% if request.user.student_status == '卒業生' %}

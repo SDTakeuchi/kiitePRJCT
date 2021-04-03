@@ -9,11 +9,11 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from .managers import CustomUserManager
 
 YEAR_CHOICES = []
-for r in range(2016, (datetime.datetime.now().year)):
+for r in range(2016, (datetime.datetime.now().year+1)):
     YEAR_CHOICES.append((r,r))
 
 def current_year():
-    return datetime.date.today().year
+    return datetime.date.today().year+1
 
 def max_value_current_year(value):
     return MaxValueValidator(current_year())(value)    
