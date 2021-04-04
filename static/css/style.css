@@ -1049,3 +1049,13 @@ select#id_title {
 #commenthere, #commentbackhere{
   padding-top: 9px;
 }
+
+.article-body{
+  margin: 50px 0;
+}
+.article-body p, .article-body b{
+  font-size:16.5px;
+}
+.article-body h4{
+  padding:30px 0;
+}

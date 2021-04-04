@@ -538,3 +538,11 @@ class UserCreateComplete(generic.TemplateView):
                     return super().get(request, **kwargs)
 
         return render (request, 'user/went_wrong.html', context)
+
+#--------------story-section-----------------------
+def storyIndexView(request):
+	return render(request, 'story/story_index.html')
+def story1View(request):
+	return render(request, 'story/story1doug.html')
+def story2View(request):
+	return render(request, 'story/story2toda.html')

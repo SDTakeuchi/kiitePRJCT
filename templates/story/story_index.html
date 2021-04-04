@@ -1,0 +1,38 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block content %}
+<div style="margin-top: 100px; text-align:center;">
+    <h1 style="color:black;">STORIES</h1>
+</div>
+
+<div class="main posts-index">
+    <div class="container">
+
+        <div class="posts-index-item">
+            <a href="{% url 'story1' %}"><strong>【第1回】<br>39社落ちた2年前の自分に伝えたかった３つのコト</strong></a>
+            <div>
+            <div class="pull-right">
+                <img src="{% static 'images/dougpic.jpg' %}" alt="profile pic" style="width:35px; height:35px">
+                <p>武内修平</p>
+            </div>
+            </div>
+        </div>
+
+        <div class="posts-index-item">
+            <a href="{% url 'story2' %}"><strong>【第2回】[就活体験談]<br>「彼女いますか?だってさwwww」<br>チーバくんのうなじからやってきた男の熱き就活ストーリー</strong></a>
+            <div>
+            <div class="pull-right">
+                <img src="{% static 'images/toda1.jpg' %}" alt="profile pic" style="width:35px; height:35px">
+                <p>戸田健太郎</p>
+            </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="emptybox"></div>
+</div>
+
+
+
+{% endblock %}
