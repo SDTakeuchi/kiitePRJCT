@@ -190,6 +190,25 @@ def deleteCommentView(request, pk):
 	return redirect('postShow', pk=comment.post.id)
 
 @login_required(login_url='login')
+def editCommentView(request, pk):
+	comment = Comment.objects.get(id = pk)
+	form = CommentForm(instance=comment)
+	post = comment.post
+
+	if comment.user != request.user:
+		return redirect('postIndex')
+
+	if request.method == 'POST':
+		form = CommentForm(request.POST, instance=comment)
+		if form.is_valid():
+			form.save()
+			messages.info(request, "コメントが編集されました")
+			return redirect('postShow', pk=comment.post.id)
+
+	context={'comment':comment,'post':post, 'form':form}
+	return render(request, 'posts/comment_edit.html', context)
+
+@login_required(login_url='login')
 def deleteView(request, pk):
 	post = Post.objects.get(id = pk)
 

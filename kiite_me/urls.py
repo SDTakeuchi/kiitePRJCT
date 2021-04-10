@@ -4,7 +4,7 @@ from django.urls import path
 from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib.auth import views as auth_views
-from km.views import homeView, loginView, signupView, logoutView, indexView,showView, newView, editView, deleteCommentView, deleteView, commentView, userListView, userMypageView, userMypageEditView, termsOfUseView, privacyPolicyView, contactFormView, userDeleteView, commentBackView, adminNotificationView, crop_image, UserCreate, UserCreateDone, UserCreateComplete, reportPostView, reportCommentView, storyIndexView, story1View, story2View
+from km.views import homeView, loginView, signupView, logoutView, indexView,showView, newView, editView, deleteCommentView, editCommentView, deleteView, commentView, userListView, userMypageView, userMypageEditView, termsOfUseView, privacyPolicyView, contactFormView, userDeleteView, commentBackView, adminNotificationView, crop_image, UserCreate, UserCreateDone, UserCreateComplete, reportPostView, reportCommentView, storyIndexView, story1View, story2View
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -24,6 +24,7 @@ urlpatterns = [
     path('posts/edit/<str:pk>', editView, name='postEdit'),
     path('posts/comment/<str:pk>', commentView, name='postComment'),
     path('posts/comment/delete/<str:pk>', deleteCommentView, name='postCommentDelete'),
+    path('posts/comment/edit/<str:pk>', editCommentView, name='postCommentEdit'),
     path('posts/delete/<str:pk>', deleteView, name='postDelete'),
     path('posts/comment/back/<str:pk>', commentBackView, name='postCommentBack'),
 

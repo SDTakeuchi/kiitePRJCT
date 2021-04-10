@@ -1,0 +1,38 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block content %}
+<div class="main posts-show">
+    <div class="container">
+      <div class="posts-show-item">
+        <div class="asker">
+          {% if post.user.name %}
+          <img class="profile-pic" alt="profile image" src="{{ post.user.profile_pic.url }}">
+          <h4><a class="userLink" href="{% url 'userList' post.user.id %}">{{ post.user.name }}</a></h4> <!-- ####### -->
+          {% else %}
+          <img class="profile-pic" alt="profile image" src="/static/images/profile-icon-png-898.png">
+          <h4>退会済みユーザー</h4>
+          {% endif %}
+        </div>
+        <p>
+          <strong>{{ post.title }}</strong><br>
+          {{ post.body | linebreaksbr }}
+        </p>
+        <div class="post-time">
+          <p>#{{ post.tag }}</p>
+          {{ post.date_updated|date:"Y/m/d H:i" }}
+        </div>
+      </div>
+
+      <p id="commentbackhere">コメントを編集</p>
+      <form action="" method="POST">
+          {% csrf_token %}
+          {{ form.body|add_class:"newpost-body" }}
+          <input type="submit" class="btn btn-warning" value="編集する">
+      </form>
+
+    </div>
+  </div>
+  <div class="emptybox"></div>
+{% endblock %}
