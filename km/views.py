@@ -115,8 +115,9 @@ def indexView (request):
 @login_required(login_url='login')
 def showView (request, pk):
 	post = Post.objects.get(id=pk)
-	if post.user != request.user:
-		return redirect('postIndex')
+	if request.user.student_status == '在学生':
+		if post.user != request.user:
+			return redirect('postIndex')
 	return render(request, 'posts/show.html', {'post':post})
 
 @login_required(login_url='login')
