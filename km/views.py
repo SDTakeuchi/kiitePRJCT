@@ -492,8 +492,16 @@ class UserCreate(generic.CreateView):
         
         user = form.save(commit=False)
         user.is_active = False
-
         user.save()
+        if user.student_status == '卒業生':
+            context={'user': user}
+            subject = render_to_string('email_template/create_alumni/subject.txt', context)
+            message = render_to_string('email_template/create_alumni/message.txt', context)
+
+            recepient = str(user.email)
+            msg = EmailMessage(subject, message, EMAIL_HOST_USER, [recepient], bcc=[EMAIL_HOST_USER])
+            msg.send()
+            return redirect('signupAlumni')
 
         # アクティベーションURLの送付
         current_site = get_current_site(self.request)
@@ -513,6 +521,9 @@ class UserCreate(generic.CreateView):
         msg.send()
 
         return redirect('createDone')
+
+def signupAlumni(request):
+	return render(request, 'user/signup_alumni.html')
 
 class UserCreateDone(generic.TemplateView):
     """ユーザー仮登録したよ"""
@@ -556,6 +567,7 @@ class UserCreateComplete(generic.TemplateView):
             else:
                 if not user.is_active:
                     # 問題なければ本登録とする
+					
                     user.is_active = True
                     user.save()
                     return super().get(request, **kwargs)

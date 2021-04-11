@@ -4,7 +4,7 @@ from django.urls import path
 from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib.auth import views as auth_views
-from km.views import homeView, loginView, signupView, logoutView, indexView,showView, newView, editView, deleteCommentView, editCommentView, deleteView, commentView, userListView, userMypageView, userMypageEditView, termsOfUseView, privacyPolicyView, contactFormView, userDeleteView, commentBackView, adminNotificationView, crop_image, UserCreate, UserCreateDone, UserCreateComplete, reportPostView, reportCommentView, storyIndexView, story1View, story2View
+from km.views import homeView, loginView, signupView, logoutView, indexView,showView, newView, editView, deleteCommentView, editCommentView, deleteView, commentView, userListView, userMypageView, userMypageEditView, termsOfUseView, privacyPolicyView, contactFormView, userDeleteView, commentBackView, adminNotificationView, crop_image, UserCreate, signupAlumni, UserCreateDone, UserCreateComplete, reportPostView, reportCommentView, storyIndexView, story1View, story2View
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -15,6 +15,7 @@ urlpatterns = [
     path('logout/', logoutView, name='logout'),
 
     path('create/', UserCreate.as_view(), name='signup'),
+    path('create_done_alumni/', signupAlumni, name='signupAlumni'),
     path('create_done/', UserCreateDone.as_view(), name='createDone'),
     path('create_complete/<token>/', UserCreateComplete.as_view(), name='createComplete'),
 
