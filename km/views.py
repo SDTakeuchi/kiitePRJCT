@@ -86,7 +86,9 @@ def logoutView (request):
 
 @login_required(login_url='login')
 def indexView (request):
-    post_list = Post.objects.all().filter(user=request.user).order_by('-date_created')
+    post_list = Post.objects.all().order_by('-date_created')
+    if request.user.student_status == '在学生':
+        post_list = post_list.filter(user=request.user)
     page = request.GET.get('page', 1)
 
     myFilter = PostFilter(request.GET, queryset=post_list)

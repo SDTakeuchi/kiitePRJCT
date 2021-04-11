@@ -42,8 +42,8 @@
       {{ form.real_name }}
       <p>入学年度：</p>
       {{ form.entry_year }}
-      <p>在籍状況：</p>
-      {{ form.student_status }}
+      <p>在籍状況：{{ request.user.student_status }}</p>
+      <p style="font-size:13px;"> ※在籍状況を変更される場合はお手数ですが、お問い合わせより運営にご連絡ください。</p>
       <p>メールアドレス：</p>
       {{ form.email }}
       {% if request.user.student_status == '卒業生' %}
