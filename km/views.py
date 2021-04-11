@@ -86,7 +86,7 @@ def logoutView (request):
 
 @login_required(login_url='login')
 def indexView (request):
-    post_list = Post.objects.all().order_by('-date_created')
+    post_list = Post.objects.all().filter(user=request.user).order_by('-date_created')
     page = request.GET.get('page', 1)
 
     myFilter = PostFilter(request.GET, queryset=post_list)
@@ -113,6 +113,8 @@ def indexView (request):
 @login_required(login_url='login')
 def showView (request, pk):
 	post = Post.objects.get(id=pk)
+	if post.user != request.user:
+		return redirect('postIndex')
 	return render(request, 'posts/show.html', {'post':post})
 
 @login_required(login_url='login')
