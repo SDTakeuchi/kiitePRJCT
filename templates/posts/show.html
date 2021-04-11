@@ -59,7 +59,11 @@
 
       {% if not post.comments.all %}
       <br>
-      <p>まだコメントがないようです... ぜひ答えてあげましょう！</p>
+        {% if post.user == request.user %}
+        <p>卒業生の回答までしばしお待ちください...！</p>
+        {% else %}
+        <p>まだコメントがないようです... ぜひ答えてあげましょう！</p>
+        {% endif %}
       {% else %}
         {% for comment in post.comments.all %}
           <div class="posts-index-item">
