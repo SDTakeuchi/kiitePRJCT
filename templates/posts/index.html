@@ -4,6 +4,13 @@
 {% block content %}
 <div class="main posts-index">
     <div class="container">
+      {% if request.user.student_status == '在学生' %}
+      <div class="form-heading" style="margin-top:0px">Your Questions</div>
+      {% else %}
+      <div class="form-heading" style="margin-top:0px">Questions</div>
+      {% endif %}
+
+      {% if request.user.student_status == '卒業生'%}
       <form method="GET">
         {{ myFilter.form.title.label_tag }}
         {{ myFilter.form.title }}
@@ -16,6 +23,12 @@
       <div class="hitnum">
         <p>検索結果：{{ post_list|length }} 件 ( {{fromNum}}~{{toNum}}件表示 )</p>
       </div>
+      {% else %}
+        {% if not posts %}
+          <h2 style="text-align:center; margin-top:13%; color:rgb(133, 133, 133);">Let's ask whatever question you've got!</h2>
+        {% endif %}
+      {% endif %}
+
       {% for post in posts %}
         <div class="posts-index-item">
           <a href="{% url 'postShow' post.id %}">{{ post.title|truncatechars:45 }}</a>
