@@ -23,16 +23,15 @@ urlpatterns = [
     path('posts/new/', newView, name='postNew'),
     path('posts/show/<str:pk>', showView, name='postShow'),
     path('posts/edit/<str:pk>', editView, name='postEdit'),
-    path('posts/comment/<str:pk>', commentView, name='postComment'),
     path('posts/comment/delete/<str:pk>', deleteCommentView, name='postCommentDelete'),
     path('posts/comment/edit/<str:pk>', editCommentView, name='postCommentEdit'),
-    path('posts/delete/<str:pk>', deleteView, name='postDelete'),
     path('posts/comment/back/<str:pk>', commentBackView, name='postCommentBack'),
-
-    path('posts/report/<str:pk>', reportPostView, name='reportPost'),
     path('posts/comment/report/<str:pk>', reportCommentView, name='reportComment'),
+    path('posts/comment/<str:pk>', commentView, name='postComment'),
+    path('posts/delete/<str:pk>', deleteView, name='postDelete'),
+    path('posts/report/<str:pk>', reportPostView, name='reportPost'),
 
-    path('user/list/<str:pk>', userListView, name="userList" ),  #######################
+    path('user/list/<str:pk>', userListView, name="userList" ),
     path('user/mypage/', userMypageView, name="mypage" ),
     path('user/mypage/edit/', userMypageEditView, name="mypageEdit" ),
     path('user/delete_user_data', userDeleteView, name="userDelete" ),
