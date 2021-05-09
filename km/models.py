@@ -83,5 +83,12 @@ class Comment(models.Model):
 
     def __str__(self):
         return '%s - %s' % (self.post.title, self.user)
-         #this is how it is written in python2 mainly,
-         #you'd better write return self.post.title + self.user in python3
+        #this is how it is written in python2 mainly,
+        #you'd better write return self.post.title + self.user in python3
+
+class Article(models.Model):
+    title = models.TextField()
+    user = models.ForeignKey(CustomUser, null=True, on_delete= models.SET_NULL)
+
+    def __str__(self):
+        return self.title
