@@ -577,8 +577,12 @@ class UserCreateComplete(generic.TemplateView):
 
 #--------------story-section-----------------------
 def storyIndexView(request):
-	return render(request, 'story/story_index.html')
-def story1View(request):
+	articles = Article.objects.all().order_by('-date_added')
+	context = {'articles': articles}
+	return render(request, 'story/story_index.html', context)
+
+def story1View(request, pk):
 	return render(request, 'story/story1doug.html')
-def story2View(request):
+
+def story2View(request, pk):
 	return render(request, 'story/story2toda.html')

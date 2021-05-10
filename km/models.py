@@ -89,6 +89,7 @@ class Comment(models.Model):
 class Article(models.Model):
     title = models.TextField()
     user = models.ForeignKey(CustomUser, null=True, on_delete= models.SET_NULL)
+    date_added = models.DateTimeField(auto_now_add=True, null=True)
 
     def __str__(self):
         return self.title
