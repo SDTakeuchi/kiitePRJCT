@@ -581,8 +581,8 @@ def storyIndexView(request):
 	context = {'articles': articles}
 	return render(request, 'story/story_index.html', context)
 
-def story1View(request, pk):
+def story1View(request):
 	return render(request, 'story/story1doug.html')
 
-def story2View(request, pk):
+def story2View(request):
 	return render(request, 'story/story2toda.html')

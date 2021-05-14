@@ -50,7 +50,7 @@ urlpatterns = [
 
     path('story/', storyIndexView, name="storyIndex"),
     path('story/1', story1View, name="story1"),
-    path('story/2', story2View, name="story2"),
+    path('story/2', story1View, name="story2"),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

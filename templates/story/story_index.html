@@ -12,8 +12,8 @@
             <a href="{% url 'story1' %}"><strong>【第1回】<br>40社落ちた2年前の自分に伝えたかったあるコト、なんだと思いますか...？</strong></a>
             <div>
             <div class="pull-right">
-                <img src="{% static 'images/dougpic.jpg' %}" alt="profile pic" style="width:35px; height:35px">
                 <p>武内修平</p>
+                <img src="{% static 'images/dougpic.jpg' %}" alt="profile pic" style="width:35px; height:35px">
             </div>
             </div>
         </div>
@@ -22,11 +22,22 @@
             <a href="{% url 'story2' %}"><strong>【第2回】<br>「とりあえずやってみるか！」<br>チーバくんのうなじからやってきた男の熱き就活ストーリー</strong></a>
             <div>
             <div class="pull-right">
-                <img src="{% static 'images/toda1.jpg' %}" alt="profile pic" style="width:35px; height:35px">
                 <p>戸田健太郎</p>
+                <img src="{% static 'images/toda1.jpg' %}" alt="profile pic" style="width:35px; height:35px">
             </div>
             </div>
         </div>
+        {% for article in articles %}
+        <div class="posts-index-item">
+            <a href="{% url 'story1' %}?p={{ article.user.id }}"><strong>{{ article.title|linebreaksbr }}</strong></a>
+            <div>
+            <div class="pull-right">
+                <p>{{ article.user.name }}</p>
+                <img src="{{ article.user.profile_pic.url }}" alt="profile pic" style="width:35px; height:35px">
+            </div>
+            </div>
+        </div>
+        {% endfor %}
 
     </div>
     <div class="emptybox"></div>

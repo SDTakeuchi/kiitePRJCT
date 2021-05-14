@@ -88,7 +88,10 @@ class Comment(models.Model):
 
 class Article(models.Model):
     title = models.TextField()
+    body = models.TextField(default=None)
     user = models.ForeignKey(CustomUser, null=True, on_delete= models.SET_NULL)
+    interviewee_name = models.CharField(max_length=40, null=True, blank=True)
+    interviewee_pic = models.ImageField(null=True, blank=True)
     date_added = models.DateTimeField(auto_now_add=True, null=True)
 
     def __str__(self):
