@@ -1,0 +1,40 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="main posts-show">
+    <div class="container">
+      <div class="posts-show-item">
+        <h3>{{ article.title| linebreaksbr }}</h3>
+        
+        <div class="asker"> 
+        <!-- author section -->
+          {% if not article.interviewee_pic %}
+            <img class="profile-pic" alt="profile image" src="{{ article.user.profile_pic.url }}" style="width:38px; height:38px;">
+          {% else %}
+            <img class="profile-pic" alt="profile image" src="{{ article.interviewee_pic.url }}" style="width:38px; height:38px;">
+          {% endif %}
+
+          <a href="{% url 'userList' article.user.id %}">
+          {% if not article.interviewee_name %}
+            <h4 style="padding-top:0;">{{ article.user.name }}</h4> 
+          {% else %}
+            <h4 style="padding-top:0;">{{ article.interviewee_name }}</h4>
+          {% endif %}
+          </a>
+        </div>
+        <div class="article-body">
+<!-- write body down here -->
+
+{{ article.body|safe }}
+
+<!-- write body up here -->
+        </div>
+        <div class="post-time">
+          <p>2021/4/11</p>
+        </div>
+      </div>
+
+    </div><div class="emptybox"></div>
+  </div>
+{% endblock %}

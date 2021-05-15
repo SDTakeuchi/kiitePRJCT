@@ -29,7 +29,7 @@
         </div>
         {% for article in articles %}
         <div class="posts-index-item">
-            <a href="{% url 'story1' %}?p={{ article.user.id }}"><strong>{{ article.title|linebreaksbr }}</strong></a>
+            <a href="{% url 'storyShow' article.id %}"><strong>{{ article.title|linebreaksbr }}</strong></a>
             <div>
             <div class="pull-right">
                 {% if not article.interviewee_name %}
@@ -37,6 +37,7 @@
                 {% else %}
                     <p>{{ article.interviewee_name }}</p>
                 {% endif %}
+
                 {% if not article.interviewee_pic %}
                     <img src="{{ article.user.profile_pic.url }}" alt="profile pic" style="width:35px; height:35px">
                 {% else %}

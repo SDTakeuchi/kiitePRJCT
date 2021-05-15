@@ -586,3 +586,7 @@ def story1View(request):
 
 def story2View(request):
 	return render(request, 'story/story2toda.html')
+
+def storyShowView(request, pk):
+	article = Article.objects.all().get(id = pk)
+	return render(request, 'story/story_show.html',{'article': article})
