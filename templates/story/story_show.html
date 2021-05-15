@@ -31,7 +31,13 @@
 <!-- write body up here -->
         </div>
         <div class="post-time">
-          <p>{{ article.date_added|date:"Y/m/d H:i" }}</p>
+          <p>{{ article.date_added|date:"Y/m/d" }}</p>
+        </div>
+        <div class="button-section">
+          <div class="btn">
+            <a href="{% url 'postNewMentioned' article.user.id %}">???</a>
+            <a href="{% url 'userList' article.user.id %}">???</a>
+          </div>
         </div>
       </div>
 

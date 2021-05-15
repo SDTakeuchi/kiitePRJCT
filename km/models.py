@@ -66,6 +66,7 @@ class Post(models.Model):
     body = models.TextField(null=True)
     tag = models.ForeignKey(Tag, null=True,on_delete= models.SET_NULL, verbose_name='タグ')
     user = models.ForeignKey(CustomUser,null=True, on_delete= models.SET_NULL)
+    mentioned_user = models.ForeignKey(CustomUser, null=True, blank=True, on_delete= models.SET_NULL, related_name='mentioned_user')
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
 
@@ -88,6 +89,7 @@ class Comment(models.Model):
 
 class Article(models.Model):
     title = models.TextField()
+    industry = models.CharField(max_length=20, default=None)
     body = models.TextField(default=None)
     user = models.ForeignKey(CustomUser, null=True, on_delete= models.SET_NULL)
     interviewee_name = models.CharField(max_length=40, null=True, blank=True)

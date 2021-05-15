@@ -32,6 +32,7 @@
             <a href="{% url 'storyShow' article.id %}"><strong>{{ article.title|linebreaksbr }}</strong></a>
             <div>
             <div class="pull-right">
+                <p>{{ article.industry }}・</p>
                 {% if not article.interviewee_name %}
                     <p>{{ article.user.name }}</p>
                 {% else %}

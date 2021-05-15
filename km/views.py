@@ -138,6 +138,28 @@ def newView (request):
 	return render(request, 'posts/new.html', context)
 
 @login_required(login_url='login')
+def newMentionedView (request, pk):
+	try:
+		mentioned_user = CustomUser.objects.all().get(id = pk)
+	except:
+		return redirect('postIndex')
+	finally:
+		form = PostForm()
+		current_user = request.user
+		if request.method == 'POST':
+			form = PostForm(request.POST)
+			if form.is_valid():
+				post_user = form.save(commit=False)
+				post_user.user = current_user
+				post_user.mentioned_user = mentioned_user
+				post_user.save()
+				messages.info(request, "質問が投稿されました")
+				return redirect('postIndex')
+
+		context={'form':form, 'mentioned_user':mentioned_user}
+		return render(request, 'posts/new.html', context)
+
+@login_required(login_url='login')
 def editView (request, pk):
 	post = Post.objects.get(id = pk)
 	form = PostForm(instance=post)
