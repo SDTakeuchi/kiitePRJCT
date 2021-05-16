@@ -4,6 +4,7 @@
 {% block content %}
 <div class="main posts-show">
     <div class="container">
+      <p><a href="{% url 'storyIndex' %}">< STORIESトップページ</a></p>
       <div class="posts-show-item">
         <h3>{{ article.title| linebreaksbr }}</h3>
         
@@ -33,13 +34,9 @@
         <div class="post-time">
           <p>{{ article.date_added|date:"Y/m/d" }}</p>
         </div>
+        <p style="font-size:16px;">最後まで拝読いただきありがとうございました！</p>
         {% if article.user.can_ask == True %}
-        <p style="font-size:16px;">{{ article.user.name }}さんに質問したい方は<a href="{% url 'postNewMentioned' article.user.id %}">こちら</a>より質問できます。</p>
-        <div class="button-section">
-          <a class="btn btn-warning" href="{% url 'postNewMentioned' article.user.id %}" role="button" style="color: black;">
-            この卒業生に質問する！
-          </a>
-        </div>
+        <p style="font-size:16px;">また現在{{ article.user.name }}さん宛にメンション付きの質問をすることが可能となっています！<br><br class="br-sp">今回のコラムの内容について{{ article.user.name }}さんに質問をしてみたい方は<a href="{% url 'postNewMentioned' article.user.id %}"><b>こちらのリンク</b></a>より質問を作成してください。</p>
         {% endif %}
       </div>
 
