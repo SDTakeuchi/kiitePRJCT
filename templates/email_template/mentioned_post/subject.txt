@@ -1,0 +1,1 @@
+【Kiite-me!】{{mentnioned_user.name}}さん宛に質問が届きました！

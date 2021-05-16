@@ -139,25 +139,34 @@ def newView (request):
 
 @login_required(login_url='login')
 def newMentionedView (request, pk):
-	try:
-		mentioned_user = CustomUser.objects.all().get(id = pk)
-	except:
+	mentioned_user = CustomUser.objects.all().get(id = pk)
+	if mentioned_user.can_ask == False:
 		return redirect('postIndex')
-	finally:
-		form = PostForm()
-		current_user = request.user
-		if request.method == 'POST':
-			form = PostForm(request.POST)
-			if form.is_valid():
-				post_user = form.save(commit=False)
-				post_user.user = current_user
-				post_user.mentioned_user = mentioned_user
-				post_user.save()
-				messages.info(request, "質問が投稿されました")
-				return redirect('postIndex')
 
-		context={'form':form, 'mentioned_user':mentioned_user}
-		return render(request, 'posts/new.html', context)
+	form = PostForm()
+	current_user = request.user
+	if request.method == 'POST':
+		form = PostForm(request.POST)
+		if form.is_valid():
+			post_user = form.save(commit=False)
+			post_user.user = current_user
+			post_user.mentioned_user = mentioned_user
+			post_user.save()
+			
+			context={'current_user':current_user,'post_user': post_user, 'mentioned_user':mentioned_user}
+
+			subject = render_to_string('email_template/mentioned_post/subject.txt', context)
+			message = render_to_string('email_template/mentioned_post/message.txt', context)
+		
+			recepient = str(mentioned_user.email)
+			# msg = EmailMessage(subject, message, EMAIL_HOST_USER, [recepient])
+			# msg.send()
+
+			messages.info(request, "質問が投稿されました")
+			return redirect('postIndex')
+
+	context={'form':form, 'mentioned_user':mentioned_user}
+	return render(request, 'posts/new.html', context)
 
 @login_required(login_url='login')
 def editView (request, pk):

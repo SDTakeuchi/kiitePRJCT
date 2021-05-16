@@ -56,7 +56,7 @@
       {{ form.introduction }}
       {% if request.user.student_status == '卒業生' %}
       <p>{{ form.can_ask }}メンションによる質問を許可する</p>
-      <p style="font-size:13px;">　※チェックをした場合、あなたのプロフィールを閲覧した在学生ユーザーが{{ request.user.name }}さん宛に質問をすることが可能となります。</p>
+      <p style="font-size:13px;">　※チェックをした場合、あなたのコラムやプロフィールを閲覧した在学生ユーザーが{{ request.user.name }}さん宛に質問をすることが可能となります。</p>
       {% endif %}
       <br>
 		<input class="btn btn-warning" type="submit" value="更新" name="Update Information">

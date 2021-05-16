@@ -6,6 +6,11 @@
 <div class="main posts-show">
     <div class="container">
       <div class="posts-show-item">
+        {% if post.mentioned_user %}
+          <p style="font-size:16px;">送信先 :
+            <a href="{% url 'userList' post.mentioned_user.id %}"><img src="{{ post.mentioned_user.profile_pic.url }}" alt="profile pic" style="width:32px; height:32px; border-radius: 45%;"> {{ post.mentioned_user.name }}</a> さん
+          </p>
+        {% endif %}
         <form action="" method="POST">
           {% csrf_token %}
           <p>質問タイトル</p>

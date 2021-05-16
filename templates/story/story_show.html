@@ -33,12 +33,14 @@
         <div class="post-time">
           <p>{{ article.date_added|date:"Y/m/d" }}</p>
         </div>
+        {% if article.user.can_ask == True %}
+        <p style="font-size:16px;">{{ article.user.name }}さんに質問したい方は<a href="{% url 'postNewMentioned' article.user.id %}">こちら</a>より質問できます。</p>
         <div class="button-section">
-          <div class="btn">
-            <a href="{% url 'postNewMentioned' article.user.id %}">???</a>
-            <a href="{% url 'userList' article.user.id %}">???</a>
-          </div>
+          <a class="btn btn-warning" href="{% url 'postNewMentioned' article.user.id %}" role="button" style="color: black;">
+            この卒業生に質問する！
+          </a>
         </div>
+        {% endif %}
       </div>
 
     </div><div class="emptybox"></div>
