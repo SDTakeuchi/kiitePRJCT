@@ -480,8 +480,8 @@ footer {
 
 .signup-btn{
   position: fixed;
-  bottom: 27px;
-  right: 32px;
+  bottom: 35px;
+  right: 35px;
 }
 
 @media screen and (max-width: 767px) {
