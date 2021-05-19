@@ -49,7 +49,7 @@ urlpatterns = [
     path('contact/form/', contactFormView, name="contactForm"),
     path('staff_only/', adminNotificationView, name="adminNotificationForm"),
 
-    path('story/', storyIndexView, name="storyIndex"),
+    path('story/index/', storyIndexView, name="storyIndex"),
     path('story/take', story1View, name="story1"),
     path('story/toda', story1View, name="story2"),
     path('story/<str:pk>', storyShowView, name="storyShow"),
