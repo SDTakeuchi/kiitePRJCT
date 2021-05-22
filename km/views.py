@@ -67,9 +67,12 @@ def loginView (request):
 
 		if user is not None:
 			login(request, user)
+			article_url = request.GET.get('next')
+			if article_url is not None:
+				return redirect(article_url)
 			if user.introduction == "まだプロフィールを記入していないようです、、、" or "":
-				messages.success(request,"プロフィールの記入がまだのようです！マイページから記入しましょう！")   ###########
-			return redirect('postIndex')
+				messages.success(request,"プロフィールの記入がまだのようです！マイページから記入しましょう！")
+			return redirect('/posts/index')
 		else:
 			messages.info(request, "メールアドレスかパスワードが誤っています。")
 

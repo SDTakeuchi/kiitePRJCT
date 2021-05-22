@@ -36,7 +36,7 @@
         </div>
         <p style="font-size:16px;">最後まで拝読いただきありがとうございました！</p>
         {% if article.user.can_ask == True %}
-        <p style="font-size:16px;">また現在{{ article.user.name }}さん宛にメンション付きの質問をすることが可能となっています！<br><br class="br-sp">今回のコラムの内容について{{ article.user.name }}さんに質問をしてみたい方は<a href="{% url 'postNewMentioned' article.user.id %}"><b>こちらのリンク</b></a>より質問を作成してください。</p>
+        <p style="font-size:16px;">また現在{{ article.user.name }}さん宛にメンション付きの質問をすることが可能となっています！<br><br class="br-sp">今回のコラムの内容について{{ article.user.name }}さんに質問をしたい方は<a href="{% url 'postNewMentioned' article.user.id %}"><b>こちらのリンク</b></a>より質問を投稿してください。</p>
         {% endif %}
       </div>
 
