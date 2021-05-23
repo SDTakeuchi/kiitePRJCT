@@ -21,7 +21,14 @@
       </div>
     </div>
   </div>
-
-
-<br>
+{% if user.can_ask == True %}
+	{% if not user == request.user %}
+		<div class="below-mypage">
+			<div class="card card-body">
+				<a class="btn btn-default mypage-btn" href="{% url 'postNewMentioned' user.id %}">メンション付きの質問を送る！</a>
+			</div>
+			<div class="emptybox"></div>
+		</div>
+	{% endif %}
+{% endif %}
 {% endblock %}
