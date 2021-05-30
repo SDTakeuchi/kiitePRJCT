@@ -55,7 +55,7 @@ http://www.templatemo.com/tm-472-blaster
 				{% if request.user.is_anonymous %}
 				<li><a href="{% url 'home' %}#home" class="smoothScroll">ホーム</a></li>
 				<li><a href="{% url 'home' %}#about">Kiite-me!について</a></li>
-				<li><a href="{% url 'storyIndex' %}">STORIES</a></li>
+				<li><a href="{% url 'storyIndex' %}"><span style="color:#65efef;">new! </span>STORIES</a></li>
 				<li><a href="{% url 'login' %}">ログイン</a></li>
 				<li><a href="{% url 'contactForm' %}">お問い合わせ</a></li>				`
 				{% endif %}
@@ -64,7 +64,7 @@ http://www.templatemo.com/tm-472-blaster
 				<li><a href="{% url 'postIndex' %}" class="smoothScroll">ホーム</a></li>
 				<li><a href="{% url 'postNew' %}">質問作成</a></li>
 				<li><a href="{% url 'mypage' %}">マイページ</a></li>
-				<li><a href="{% url 'storyIndex' %}">STORIES</a></li>
+				<li><a href="{% url 'storyIndex' %}"><span style="color:#65efef;">new! </span>STORIES</a></li>
 				<li><a href="{% url 'logout' %}" onclick="return confirm('ログアウトします。よろしいですか？')">ログアウト</a></li>	
 				{% endif %}
 			</ul>  
