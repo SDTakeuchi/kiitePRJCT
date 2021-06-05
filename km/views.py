@@ -611,7 +611,7 @@ class UserCreateComplete(generic.TemplateView):
 
 #--------------story-section-----------------------
 def storyIndexView(request):
-	articles = Article.objects.all().order_by('-date_added')
+	articles = Article.objects.all().order_by('date_added')
 	context = {'articles': articles}
 	return render(request, 'story/story_index.html', context)
 

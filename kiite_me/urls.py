@@ -51,7 +51,7 @@ urlpatterns = [
 
     path('story/index/', storyIndexView, name="storyIndex"),
     path('story/take', story1View, name="story1"),
-    path('story/toda', story1View, name="story2"),
+    path('story/toda', story2View, name="story2"),
     path('story/<str:pk>', storyShowView, name="storyShow"),
 ]
 
