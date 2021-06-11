@@ -423,22 +423,22 @@ def adminNotificationView(request):
 
 	notiForm = forms.adminNotificationForm()
 	if request.method == 'POST':
-		# notiForm = forms.adminNotificationForm(request.POST)
-		# subject = '【Kiite-me!】' + str(notiForm['title'].value())
-		# message = str(notiForm['toGroup'].value())
-		# message += '\n'
-		# message += str(notiForm['body'].value())
-		# message += '\n\n--\n====================================\n● 配信元：キイテミ運営事務局\n\n▼お問い合わせは下記までお願いいたします。\nキイテミ運営事務局\nkiiteme.info@gmail.com\n===================================='#署名
+		notiForm = forms.adminNotificationForm(request.POST)
+		subject = '【Kiite-me!】' + str(notiForm['title'].value())
+		message = str(notiForm['toGroup'].value())
+		message += '\n\n'
+		message += str(notiForm['body'].value())
+		message += '\n\n--\n\n====================================\n● 配信元：キイテミ運営事務局\n\n▼お問い合わせは下記までお願いいたします。\nキイテミ運営事務局\nkiiteme.info@gmail.com\n===================================='#署名
 
-		# if str(notiForm['toGroup'].value()) == 'ユーザーの皆様':
-		# 	recepient = CustomUser.objects.filter(is_active__isnull=False).values_list('email', flat=True)
-		# elif str(notiForm['toGroup'].value()) == 'ユーザー（在学生）の皆様' or str(notiForm['toGroup'].value()) == 'ユーザー（卒業生）の皆様':
-		# 	recepient = CustomUser.objects.filter(student_status__contains=str(notiForm['toGroup'].value()))
-		# elif  str(notiForm['toGroup'].value()) == 'スタッフの皆様':
-		# 	recepient = CustomUser.objects.filter(is_staff=True).values_list('email', flat=True)
-		# recepient = list(recepient)
-		# msg = EmailMessage(subject, message, EMAIL_HOST_USER, bcc=recepient)
-		# msg.send()
+		if str(notiForm['toGroup'].value()) == 'ユーザーの皆様':
+			recepient = CustomUser.objects.filter(is_active__isnull=False).values_list('email', flat=True)
+		elif str(notiForm['toGroup'].value()) == 'スタッフの皆様':
+			recepient = CustomUser.objects.filter(is_staff=True).values_list('email', flat=True)
+		else:
+			recepient = CustomUser.objects.filter(student_status__contains=str(notiForm['toGroup'].value()[5:7])).values_list('email', flat=True)
+		recepient = list(recepient)
+		msg = EmailMessage(subject, message, EMAIL_HOST_USER, bcc=recepient)
+		msg.send()
 		return render(request, 'contact/sent_admin_notification.html', {'recepient': recepient})
 
 	return render(request, 'contact/admin_notification.html', {'form': notiForm})
