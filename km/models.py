@@ -80,7 +80,11 @@ class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments")
     user = models.ForeignKey(CustomUser, null=True, on_delete= models.SET_NULL)
     body = models.TextField()
+    like_user_list = models.ManyToManyField(CustomUser, blank=True, null=True, related_name="like_user_list")
     date_added = models.DateTimeField(auto_now_add=True)
+    
+    def count_like(self):
+        return self.like_user_list.count()
 
     def __str__(self):
         return '%s - %s' % (self.post.title, self.user)

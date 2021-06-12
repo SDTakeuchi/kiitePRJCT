@@ -190,6 +190,17 @@ def editView (request, pk):
 	return render(request, 'posts/edit.html', context)
 
 @login_required(login_url='login')
+def likeUnlikeCommentView(request, pk):
+	comment = Comment.objects.get(id = pk)
+	if comment.user == request.user:
+		pass
+	elif request.user in comment.like_user_list.all():
+		comment.like_user_list.remove(request.user)
+	else:
+		comment.like_user_list.add(request.user)
+	return redirect('postShow', pk=comment.post.id)
+
+@login_required(login_url='login')
 def commentView (request, pk):
 	post = Post.objects.get(id = pk)
 	form = CommentForm()

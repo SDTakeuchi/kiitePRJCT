@@ -4,7 +4,7 @@ from django.urls import path
 from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib.auth import views as auth_views
-from km.views import homeView, loginView, signupView, logoutView, indexView,showView, newView, editView, deleteCommentView, editCommentView, deleteView, commentView, userListView, userMypageView, userMypageEditView, termsOfUseView, privacyPolicyView, contactFormView, userDeleteView, commentBackView, adminNotificationView, crop_image, UserCreate, signupAlumni, UserCreateDone, UserCreateComplete, reportPostView, reportCommentView, storyIndexView, story1View, story2View, storyShowView, newMentionedView
+from km.views import homeView, loginView, signupView, logoutView, indexView,showView, newView, editView, deleteCommentView, editCommentView, deleteView, commentView, userListView, userMypageView, userMypageEditView, termsOfUseView, privacyPolicyView, contactFormView, userDeleteView, commentBackView, adminNotificationView, crop_image, UserCreate, signupAlumni, UserCreateDone, UserCreateComplete, reportPostView, reportCommentView, storyIndexView, story1View, story2View, storyShowView, newMentionedView, likeUnlikeCommentView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,6 +27,7 @@ urlpatterns = [
     path('posts/comment/delete/<str:pk>', deleteCommentView, name='postCommentDelete'),
     path('posts/comment/edit/<str:pk>', editCommentView, name='postCommentEdit'),
     path('posts/comment/back/<str:pk>', commentBackView, name='postCommentBack'),
+    path('posts/comment/likeUnlike/<str:pk>', likeUnlikeCommentView, name='likeUnlike'),
     path('posts/comment/report/<str:pk>', reportCommentView, name='reportComment'),
     path('posts/comment/<str:pk>', commentView, name='postComment'),
     path('posts/delete/<str:pk>', deleteView, name='postDelete'),
