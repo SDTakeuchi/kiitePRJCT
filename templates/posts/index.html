@@ -25,7 +25,12 @@
       </div>
       {% else %}
         {% if not posts %}
-          <h2 style="text-align:center; margin-top:13%; color:rgb(133, 133, 133);">Let's ask whatever question you've got!</h2>
+          <a href="{% url 'postNew' %}">
+            <h2 style="text-align:center; text-decoration: none; margin-top:13%; color:rgb(133, 133, 133);">Let's ask whatever question you've got!</h2>
+          </a>
+          <div class="button-section">
+            <a href="{% url 'postNew' %}" class="btn-text-3d" style="text-decoration: none; color:#fff;">質問を作成！</a>
+          </div>
         {% endif %}
       {% endif %}
 
@@ -68,10 +73,13 @@
   </ul>
   {% endif %}
 </div>
-
-<a href="{% url 'postNew' %}" class="newpostlink">
-  <svg xmlns="http://www.w3.org/2000/svg" width="33" height="33" fill="currentColor" class="bi bi-plus-square-fill spver" viewBox="0 0 16 16">
-    <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3a.5.5 0 0 1 1 0z"/>
-  </svg>
-</a>
+{% if posts %}
+  {% if request.user.student_status == '在学生' %}
+    <a href="{% url 'postNew' %}" class="newpostlink">
+      <svg xmlns="http://www.w3.org/2000/svg" width="33" height="33" fill="currentColor" class="bi bi-plus-square-fill spver" viewBox="0 0 16 16">
+        <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3a.5.5 0 0 1 1 0z"/>
+      </svg>
+    </a>
+  {% endif %}
+{% endif %}
 {% endblock %}

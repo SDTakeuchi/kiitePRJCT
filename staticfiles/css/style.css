@@ -480,8 +480,8 @@ footer {
 
 .signup-btn{
   position: fixed;
-  bottom: 35px;
-  right: 35px;
+  bottom: 27px;
+  right: 32px;
 }
 
 @media screen and (max-width: 767px) {
@@ -1024,7 +1024,7 @@ footer {
   padding: 3px;
 }
 .emptybox{
-  height: 22px;
+  height: 15px;
 }
 #id_entry_year, #id_student_status {
   height: 38px;
@@ -1051,11 +1051,38 @@ select#id_title {
 }
 
 .article-body{
-  margin: 50px -5px;
+  margin: 50px 0;
 }
 .article-body p, .article-body b{
-  font-size:15.7px;
+  font-size:16.5px;
 }
 .article-body h4{
-  padding:33px 0;
+  padding:30px 0;
+}
+
+.button-section {
+  margin-top: 27%;
+  text-align: center;
+}
+
+.btn-text-3d {
+  display: inline-block;
+  background: #ff8181;
+  width: 150px;
+  height: 150px;
+  line-height: 150px;
+  border-radius: 50%;
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+  overflow: hidden;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.29);
+  border-bottom: solid 3px #bd6565;
+  transition: .4s;
+}
+.btn-text-3d:active {
+  -webkit-transform: translateY(2px);
+  transform: translateY(2px);
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.15);
+  border-bottom: none;
 }

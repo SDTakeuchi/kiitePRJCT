@@ -88,6 +88,7 @@
             <p>
             {{ comment.body | linebreaksbr }}
             </p> 
+            <div class="sub-action">
             {% if comment.user == request.user %}
             <a href="{% url 'postCommentDelete' comment.id %}" onclick="return confirm('このコメントを本当に削除しますか？')">
               <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-trash-fill commenticons" viewBox="0 0 16 16">
@@ -112,6 +113,7 @@
               </svg>
             </a>
             {% endif %}
+            </div>
           </div>
         {% endfor %}
       {% endif %}
