@@ -88,7 +88,7 @@
             <p>
             {{ comment.body | linebreaksbr }}
             </p> 
-            <div class="sub-action">
+            <div class="sub-buttons">
             {% if comment.user != request.user %}
               <a href="{% url 'likeUnlike' comment.id %}" style="text-decoration:none;">
                 <button class="btn">
@@ -134,7 +134,6 @@
           </div>
         {% endfor %}
       {% endif %}
-
     </div><div class="emptybox"></div>
   </div>
 {% endblock %}
