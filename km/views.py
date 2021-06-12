@@ -198,6 +198,15 @@ def likeUnlikeCommentView(request, pk):
 		comment.like_user_list.remove(request.user)
 	else:
 		comment.like_user_list.add(request.user)
+		context={'comment': comment, 'user': request.user, 'liked_user': comment.user}
+
+		subject = render_to_string('email_template/like_comment/subject.txt',context)
+		message = render_to_string('email_template/like_comment/message.txt',context)
+	
+		recepient = str(comment.user.email)
+		msg = EmailMessage(subject, message, EMAIL_HOST_USER, [recepient])
+		msg.send()
+
 	return redirect('postShow', pk=comment.post.id)
 
 @login_required(login_url='login')
