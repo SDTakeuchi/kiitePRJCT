@@ -438,7 +438,7 @@ def adminNotificationView(request):
 			recepient = CustomUser.objects.filter(student_status__contains=str(notiForm['toGroup'].value()[5:7])).values_list('email', flat=True)
 		recepient = list(recepient)
 		msg = EmailMessage(subject, message, EMAIL_HOST_USER, bcc=recepient)
-		msg.send()
+		# msg.send()
 		return render(request, 'contact/sent_admin_notification.html', {'recepient': recepient})
 
 	return render(request, 'contact/admin_notification.html', {'form': notiForm})
