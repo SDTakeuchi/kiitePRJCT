@@ -196,6 +196,9 @@ def likeUnlikeCommentView(request, pk):
 		pass
 	elif request.user in comment.like_user_list.all():
 		comment.like_user_list.remove(request.user)
+	elif comment.user is None:
+		if not request.user in comment.like_user_list.all():
+			comment.like_user_list.add(request.user)
 	else:
 		comment.like_user_list.add(request.user)
 		context={'comment': comment, 'user': request.user, 'liked_user': comment.user}
