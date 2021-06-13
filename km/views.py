@@ -204,8 +204,8 @@ def likeUnlikeCommentView(request, pk):
 		message = render_to_string('email_template/like_comment/message.txt',context)
 	
 		recepient = str(comment.user.email)
-		msg = EmailMessage(subject, message, EMAIL_HOST_USER, [recepient])
-		msg.send()
+		# msg = EmailMessage(subject, message, EMAIL_HOST_USER, [recepient])
+		# msg.send()
 
 	return redirect('postShow', pk=comment.post.id)
 
