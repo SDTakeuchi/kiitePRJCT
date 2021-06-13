@@ -21,12 +21,22 @@
                 <p>内容</p>
                 {{ form.body }}
 
-                <input type="submit" name="ContactForm" value="送信">
+                <input type="submit" name="ContactForm" value="送信" id="show_spinner">
             </form>
             {{ form.errors }}
             </div>
         </div>
         </div>
     </div>
-
+<!-- spinner section -->
+<div class="spinner-div" id="id_spinner">
+    <div class="loader" id="loader-1"></div>
+</div>
+<script type="text/javascript">
+    var show_spinner_event = document.getElementById("show_spinner")
+    show_spinner_event.addEventListener("click", showSpinner);
+    function showSpinner(){
+        document.getElementById("id_spinner").style.display = "block";
+    }
+</script>
 {% endblock %}
