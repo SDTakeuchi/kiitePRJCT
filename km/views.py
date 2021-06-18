@@ -30,7 +30,7 @@ from django.core.signing import BadSignature, SignatureExpired, loads, dumps
 from django.views import generic
 from django.contrib.auth import get_user_model
 from django.views.generic import TemplateView
-
+import re
 
 TEMP_PROFILE_IMAGE_NAME = "temp_profile_image.png"
 # Create your views here.
@@ -419,22 +419,50 @@ def privacyPolicyView(request):
 	return render(request, 'policies/privacy_policy.html')
 
 #----------contact-----------------
+BLACKLIST = [
+	'amparo.maguire',
+	'andersongervasi2985',
+	'andersongervasi',
+	'albertmcclellan3867',
+	'baasiminvestment',
+	'castlesarro8899',
+	'charmainfarm',
+	'coltonclevand',
+	'coltonclevand80154'
+	'coltonbourget',
+	'coltonbourget80365',
+	'contact',
+	'eric.jones.z.mail',
+	'eberlekinard7910',
+	'frank.moye',
+	'jamesfernando87516',
+	'msrk4139',
+	'no-replyVow',
+	'nancyshaylahy',
+	'harleayanderson96425',
+	'oslerprato6887',
+	'shareboss.jp',
+	'tommyfishman35624',
+	'woods.sharon',
+]
 
 def contactFormView(request):
-
 	cont = forms.ContactForm()
+	blacklistRegex = re.compile('([^@]+)')
 
 	if request.method == 'POST':
-		# cont = forms.ContactForm(request.POST)
-		# subject = '【kiite-me】お問い合わせが送信されました ※自動送信です'
-		# message = '速やかに運営事務局よりご返信をお送りします！しばらくお待ちください。\n下記が送信されたメッセージです。\nーーーーーーーーーーーーーーーーーーーーーーーー\n\n'
-		# message += str(cont['title'].value())
-		# message += '\n'
-		# message += str(cont['body'].value())
-		# message += '\n\n--\n====================================\n● 配信元：キイテミ運営事務局\n\n▼お問い合わせは下記までお願いいたします。\nキイテミ運営事務局\nkiiteme.info@gmail.com\n===================================='#署名
-		# recepient = str(cont['toEmail'].value())
-		# msg = EmailMessage(subject, message, EMAIL_HOST_USER, [recepient], [EMAIL_HOST_USER])
-		# msg.send()
+		cont = forms.ContactForm(request.POST)
+		recepient = str(cont['toEmail'].value())
+		if blacklistRegex.search(recepient).group() in BLACKLIST:
+			return render(request, 'contact/contact_sent.html', {'recepient': recepient})
+		subject = '【kiite-me】お問い合わせが送信されました ※自動送信です'
+		message = '速やかに運営事務局よりご返信をお送りします！しばらくお待ちください。\n下記が送信されたメッセージです。\nーーーーーーーーーーーーーーーーーーーーーーーー\n\n'
+		message += str(cont['title'].value())
+		message += '\n'
+		message += str(cont['body'].value())
+		message += '\n\n--\n====================================\n● 配信元：キイテミ運営事務局\n\n▼お問い合わせは下記までお願いいたします。\nキイテミ運営事務局\nkiiteme.info@gmail.com\n===================================='
+		msg = EmailMessage(subject, message, EMAIL_HOST_USER, [recepient], [EMAIL_HOST_USER])
+		msg.send()
 		return render(request, 'contact/contact_sent.html', {'recepient': recepient})
 
 	return render(request, 'contact/contact_form.html', {'form': cont})
