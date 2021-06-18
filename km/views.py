@@ -461,8 +461,8 @@ def contactFormView(request):
 		message += '\n'
 		message += str(cont['body'].value())
 		message += '\n\n--\n====================================\n● 配信元：キイテミ運営事務局\n\n▼お問い合わせは下記までお願いいたします。\nキイテミ運営事務局\nkiiteme.info@gmail.com\n===================================='
-		msg = EmailMessage(subject, message, EMAIL_HOST_USER, [recepient], [EMAIL_HOST_USER])
-		msg.send()
+		# msg = EmailMessage(subject, message, EMAIL_HOST_USER, [recepient], [EMAIL_HOST_USER])
+		# msg.send()
 		return render(request, 'contact/contact_sent.html', {'recepient': recepient})
 
 	return render(request, 'contact/contact_form.html', {'form': cont})
