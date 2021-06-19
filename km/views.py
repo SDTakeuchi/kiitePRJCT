@@ -297,7 +297,7 @@ def commentBackView (request, pk):
 		if form.is_valid():
 			comment_instance = form.save(commit=False)
 			if comment.user != None:
-				comment_instance.body = str(f' > {comment.user.name}\r\n') + comment_instance.body
+				comment_instance.body = str(f' > {comment.user.name}さん\r\n') + comment_instance.body
 			else:
 				comment_instance.body = ' > 退会済みユーザー\r\n' + comment_instance.body
 			comment_instance.user = current_user

@@ -1090,7 +1090,7 @@ select#id_title {
 .spinner-div {
   display: none;
   position: fixed;
-  top: 60px;
+  top: 43%;
   left: 50%;
   transform: translate(-50%, 0%);
 }
