@@ -453,13 +453,16 @@ def contactFormView(request):
 	if request.method == 'POST':
 		cont = forms.ContactForm(request.POST)
 		recepient = str(cont['toEmail'].value())
+		body = str(cont['body'].value())
+		if "http" in body:
+			return render(request, 'contact/contact_sent.html', {'recepient': recepient})
 		if blacklistRegex.search(recepient).group() in BLACKLIST:
 			return render(request, 'contact/contact_sent.html', {'recepient': recepient})
 		subject = '【kiite-me】お問い合わせが送信されました ※自動送信です'
 		message = '速やかに運営事務局よりご返信をお送りします！しばらくお待ちください。\n下記が送信されたメッセージです。\nーーーーーーーーーーーーーーーーーーーーーーーー\n\n'
 		message += str(cont['title'].value())
 		message += '\n'
-		message += str(cont['body'].value())
+		message += body
 		message += '\n\n--\n====================================\n● 配信元：キイテミ運営事務局\n\n▼お問い合わせは下記までお願いいたします。\nキイテミ運営事務局\nkiiteme.info@gmail.com\n===================================='
 		# msg = EmailMessage(subject, message, EMAIL_HOST_USER, [recepient], [EMAIL_HOST_USER])
 		# msg.send()
