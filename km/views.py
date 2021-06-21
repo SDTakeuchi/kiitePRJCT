@@ -541,7 +541,14 @@ def crop_image(request, *args, **kwargs):
 				cropY = 0
 			crop_img = img[cropY:cropY+cropHeight, cropX:cropX+cropWidth]
 
-			cv2.imwrite(url, crop_img)
+			img_height = img.shape[0]
+			img_width = img.shape[1]
+			while img_width > 250 or img_height > 250:
+				img_height = int(img_height*0.6)
+				img_width = int(img_width*0.6)
+				crop_img = cv2.resize(crop_img, (img_width, img_height))
+
+			crop_img = cv2.imwrite(url, crop_img, [cv2.IMWRITE_PNG_COMPRESSION, 1])
 
 			# delete the old image
 			user.profile_pic.delete()
