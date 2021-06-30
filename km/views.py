@@ -33,7 +33,10 @@ from django.views.generic import TemplateView
 import re
 
 TEMP_PROFILE_IMAGE_NAME = "temp_profile_image.png"
-# Create your views here.
+
+def truncate(string, length, ellipsis='...'):
+    return string[:length] + (ellipsis if string[length:] else '')
+
 def homeView (request):
 	return render(request, 'home.html')
 	
@@ -228,15 +231,15 @@ def commentView (request, pk):
 			
 			if post.user != None:
 				if comment_instance.user != post.user:
-					comment_body = comment_instance.body
+					comment_body = truncate(comment_instance.body, 150)
 					context={'post':post,'comment_instance': comment_instance,'comment_body':comment_body}
 
 					subject = render_to_string('email_template/newcomment/subject.txt')
 					message = render_to_string('email_template/newcomment/message.txt',context)
 				
-					recepient = str(post.user.email)
-					# msg = EmailMessage(subject, message, EMAIL_HOST_USER, [recepient])
-					# msg.send()
+					# recepient = str(post.user.email)
+					msg = EmailMessage(subject, message, EMAIL_HOST_USER, ['kuranku191952996@gmail.com'])
+					msg.send()
 
 			messages.info(request, "コメントが投稿されました")
 			return redirect('postShow', pk=post.id)
