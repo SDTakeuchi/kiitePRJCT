@@ -231,14 +231,14 @@ def commentView (request, pk):
 			
 			if post.user != None:
 				if comment_instance.user != post.user:
-					comment_body = truncate(comment_instance.body, 150)
+					comment_body = truncate(comment_instance.body, 200)
 					context={'post':post,'comment_instance': comment_instance,'comment_body':comment_body}
 
 					subject = render_to_string('email_template/newcomment/subject.txt')
 					message = render_to_string('email_template/newcomment/message.txt',context)
 				
-					# recepient = str(post.user.email)
-					msg = EmailMessage(subject, message, EMAIL_HOST_USER, ['kuranku191952996@gmail.com'])
+					recepient = str(post.user.email)
+					msg = EmailMessage(subject, message, EMAIL_HOST_USER, [recepient])
 					msg.send()
 
 			messages.info(request, "コメントが投稿されました")
@@ -300,9 +300,9 @@ def commentBackView (request, pk):
 		if form.is_valid():
 			comment_instance = form.save(commit=False)
 			if comment.user != None:
-				comment_instance.body = str(f' > {comment.user.name}さん\r\n') + comment_instance.body
+				comment_instance.body = str(f' > {comment.user.name}さん\r\n') + truncate(comment_instance.body, 200)
 			else:
-				comment_instance.body = ' > 退会済みユーザー\r\n' + comment_instance.body
+				comment_instance.body = ' > 退会済みユーザー\r\n' + truncate(comment_instance.body, 200)
 			comment_instance.user = current_user
 			comment_instance.post = post
 			comment_instance.save()
