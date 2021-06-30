@@ -90,6 +90,9 @@ class Comment(models.Model):
         return '%s - %s' % (self.post.title, self.user)
         #this is how it is written in python2 mainly,
         #you'd better write return self.post.title + self.user in python3
+    
+    class Meta:
+        ordering = ['date_added']
 
 class Article(models.Model):
     title = models.TextField()
