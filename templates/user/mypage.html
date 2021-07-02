@@ -5,6 +5,18 @@
 <div class="main mypage-show">
     <div class="container">
       <div class="mypage-show-item">
+		{% if student.show_rank != None %}
+		<img style="width:20px; height:40px; display:inline; float:left;"
+			{% if student.show_rank == "bronze" %}
+			src="{% static 'images/rank_medals/bronze_rank_medal.png' %}"
+			{% elif student.show_rank == "silver" %}
+			src="{% static 'images/rank_medals/silver_rank_medal.png' %}"
+			{% elif student.show_rank == "gold" %}
+			src="{% static 'images/rank_medals/gold_rank_medal.png' %}"
+			{% endif %}
+		alt="rank_medal">
+		{% endif %}
+		<p style="font-size: 13px; line-height: 20px;">{{ student.remaining_comments_to_rankup|linebreaksbr }}</p>
         
 		<img class="profile-pic" src="{{ student.profile_pic.url }}">
 		<div class="user-info">

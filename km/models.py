@@ -52,6 +52,33 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     objects = CustomUserManager()
 
+    bronze = 5
+    silver = 20
+    gold = 50
+
+    def show_rank(self):
+        comment_count = Comment.objects.filter(user=self).count()
+        if comment_count >= self.gold:
+            return "gold"
+        elif comment_count >= self.silver:
+            return "silver"
+        elif comment_count >= self.bronze:
+            return "bronze"
+        else:
+            return None
+
+    def remaining_comments_to_rankup(self):
+        comment_count = Comment.objects.filter(user=self).count()
+        current_rank = self.show_rank()
+        if current_rank == None:
+            return "あと{}回コメントで\nブロンズにランクアップ！".format(self.bronze-comment_count)
+        elif current_rank == "bronze":
+            return "あと{}回コメントで\nシルバーにランクアップ！".format(self.silver-comment_count)
+        elif current_rank == "silver":
+            return "あと{}回コメントで\nゴールドにランクアップ！".format(self.gold-comment_count)
+        elif current_rank == "gold":
+            return "おめでとうございます！\n最高ランクのゴールド達成です！"
+
     def __str__(self):
         return self.email
 
