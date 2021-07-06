@@ -65,4 +65,20 @@ def dailymail():
         msg_for_line += "---------------------------------------"
         send_msg_to_line(msg_for_line)
 
-        #below for remind mail to ZAIGAKU-SEI not responding to any answers
+    #below for remind mail to ZAIGAKU-SEI not responding to any answers
+    three_days_before1959 = today1959 - datetime.timedelta(days=3)
+    four_days_before2000 = yesterday2000 - datetime.timedelta(days=3)
+    for post in Post.objects.all():
+        commented_user = list(post.comments.filter(post=post).values_list('user__email', flat=True))
+        liked_user = list(post.comments.filter(post=post).values_list('like_user_list__email', flat=True))
+        if str(post.user) not in liked_user:
+            if str(post.user) not in commented_user:
+                latest_comment = post.comments.filter(post=post).filter(date_added__gte=four_days_before2000).filter(date_added__lte=three_days_before1959).order_by('-date_added').first()
+                if latest_comment is not None:
+                    context={'user':post.user, 'post':post}
+                    subject = render_to_string('email_template/remind/subject.txt', context)
+                    message = render_to_string('email_template/remind/message.txt', context)
+                    recepient = str(post.user.email)
+                    msg = EmailMessage(subject, message, EMAIL_HOST_USER, [recepient], bcc=[EMAIL_HOST_USER])
+                    msg.send()
+                    print("remind mail has been sent")
