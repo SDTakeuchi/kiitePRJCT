@@ -108,13 +108,14 @@ class Comment(models.Model):
     user = models.ForeignKey(CustomUser, null=True, on_delete= models.SET_NULL)
     body = models.TextField()
     like_user_list = models.ManyToManyField(CustomUser, blank=True, related_name="like_user_list")
+    is_reply_to = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True, default=None)
     date_added = models.DateTimeField(auto_now_add=True)
     
     def count_like(self):
         return self.like_user_list.count()
 
     def __str__(self):
-        return '%s - %s' % (self.post.title, self.user)
+        return '%s - %s - %s' % (self.post.title, self.user, self.body[:20])
         #this is how it is written in python2 mainly,
         #you'd better write return self.post.title + self.user in python3
     

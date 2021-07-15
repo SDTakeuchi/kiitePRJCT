@@ -65,7 +65,7 @@ def dailymail():
         msg_for_line += "---------------------------------------"
         send_msg_to_line(msg_for_line)
 
-    #below for remind mail to ZAIGAKU-SEI not responding to any answers
+    #below for remind mail to 在学生 not responding to any answers
     three_days_before1959 = today1959 - datetime.timedelta(days=3)
     four_days_before2000 = yesterday2000 - datetime.timedelta(days=3)
     for post in Post.objects.all():

@@ -121,10 +121,13 @@ def indexView (request):
 @login_required(login_url='login')
 def showView (request, pk):
 	post = Post.objects.get(id=pk)
+	comments = Comment.objects.filter(post=post).filter(is_reply_to__isnull=True)
+	cmtbks = Comment.objects.filter(post=post).exclude(is_reply_to__isnull=True)
+	context = {'post': post, 'comments':comments, 'cmtbks':cmtbks}
 	if request.user.student_status == '在学生':
 		if post.user != request.user:
 			return redirect('postIndex')
-	return render(request, 'posts/show.html', {'post':post})
+	return render(request, 'posts/show.html', context)
 
 @login_required(login_url='login')
 def newView (request):
@@ -290,19 +293,27 @@ def deleteView(request, pk):
 
 @login_required(login_url='login')
 def commentBackView (request, pk):
-	comment = Comment.objects.get(id = pk)
+	comment = Comment.objects.get(id=pk)
 	post = comment.post
 	form = CommentForm()
 	current_user = request.user
+	cmtbk_to_id = request.GET.get("comment_back")
 
 	if request.method == 'POST':
 		form = CommentForm(request.POST)
 		if form.is_valid():
 			comment_instance = form.save(commit=False)
-			if comment.user != None:
-				comment_instance.body = str(f' > {comment.user.name}さん\r\n') + truncate(comment_instance.body, 200)
+			comment_instance.is_reply_to = comment
+			if cmtbk_to_id is not None:
+				replying_comment = Comment.objects.get(id=cmtbk_to_id)
+				if replying_comment.user is not None:
+					comment_instance.body = str(f' > {replying_comment.user.name}さん\r\n') + comment_instance.body
+				else:
+					comment_instance.body = ' > 退会済みユーザー\r\n' + comment_instance.body
+			elif comment.user is not None:
+				comment_instance.body = str(f' > {comment.user.name}さん\r\n') + comment_instance.body
 			else:
-				comment_instance.body = ' > 退会済みユーザー\r\n' + truncate(comment_instance.body, 200)
+				comment_instance.body = ' > 退会済みユーザー\r\n' + comment_instance.body
 			comment_instance.user = current_user
 			comment_instance.post = post
 			comment_instance.save()
@@ -310,12 +321,20 @@ def commentBackView (request, pk):
 			comment_body = '\n'.join(comment_instance.body.splitlines()[1:])
 			context={'post':post,'comment':comment,'comment_instance': comment_instance,'comment_body':comment_body}
 
-			if comment.user != None:
-				recepient = str(comment.user.email)
+			if Comment.objects.get(id=cmtbk_to_id).user is not None:
+				recepient = str(Comment.objects.get(id=cmtbk_to_id).user.email)
 				subject = render_to_string('email_template/commentback/subject.txt')
 				message = render_to_string('email_template/commentback/message.txt',context)
 				# msg = EmailMessage(subject, message, EMAIL_HOST_USER, [recepient])
 				# msg.send()
+
+			if comment.user is not None:
+				if Comment.objects.get(id=cmtbk_to_id).user != comment.user:
+					recepient = str(comment.user.email)
+					subject = render_to_string('email_template/commentback/subject.txt')
+					message = render_to_string('email_template/commentback/message.txt',context)
+					# msg = EmailMessage(subject, message, EMAIL_HOST_USER, [recepient])
+					# msg.send()
 
 				if comment_instance.user != post.user and comment.user != post.user:
 					recepient = str(post.user.email)

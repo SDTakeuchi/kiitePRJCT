@@ -1140,3 +1140,14 @@ select#id_title {
   }
 }
 /* loading spinner (above) */
+
+.comment-back {
+  padding-top: 15px;
+  padding-left: 31px;
+}
+
+.cmtbk-indent-box {
+  padding-left: 9px;
+  padding-bottom: 28px;
+  border-left: solid 4px rgb(200, 200, 200);
+}
