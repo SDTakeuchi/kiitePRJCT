@@ -189,8 +189,9 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12 col-sm-12 text-center">
-				<a href="{% url 'signup' %}"><h2 class="heading bold">登録はコチラ!</h2></a>
-				<h2 class="subheading">困ったらなんでもキイテミ！<br class="br-sp">OB・OGが疑問に答えます！</h2>
+				<h2 class="heading bold"><a href="{% url 'signup' %}">登録はコチラ!</a></h2>
+				<h2 class="subheading">困ったらなんでもキイテミ！<br class="br-sp">OB・OGが疑問に答えます！
+				<br><a href="{% url 'contactForm' %}" style="line-height:38px;">お問い合わせはコチラから</a></h2>
 			</div>
 		</div>
 	</div>
@@ -212,7 +213,7 @@
 {% if not user.is_authenticated %}
 <div class="spver signup-btn">
 	<a href="{% url 'signup' %}">
-		<button type="button" class="btn btn-default btn-lg" style="box-shadow: 1px 1.5px 3px 1px rgb(0 0 255 / 20%);">Sign up here!</button>
+		<button type="button" class="btn btn-default btn-lg" style="box-shadow: 1px 1.5px 3px 1px rgb(0 0 255 / 20%); color:#fff; background-color:#51d095;">Sign up here!</button>
 	</a>
 </div>
 {% endif %}

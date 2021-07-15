@@ -939,8 +939,8 @@ footer {
   margin-bottom: 15px;
 }
 .form input[type="submit"] {
-  background-color: #FFD321;
-  color: rgb(0, 0, 0);
+  background-color: #337ab7;
+  color: #fff;
   cursor: pointer;
   font-weight: 390;
   width: 120px;
@@ -1043,8 +1043,8 @@ select#id_title {
   position: fixed;
   padding: 10px 13px;
   color: #373546;
-  right: 22px;
-  bottom: 28px;
+  right: 16px;
+  bottom: 15px;
 }
 #commenthere, #commentbackhere{
   padding-top: 9px;
@@ -1140,12 +1140,14 @@ select#id_title {
   }
 }
 /* loading spinner (above) */
+
 .comment-back {
   padding-top: 15px;
-  padding-left: 22px;
+  padding-left: 31px;
 }
 
 .cmtbk-indent-box {
   padding-left: 9px;
-  border-left: dotted 2px rgb(165, 165, 165);
+  padding-bottom: 28px;
+  border-left: solid 4px rgb(200, 200, 200);
 }
