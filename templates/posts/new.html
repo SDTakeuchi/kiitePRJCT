@@ -5,6 +5,7 @@
 {% block content %}
 <div class="main posts-show">
     <div class="container">
+      <div class="form-heading" style="margin-top:0px">質問作成</div>
       <div class="posts-show-item">
         {% if mentioned_user %}
         <p style="font-size:16px;">送信先 :
@@ -14,17 +15,30 @@
 
         <form action="" method="POST">
           {% csrf_token %}
-          <p>質問タイトル*</p>
+          <p style="margin-top:0px;">質問タイトル*</p>
           {{ form.title|add_class:"newpost-title" }}
           <p>関連タグ*</p>
           {{ form.tag|add_class:"newpost-tag" }}
           <p>質問内容*</p>
           {{ form.body|add_class:"newpost-body" }}
-              <input type="submit" name="Submit" value="投稿">
+          <div class="checkbox">
+            <label>
+              {{ form.is_public }}
+              質問を他の在学生にも公開する
+            </label>
+          </div>
+          <div class="checkbox">
+            <label>
+              {{ form.is_anonymous }}
+              質問をユーザー名非公開で投稿する
+            </label>
+          </div>
+          <input type="submit" name="Submit" value="投稿">
         </form>
         {{form.errors}}
         </div>
       </div>
+      <div class="emptybox"></div>
     </div>
   </div>
 {% endblock %}

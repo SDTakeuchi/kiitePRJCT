@@ -32,7 +32,7 @@ class CustomUserChangeForm(UserChangeForm):
 class PostForm(ModelForm):
     class Meta:
         model = Post
-        fields = ['title','tag', 'body',]
+        fields = ['title','tag', 'body','is_public', 'is_anonymous']
 
 class CommentForm(ModelForm):
     class Meta:

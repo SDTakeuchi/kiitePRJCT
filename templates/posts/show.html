@@ -7,9 +7,12 @@
       <p><a href="{% url 'postIndex' %}">< 質問一覧</a></p>
       <div class="posts-show-item">
         <div class="asker">
-          {% if post.user.name %}
+          {% if post.is_anonymous == True %}
+          <img class="profile-pic" alt="profile image" src="{% static 'images/profile-icon-png-898.png' %}">
+          <h4>ユーザー名非公開</h4>
+          {% elif post.user.name %}
           <img class="profile-pic" alt="profile image" src="{{ post.user.profile_pic.url }}">
-          <h4><a class="userLink" href="{% url 'userList' post.user.id %}">{{ post.user.name }}</a></h4> <!-- ####### -->
+          <h4><a class="userLink" href="{% url 'userList' post.user.id %}">{{ post.user.name }}</a></h4>
           {% else %}
           <img class="profile-pic" alt="profile image" src="{% static 'images/profile-icon-png-898.png' %}">
           <h4>退会済みユーザー</h4>
@@ -143,8 +146,13 @@
               {% if cmtbk.is_reply_to == comment %}
                 <div class="cmtbk-indent-box">
                   <div class="cmtbk-user-info">
-                    <img src="{{ cmtbk.user.profile_pic.url }}" alt="user profile" style="width:36px; height:auto; margin-bottom: unset;">
-                    <strong><a href="{% url 'userList' cmtbk.user.id %}" style="font-size:15px;">{{ cmtbk.user.name }}</a></strong>
+                    {% if cmtbk.user == post.user and post.is_anonymous == True %}
+                      <img src="{% static 'images/profile-icon-png-898.png' %}" alt="user profile" style="width:36px; height:auto; margin-bottom: unset;">
+                      <strong>ユーザー名非公開</strong>
+                    {% else %}
+                      <img src="{{ cmtbk.user.profile_pic.url }}" alt="user profile" style="width:36px; height:auto; margin-bottom: unset;">
+                      <strong><a href="{% url 'userList' cmtbk.user.id %}" style="font-size:15px;">{{ cmtbk.user.name }}</a></strong>
+                    {% endif %}
                     <p style="font-size:12px;"><br>{{ cmtbk.user.student_status }} {{ cmtbk.date_added }}</p>      
                   </div>
                   <div class="cmtbk-msg-body"><p>{{ cmtbk.body|linebreaksbr }}</p></div>

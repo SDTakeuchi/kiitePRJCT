@@ -13,16 +13,29 @@
         {% endif %}
         <form action="" method="POST">
           {% csrf_token %}
-          <p>質問タイトル</p>
+          <p style="margin-top:0px;">質問タイトル</p>
           {{ form.title|add_class:"newpost-title" }}
           <p>関連タグ</p>
           {{ form.tag|add_class:"newpost-tag" }}
           <p>質問内容</p>
           {{ form.body|add_class:"newpost-body" }}
-              <input type="submit" value="投稿" name="Submit">
+          <div class="checkbox">
+            <label>
+              {{ form.is_public }}
+              質問を他の在学生にも公開する
+            </label>
+          </div>
+          <div class="checkbox">
+            <label>
+              {{ form.is_anonymous }}
+              質問をユーザー名非公開で投稿する
+            </label>
+          </div>
+          <input type="submit" value="更新" name="Submit">
         </form>
         </div>
       </div>
+      <div class="emptybox"></div>
     </div>
   </div>
 {% endblock %}

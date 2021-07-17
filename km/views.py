@@ -190,7 +190,7 @@ def editView (request, pk):
 		if form.is_valid():
 			form.save()
 			messages.info(request, "質問が編集されました")
-			return redirect('/posts/index')
+			return redirect('postShow', pk=pk)
 
 	context={'post':post,'form':form}
 	return render(request, 'posts/edit.html', context)

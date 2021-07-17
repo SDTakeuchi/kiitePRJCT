@@ -819,7 +819,7 @@ footer {
 
 .posts-show-item p {
   font-size: 17px;
-  margin: 23px 0;
+  margin: 21px 0;
 }
 
 .post-time {
@@ -1145,9 +1145,12 @@ select#id_title {
   padding-top: 15px;
   padding-left: 31px;
 }
-
 .cmtbk-indent-box {
   padding-left: 9px;
   padding-bottom: 28px;
   border-left: solid 4px rgb(200, 200, 200);
+}
+.checkbox {
+  font-size: 17px;
+  padding: 4px 0;
 }
