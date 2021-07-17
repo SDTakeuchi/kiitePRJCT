@@ -25,8 +25,11 @@ class CustomUserAdmin(UserAdmin):
     search_fields = ('email',)
     ordering = ('email',)
 
+class TagAdmin(admin.ModelAdmin):
+    list_display = ('name', 'ordering_number')
+
 admin.site.register(CustomUser, CustomUserAdmin)
-admin.site.register(Tag)
+admin.site.register(Tag, TagAdmin)
 admin.site.register(Post)
 admin.site.register(Comment)
 admin.site.register(Article)
