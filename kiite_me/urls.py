@@ -4,7 +4,7 @@ from django.urls import path
 from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib.auth import views as auth_views
-from km.views import homeView, loginView, signupView, logoutView, indexView,showView, newView, editView, deleteCommentView, editCommentView, deleteView, commentView, userListView, userMypageView, userMypageEditView, termsOfUseView, privacyPolicyView, contactFormView, userDeleteView, commentBackView, adminNotificationView, crop_image, UserCreate, signupAlumni, UserCreateDone, UserCreateComplete, reportPostView, reportCommentView, storyIndexView, story1View, story2View, storyShowView, newMentionedView, likeUnlikeCommentView
+from km.views import homeView, loginView, signupView, logoutView, indexView,showView, newView, editView, deleteCommentView, editCommentView, deleteView, commentView, userListView, userMypageView, userMypageEditView, termsOfUseView, privacyPolicyView, contactFormView, userDeleteView, commentBackView, adminNotificationView, crop_image, UserCreate, signupAlumni, UserCreateDone, UserCreateComplete, reportPostView, reportCommentView, storyIndexView, story1View, story2View, storyShowView, newMentionedView, likeUnlikeCommentView, indexOthersView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -20,6 +20,7 @@ urlpatterns = [
     path('create_complete/<token>/', UserCreateComplete.as_view(), name='createComplete'),
 
     path('posts/index/', indexView, name='postIndex'),
+    path('posts/index/public_questions', indexOthersView, name='postIndexOthers'),
     path('posts/mention-new/<str:pk>', newMentionedView, name='postNewMentioned'),
     path('posts/new/', newView, name='postNew'),
     path('posts/show/<str:pk>', showView, name='postShow'),

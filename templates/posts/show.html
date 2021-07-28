@@ -4,7 +4,15 @@
 {% block content %}
 <div class="main posts-show">
     <div class="container">
-      <p><a href="{% url 'postIndex' %}">< 質問一覧</a></p>
+      {% if request.user != post.user %}
+        {% if request.user.student_status == '在学生'%}
+          <p><a href="{% url 'postIndexOthers' %}">
+        {% else %}
+          <p><a href="{% url 'postIndex' %}">
+        {% endif %}
+      {% else %}
+        <p><a href="{% url 'postIndex' %}">
+      {% endif %}< 質問一覧</a></p>
       <div class="posts-show-item">
         <div class="asker">
           {% if post.is_anonymous == True %}

@@ -119,6 +119,34 @@ def indexView (request):
     return render(request, 'posts/index.html', context)
 
 @login_required(login_url='login')
+def indexOthersView (request):
+    post_list = Post.objects.filter(is_public=True).order_by('-date_created')
+    if request.user.student_status != '在学生':
+        return redirect('postIndex')
+    page = request.GET.get('page', 1)
+
+    myFilter = PostFilter(request.GET, queryset=post_list)
+    post_list = myFilter.qs
+
+    numOneView = 10
+    paginator = Paginator(post_list, numOneView)
+    try:
+        posts = paginator.page(page)
+    except PageNotAnInteger:
+        posts = paginator.page(1)
+    except EmptyPage:
+        posts = paginator.page(paginator.num_pages)
+
+    pageNum = int(page)
+    fromNum = pageNum * numOneView - numOneView + 1
+    toNum = pageNum * numOneView
+    if toNum > len(post_list):
+        toNum = int(len(post_list))
+
+    context = {'posts':posts, 'myFilter':myFilter, 'post_list':post_list, 'fromNum':fromNum, 'toNum':toNum}
+    return render(request, 'posts/index_others_q.html', context)
+
+@login_required(login_url='login')
 def showView (request, pk):
 	post = Post.objects.get(id=pk)
 	comments = Comment.objects.filter(post=post).filter(is_reply_to__isnull=True)
@@ -126,7 +154,8 @@ def showView (request, pk):
 	context = {'post': post, 'comments':comments, 'cmtbks':cmtbks}
 	if request.user.student_status == '在学生':
 		if post.user != request.user:
-			return redirect('postIndex')
+			if post.is_public == False:
+				return redirect('postIndex')
 	return render(request, 'posts/show.html', context)
 
 @login_required(login_url='login')

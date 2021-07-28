@@ -4,45 +4,22 @@
 {% block content %}
 <div class="main posts-index">
     <div class="container">
-      {% if request.user.student_status == '在学生' %}
-      <div class="form-heading" style="margin-top:0px">Your Questions</div>
-      {% else %}
-      <div class="form-heading" style="margin-top:0px">Questions</div>
-      {% endif %}
+      <div class="form-heading" style="margin-top:0px">Friends' Questions</div>
 
-      {% if request.user.student_status == '卒業生'%}
-      <form method="GET">
-        {{ myFilter.form.title.label_tag }}
-        {{ myFilter.form.title }}
-        <div class="kensakutag">
-        {{ myFilter.form.tag.label_tag }}
-        {{ myFilter.form.tag }}
-        </div>
-        <button id="kensaku" class="btn btn-primary" type="submit">検索</button>
-      </form>
-      <div class="hitnum">
-        <p>検索結果：{{ post_list|length }} 件 ( {{fromNum}}~{{toNum}}件表示 )</p>
-      </div>
-      {% else %}
-        <div class="row" style="margin-bottom: 15px;">
-          <div class="col-xs-6" style="padding-right: 0px;">
-            <a href="#" class="btn btn-default btn-block active" role="button">自分の質問
+      <div class="row" style="margin-bottom: 15px;">
+        <div class="col-xs-6" style="padding-right: 0px;">
+            <a href="{% url 'postIndex' %}" class="btn btn-default btn-block" role="button">自分の質問
             </a>
-          </div>
-          <div class="col-xs-6" style="padding-left: 0px;">
-            <a href="{% url 'postIndexOthers' %}" class="btn btn-default btn-block" role="button">みんなの質問
-            </a>
-          </div>
         </div>
+        <div class="col-xs-6" style="padding-left: 0px;">
+            <a href="#" class="btn btn-default btn-block active" role="button">みんなの質問
+            </a>
+        </div>
+        </div>
+
         {% if not posts %}
-          <a href="{% url 'postNew' %}">
-            <h2 style="text-align:center; text-decoration: none; margin-top:13%; color:rgb(133, 133, 133);">Let's ask whatever question you've got!</h2>
-          </a>
-          <div class="button-section">
-            <a href="{% url 'postNew' %}" class="btn-text-3d" style="text-decoration: none; color:#fff;">質問を作成！</a>
-          </div>
+            <h2 style="text-align:center; text-decoration: none; margin-top:13%; color:rgb(133, 133, 133);">現在質問を準備中です！...</h2>
         {% endif %}
-      {% endif %}
 
       {% for post in posts %}
         <div class="posts-index-item">
