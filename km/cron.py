@@ -63,7 +63,7 @@ def dailymail():
             msg_for_line += '\n'
             msg_for_line += '\n'
         msg_for_line += "---------------------------------------"
-        send_msg_to_line(msg_for_line)
+        # send_msg_to_line(msg_for_line)
 
     #below for remind mail to 在学生 not responding to any answers
     three_days_before1959 = today1959 - datetime.timedelta(days=3)
