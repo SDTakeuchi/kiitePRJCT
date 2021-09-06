@@ -17,7 +17,15 @@
           <p style="margin-top:0px;">質問タイトル<span style="color:rgb(214, 16, 16);">*</span></p>
           {{ form.title|add_class:"newpost-title" }}
           <p>関連タグ<span style="color:rgb(214, 16, 16);">*</span></p>
-          {{ form.tag|add_class:"newpost-tag" }}
+          {{ form.tag|add_class:"form-control" }}
+
+          <p>業界指名</p>
+          <div class="job_form">
+            {{ form.job_parent_category | add_class:"form-control parent-form" }}
+            <br>
+            {{ form.requested_industry | add_class:"form-control hide" }}
+          </div>
+
           <p>質問内容<span style="color:rgb(214, 16, 16);">*</span></p>
           {{ form.body|add_class:"newpost-body" }}
           <div class="checkbox">
@@ -40,4 +48,42 @@
       <div class="emptybox"></div>
     </div>
   </div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script>
+  // 業界選択時の処理
+  const categories = {
+    {% for parent in parent_category_list %}
+      '{{ parent.pk }}' : [
+        {% for category in parent.alumnijobchildcategory_set.all %}
+          {
+            'pk': '{{ category.pk }}',
+            'name': '{{ category.name }}'
+          },
+        {% endfor %}
+      ],
+    {% endfor %}
+  };
+
+  $('.job_form select.parent-form').on('change', function (){
+    const childJobCategoryElem = $(this).siblings('select');
+    const parentJobCategoryElem = $(this);
+
+    childJobCategoryElem.children().remove();
+    childJobCategoryElem.removeClass('hide');
+
+    const parentId = parentJobCategoryElem.val();
+    const categoryList = categories[parentId];
+
+    // 子カテゴリの選択肢を作成、追加。
+    for (const category of categoryList) {
+      const option = $('<option>');
+      option.val(category['pk']);
+      option.text(category['name']);
+      childJobCategoryElem.append(option);
+    }
+  });
+
+
+</script>
 {% endblock %}

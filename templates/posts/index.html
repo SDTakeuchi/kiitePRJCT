@@ -48,7 +48,7 @@
         <div class="posts-index-item">
           {% if post.mentioned_user %}
             {% if request.user == post.mentioned_user %}
-            <a href="{% url 'userList' post.mentioned_user.id %}" style="font-size:14px; color:rgb(214, 16, 16);">@ {{ post.mentioned_user.name }} さん （あなた宛の質問です！）</a><br>
+            <a href="{% url 'userList' post.mentioned_user.id %}" class="text-danger">@ {{ post.mentioned_user.name }} さん</a><br>
             {% else %}
             <a href="{% url 'userList' post.mentioned_user.id %}" style="font-size:14px;">@ {{ post.mentioned_user.name }} さん</a><br>
             {% endif %}

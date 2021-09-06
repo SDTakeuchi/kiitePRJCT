@@ -521,11 +521,21 @@ footer {
 
 .br-pc { display:block; }
 .br-sp { display:none; }
+
 #id_comment_body{
   width: 380px;
   margin-right: 15px;
   height: clamp(180px,50vw,206px);
 }
+
+.job_form_show_row-box {
+  text-align: right;
+}
+
+#job_form_show_row {
+  display: inline-block;
+}
+
 @media (max-width: 450px) {
   .heading {
     font-size: 40px;
@@ -556,6 +566,10 @@ footer {
     margin: 0px 0px 8px;
   }
   .posts-show-item input[type="text"],.posts-show-item input[type="email"]{width: 100% !important;}
+
+  #job_form_show_row {
+    width: 100%;
+  }
 }
 .pcver {
   display: block;
@@ -1148,4 +1162,12 @@ select#id_title {
 .checkbox {
   font-size: 17px;
   padding: 4px 0;
+}
+
+.hide {
+  display: none;
+}
+
+.job-form-reset-btn {
+  margin-left: clamp(80px, 43%, 155px);
 }

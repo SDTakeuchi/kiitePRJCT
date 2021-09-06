@@ -1,4 +1,5 @@
 {% extends 'base/base.html' %}
+{% load widget_tweaks %}
 {% load static %}
 
 {% block content %}
@@ -34,10 +35,9 @@
         </div>
         <form method="POST" action="" enctype="multipart/form-data">
 			{% csrf_token %}
-      <!-- <p>プロフィール画像:</p> -->
       <input type="file" name="profile_pic" style="display:none;" id="id_profile_image" onchange="readURL(this)">
       <p>ユーザーネーム：</p>
-      {{ form.name }}
+      {{ form.name }}      
       <p>ご本人様のお名前：</p>
       {{ form.real_name }}
       <p>入学年度：</p>
@@ -48,7 +48,31 @@
       {{ form.email }}
       {% if request.user.student_status == '卒業生' %}
       <p>業界：</p>
-      {{ form.industry }}
+      {{ form.job_parent_category | add_class:"form-control" }}
+      <br>
+      {{ form.job_category | add_class:"form-control" }}
+
+      {{ formset.management_form }}
+      {% for line_form in formset %}
+        {% for hidden in line_form.hidden_fields %} <!-- necessary for some reason... -->
+            {{ hidden }}
+        {% endfor %}
+        <div class="job_form hide">
+          <p style="display: inline-block;">内定獲得業界 {{ forloop.counter }}</p>
+          <button type="button" class="btn btn-danger job-form-reset-btn">
+            x
+          </button>
+          {{ line_form.offered_job_parent_category | add_class:"form-control parent-form" }}
+          <br>
+          {{ line_form.offered_job_child_category | add_class:"form-control hide" }}
+          <div class="emptybox"></div>
+          {{ line_form.DELETE | add_class:"hide" }}
+        </div>
+      {% endfor %}
+      <div class="job_form_show_row-box">
+        <button type="button" id="job_form_show_row" class="btn btn-success">行を追加</button>
+      </div>
+
       <p>職種：</p>
       {{ form.job_type }}
       {% endif %}
@@ -67,6 +91,89 @@
 <div class="spinner-div" id="id_spinner">
   <div class="loader" id="loader-1"></div>
 </div>
+
+<!-- javascript code below are also used in user_edit page.
+if you change code below, make sure you update both pages -->
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script>
+  const initialJobParentCategory = '{{ job_parent_category }}';
+  const parentCategoryElement = $('#id_job_parent_category');
+  // const categoryElement = $('#id_job_category');
+  const categories = {
+    {% for parent in parent_category_list %}
+      '{{ parent.pk }}' : [
+        {% for category in parent.alumnijobchildcategory_set.all %}
+          {
+            'pk': '{{ category.pk }}',
+            'name': '{{ category.name }}'
+          },
+        {% endfor %}
+      ],
+    {% endfor %}
+  };
+
+  //select init val for job form
+  parentCategoryElement.find('option[value=' + initialJobParentCategory + ']').prop('selected', true);
+
+  for (i=0; i < $('.job_form').length; i++) {
+      const currentRow = $('#id_offeredjobjointable_set-' + i + '-offered_job_parent_category').parent('div');
+
+      if (!currentRow.find('option:first-child').is(':selected')) {
+        const currentRowChildForm = $('#id_offeredjobjointable_set-' + i + '-offered_job_child_category');
+
+        currentRow.removeClass('hide');
+        currentRowChildForm.removeClass('hide');
+
+        const initCategoryList = categories[currentRow.find('option:selected').val()];
+        const initChildVal = currentRowChildForm.find('option:selected').val();
+        currentRowChildForm.children().remove();
+        for (let category of initCategoryList) {
+          let option = $('<option>');
+          option.val(category['pk']);
+          option.text(category['name']);
+          currentRowChildForm.append(option);
+        }
+        currentRowChildForm.find('option[value=' + initChildVal + ']').prop('selected', true);
+      }
+    }
+
+  $(document).on('change', '.job_form select.parent-form', function (){
+    const childJobCategoryElem = $(this).siblings('select');
+    const parentJobCategoryElem = $(this);
+
+    childJobCategoryElem.children().remove();
+    childJobCategoryElem.removeClass('hide');
+
+    const parentId = parentJobCategoryElem.val();
+    const categoryList = categories[parentId];
+
+    // 子カテゴリの選択肢を作成、追加。
+    for (const category of categoryList) {
+      const option = $('<option>');
+      option.val(category['pk']);
+      option.text(category['name']);
+      childJobCategoryElem.append(option);
+    }
+  });
+
+  // 業界選択欄の「行を追加」するときの処理
+  $('#job_form_show_row').on('click', function (){
+    const newRowId = parseInt($(document).find('div.job_form:last select:first').attr('id').substring(27, 28)) + 1;
+    const newRowIdPlus = newRowId+1;
+
+    const newRow = $('<div class="job_form"><p style="display: inline-block;">内定獲得業界 ' + newRowIdPlus + '</p><button type="button" class="btn btn-danger job-form-reset-btn">x</button><select name="offeredjobjointable_set-' + newRowId + '-offered_job_parent_category" class="form-control parent-form" id="id_offeredjobjointable_set-' + newRowId + '-offered_job_parent_category"><option value="" selected>---------</option><option value="1">金融</option><option value="2">建設・不動産</option><option value="3">運輸・物流</option><option value="4">流通・小売</option><option value="5">IT</option><option value="6">マスコミ・メディア・広告</option><option value="7">エネルギー・資源</option><option value="8">自動車・機械</option><option value="9">電機・精密機器</option><option value="10">食品・飲食</option><option value="11">生活用品</option><option value="12">サービス</option><option value="13">エンタメ・レジャー</option></select><br><select name="offeredjobjointable_set-' + newRowId + '-offered_job_child_category" class="form-control hide" id="id_offeredjobjointable_set-' + newRowId + '-offered_job_child_category"></select><input type="checkbox" class="hide" name="offeredjobjointable_set-' + newRowId + '-DELETE" id="id_offeredjobjointable_set-' + newRowId + '-DELETE"></div>')
+
+    $(newRow).insertAfter('div.job_form:last');
+  });
+
+  // reset job select form
+  $(document).on('click', '.job-form-reset-btn', function() {
+    $(this).closest('div.job_form').addClass('hide');
+    $(this).siblings('input[type="checkbox"]').prop('checked', true);('hide');
+  });
+
+</script>
+
 <script type="text/javascript">
   var cropper;
 	var imageFile;

@@ -24,6 +24,7 @@ urlpatterns = [
     path('posts/mention-new/<str:pk>', newMentionedView, name='postNewMentioned'),
     path('posts/new/', newView, name='postNew'),
     path('posts/show/<str:pk>', showView, name='postShow'),
+
     path('posts/edit/<str:pk>', editView, name='postEdit'),
     path('posts/comment/delete/<str:pk>', deleteCommentView, name='postCommentDelete'),
     path('posts/comment/edit/<str:pk>', editCommentView, name='postCommentEdit'),
