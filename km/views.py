@@ -177,18 +177,65 @@ def newView (request):
 	form = PostForm()
 	current_user = request.user
 	parent_category_list = AlumniJobParentCategory.objects.all()
+	alumni_list = CustomUser.objects.filter(student_status='卒業生')
+	offered_job_list = OfferedJobJoinTable.objects.all()
+
+	available_parent_industry_list = []
+	available_child_industry_list = []
+
+	for alumni_current_industry in alumni_list:
+		if int(alumni_current_industry.job_category.pk) not in available_child_industry_list:
+			available_child_industry_list.append(int(alumni_current_industry.job_category.pk))
+			if int(alumni_current_industry.job_category.parent.pk) not in available_parent_industry_list:
+				available_parent_industry_list.append(int(alumni_current_industry.job_category.parent.pk))
+			
+	for offered_job in offered_job_list:
+		if int(offered_job.offered_job_child_category.pk) not in available_child_industry_list:
+			available_child_industry_list.append(int(offered_job.offered_job_child_category.pk))
+			if int(offered_job.offered_job_parent_category.pk) not in available_parent_industry_list:
+				available_parent_industry_list.append(int(offered_job.offered_job_parent_category.pk))
+
+
 	if request.method == 'POST':
 		form = PostForm(request.POST)
 		if form.is_valid():
-			post_user = form.save(commit=False)
-			post_user.user = current_user
-			post_user.save()
+			post = form.save(commit=False)
+			post.user = current_user
+			post.save()
+
+			if post.requested_industry is not None:
+				matching_join_table = OfferedJobJoinTable.objects.filter(
+					offered_job_child_category=post.requested_industry
+				)
+				recepient_alumni = CustomUser.objects.filter(
+					student_status='卒業生',
+					job_category=post.requested_industry
+				)
+				recepient = []
+				for alumni in recepient_alumni:
+					if alumni not in recepient:
+						recepient.append(alumni.email)
+
+				for table in matching_join_table:
+					if table.user not in recepient:
+						recepient.append(table.user.email)
+
+				context={'current_user':current_user,'post': post, 'requested_industry': post.requested_industry}
+
+				subject = render_to_string('email_template/industry_requested/subject.txt', context)
+				message = render_to_string('email_template/industry_requested/message.txt', context)
+
+				# msg = EmailMessage(subject, message, EMAIL_HOST_USER, bcc=recepient)
+				# msg.send()
+
 			messages.info(request, "質問が投稿されました")
 			return redirect('postIndex')
 
 	context={
 		'form':form,
 		'parent_category_list': parent_category_list,
+		'available_parent_industry_list': available_parent_industry_list,
+		'available_child_industry_list': available_child_industry_list,
 		}
 	return render(request, 'posts/new.html', context)
 
@@ -462,43 +509,48 @@ def userMypageEditView(request):
 
 	if request.method == 'POST':
 		form = CustomUserChangeForm(request.POST, request.FILES, instance=student)
-		formset = OfferedJobFormset(request.POST, instance=student)
+		if student.student_status == '卒業生':
+			formset = OfferedJobFormset(request.POST, instance=student)
 
 		if form.is_valid():
-			if formset.is_valid():
-				form.save()
+			form.save()
+			if student.student_status == '卒業生' and formset.is_valid():
 				formset.save()
-				messages.info(request, "プロフィールが更新されました")
-				return redirect('/user/mypage/')
+			messages.info(request, "プロフィールが更新されました")
+			return redirect('/user/mypage/')
 		else:
 			messages.error(request,'正しくフォームが入力されていないようです...')
 			email = request.user.email
-			job_parent_category = AlumniJobChildCategory.objects.get(customuser=request.user).parent.pk
-			parent_category_list = AlumniJobParentCategory.objects.all()
-
 			context={
 				'form':form,
 				'formset':formset,
 				'email':email,
-				'job_parent_category':job_parent_category,
-				'parent_category_list':parent_category_list,
 				'DATA_UPLOAD_MAX_MEMORY_SIZE':settings.DATA_UPLOAD_MAX_MEMORY_SIZE
 				}
+
+			if student.student_status == '卒業生':
+				job_parent_category = AlumniJobChildCategory.objects.get(customuser=request.user).parent.pk
+				parent_category_list = AlumniJobParentCategory.objects.all()
+				context['job_parent_category'] = job_parent_category
+				context['parent_category_list'] = parent_category_list
+
 			return render(request, 'user/mypage_edit.html', context)
 
-
 	email = request.user.email
-	job_parent_category = AlumniJobChildCategory.objects.get(customuser=request.user).parent.pk
-	parent_category_list = AlumniJobParentCategory.objects.all()
 
 	context={
 		'form':form,
 		'formset':formset,
 		'email':email,
-		'job_parent_category':job_parent_category,
-		'parent_category_list':parent_category_list,
 		'DATA_UPLOAD_MAX_MEMORY_SIZE':settings.DATA_UPLOAD_MAX_MEMORY_SIZE
 		}
+
+	if student.student_status == '卒業生':
+		job_parent_category = AlumniJobChildCategory.objects.get(customuser=request.user).parent.pk
+		parent_category_list = AlumniJobParentCategory.objects.all()
+		context['job_parent_category'] = job_parent_category
+		context['parent_category_list'] = parent_category_list
+		
 	return render(request, 'user/mypage_edit.html', context)
 
 @login_required(login_url='login')
@@ -699,9 +751,9 @@ class UserCreate(generic.CreateView):
                 instance=user,
                 queryset=AlumniJobParentCategory.objects.none()
                 )
+        user.save()
 
         if formset.is_valid():
-                user.save()
                 formset.save()
 
         if user.student_status == '卒業生':
