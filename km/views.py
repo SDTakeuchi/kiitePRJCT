@@ -199,17 +199,17 @@ def newView (request):
 	if request.method == 'POST':
 		form = PostForm(request.POST)
 		if form.is_valid():
-			post = form.save(commit=False)
-			post.user = current_user
-			post.save()
+			post_user = form.save(commit=False)
+			post_user.user = current_user
+			post_user.save()
 
-			if post.requested_industry is not None:
+			if post_user.requested_industry is not None:
 				matching_join_table = OfferedJobJoinTable.objects.filter(
-					offered_job_child_category=post.requested_industry
+					offered_job_child_category=post_user.requested_industry
 				)
 				recepient_alumni = CustomUser.objects.filter(
 					student_status='卒業生',
-					job_category=post.requested_industry
+					job_category=post_user.requested_industry
 				)
 				recepient = []
 				for alumni in recepient_alumni:
@@ -220,7 +220,7 @@ def newView (request):
 					if table.user not in recepient:
 						recepient.append(table.user.email)
 
-				context={'current_user':current_user,'post': post, 'requested_industry': post.requested_industry}
+				context={'current_user':current_user,'post': post_user, 'requested_industry': post_user.requested_industry}
 
 				subject = render_to_string('email_template/industry_requested/subject.txt', context)
 				message = render_to_string('email_template/industry_requested/message.txt', context)
