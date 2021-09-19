@@ -1,4 +1,5 @@
 {% extends 'base/base.html' %}
+{% load widget_tweaks %}
 {% load static %}
 
 {% block content %}
@@ -34,10 +35,9 @@
         </div>
         <form method="POST" action="" enctype="multipart/form-data">
 			{% csrf_token %}
-      <!-- <p>プロフィール画像:</p> -->
       <input type="file" name="profile_pic" style="display:none;" id="id_profile_image" onchange="readURL(this)">
       <p>ユーザーネーム：</p>
-      {{ form.name }}
+      {{ form.name }}      
       <p>ご本人様のお名前：</p>
       {{ form.real_name }}
       <p>入学年度：</p>
@@ -47,10 +47,29 @@
       <p>メールアドレス：</p>
       {{ form.email }}
       {% if request.user.student_status == '卒業生' %}
-      <p>業界：</p>
-      {{ form.industry }}
-      <p>職種：</p>
-      {{ form.job_type }}
+        <p>業界：</p>
+        {{ form.job_parent_category | add_class:"form-control" }}
+        <br>
+        {{ form.job_category | add_class:"form-control" }}
+
+        {{ formset.management_form }}
+        {% for line_form in formset %}
+          <div class="job_form">
+            {% for hidden in line_form.hidden_fields %} <!-- necessary for some reason... -->
+                {{ hidden }}
+            {% endfor %}
+            <p style="display: inline-block;">内定獲得業界 {{ forloop.counter }}</p>
+            <button type="button" class="btn btn-danger job-form-reset-btn hide">x</button>
+            {{ line_form.offered_job_parent_category | add_class:"form-control parent-form" }}
+            <br>
+            {{ line_form.offered_job_child_category | add_class:"form-control child-form hide" }}
+            <div class="emptybox"></div>
+            {{ line_form.DELETE | add_class:"hide" }}
+          </div>
+        {% endfor %}
+
+        <p>職種：</p>
+        {{ form.job_type }}
       {% endif %}
       <p>自己紹介：</p>
       {{ form.introduction }}
@@ -67,6 +86,118 @@
 <div class="spinner-div" id="id_spinner">
   <div class="loader" id="loader-1"></div>
 </div>
+
+<!-- javascript code below are also used in user_edit page.
+if you change code below, make sure you update both pages -->
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script>
+  const initialJobParentCategory = '{{ job_parent_category }}';
+  const parentCategoryElement = $('#id_job_parent_category');
+  // const categoryElement = $('#id_job_category');
+  const categories = {
+    {% for parent in parent_category_list %}
+      '{{ parent.pk }}' : [
+        {% for category in parent.alumnijobchildcategory_set.all %}
+          {
+            'pk': '{{ category.pk }}',
+            'name': '{{ category.name }}'
+          },
+        {% endfor %}
+      ],
+    {% endfor %}
+  };
+
+  //select init val for job form
+  parentCategoryElement.find('option[value=' + initialJobParentCategory + ']').prop('selected', true);
+
+
+  for (i=0; i < $('.job_form').length; i++) {
+      const currentRow = $('#id_offeredjobjointable_set-' + i + '-offered_job_parent_category').parent('div');
+
+      if (!currentRow.find('option:first-child').is(':selected')) {
+        const currentRowChildForm = $('#id_offeredjobjointable_set-' + i + '-offered_job_child_category');
+        const initCategoryList = categories[currentRow.find('option:selected').val()];
+        const initChildVal = currentRowChildForm.find('option:selected').val();
+
+        currentRowChildForm.removeClass('hide');
+        currentRowChildForm.children().remove();
+        currentRow.find('button').removeClass('hide');
+        for (const category of initCategoryList) {
+          const option = $('<option>');
+          option.val(category['pk']);
+          option.text(category['name']);
+          currentRowChildForm.append(option);
+        }
+        currentRowChildForm.find('option[value=' + initChildVal + ']').prop('selected', true);
+      }
+    }
+    
+  const initCategoryListCurrent = categories[$('#id_job_parent_category').find('option:selected').val()];
+  const initChildValCurrent = $('#id_job_category').find('option:selected').val();
+  $('#id_job_category').children().remove();
+  for (const category of initCategoryListCurrent) {
+          const option = $('<option>');
+          option.val(category['pk']);
+          option.text(category['name']);
+          $('#id_job_category').append(option);
+        }
+  $('#id_job_category').find('option[value=' + initChildValCurrent + ']').prop('selected', true);
+
+  
+  $(document).on('change', '.job_form select.parent-form', function (){
+    const childJobCategoryElem = $(this).siblings('select');
+    const parentJobCategoryElem = $(this);
+
+    childJobCategoryElem.children().remove();
+    childJobCategoryElem.removeClass('hide');
+    $(this).siblings('.job-form-reset-btn').removeClass('hide');
+
+    const parentId = parentJobCategoryElem.val();
+    const categoryList = categories[parentId];
+
+    // 子カテゴリの選択肢を作成、追加。
+    childJobCategoryElem.append($('<option value="">---------</option>'));
+    for (const category of categoryList) {
+      const option = $('<option>');
+      option.val(category['pk']);
+      option.text(category['name']);
+      childJobCategoryElem.append(option);
+    }
+  });
+
+  // reset job select form
+  $(document).on('click', '.job-form-reset-btn', function() {
+    $(this).siblings('input[type="checkbox"]').prop('checked', true);
+    $(this).siblings('select.parent-form').find('option:eq(0)').prop('selected', true);
+    $(this).siblings('select.child-form').addClass('hide');
+    $(this).siblings('select.child-form').children().remove();
+    $(this).addClass('hide');
+  });
+
+  $(document).on('change', 'select.child-form', function() {
+    $(this).siblings('input[type="checkbox"]').prop('checked', false);
+  });
+
+  // form validation
+  $('input[type="submit"]').on('click', function () {
+    for (i=0; i<3; i++) {
+      if(!$('select.child-form:eq(' + i + ')').hasClass('hide')) {
+        if($('select.child-form:eq(' + i + ')').val() == '') {
+          alert('業界選択欄に入力不足の箇所があります。')
+          return false;
+        }
+      }
+    }
+    if (!$('#id_job_category').hasClass('hide')) {
+      if ($('#id_job_category').val() == '') {
+      alert('業界選択欄に入力不足の箇所があります。')
+      return false;
+      }
+    }
+  });
+
+</script>
+
 <script type="text/javascript">
   var cropper;
 	var imageFile;

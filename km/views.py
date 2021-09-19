@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import *
 from .forms import *
 from .filters import PostFilter
@@ -29,7 +29,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.core.signing import BadSignature, SignatureExpired, loads, dumps
 from django.views import generic
 from django.contrib.auth import get_user_model
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, DetailView
 import re
 
 TEMP_PROFILE_IMAGE_NAME = "temp_profile_image.png"
@@ -38,8 +38,10 @@ def truncate(string, length, ellipsis='...'):
     return string[:length] + (ellipsis if string[length:] else '')
 
 def homeView (request):
-	return render(request, 'home.html')
-	
+	# home_pic = format_html('<img id="homepic" src="{% static 'images/home-pic4.jpg' %}">')
+	context = {}
+	return render(request, 'home.html', context)
+
 #-----auth section------------------------------------------------------
 
 @unauthenticated_user
@@ -148,7 +150,7 @@ def indexOthersView (request):
 
 @login_required(login_url='login')
 def showView (request, pk):
-	post = Post.objects.get(id=pk)
+	post = get_object_or_404(Post, id=pk)
 	comments = Comment.objects.filter(post=post).filter(is_reply_to__isnull=True)
 	cmtbks = Comment.objects.filter(post=post).exclude(is_reply_to__isnull=True)
 	context = {'post': post, 'comments':comments, 'cmtbks':cmtbks}
@@ -158,21 +160,85 @@ def showView (request, pk):
 				return redirect('postIndex')
 	return render(request, 'posts/show.html', context)
 
+# class PostDetailView(DetailView):
+
+# 	template_name = 'posts/show.html'
+# 	model = Post
+# 	context_object_name = 'post'
+
+# 	def get_context_data(self, **kwargs):
+# 		ctx = super().get_context_data(**kwargs)
+# 		self.this_post = get_object_or_404(Post, pk=self.kwargs['pk'])
+# 		ctx['comments'] = Comment.objects.filter(post=self.this_post).filter(is_reply_to__isnull=True)
+# 		ctx['cmtbks'] = Comment.objects.filter(post=self.this_post).exclude(is_reply_to__isnull=True)
+# 		return ctx
+
+
 @login_required(login_url='login')
 def newView (request):
 	form = PostForm()
 	current_user = request.user
+	parent_category_list = AlumniJobParentCategory.objects.all()
+	alumni_list = CustomUser.objects.filter(student_status='卒業生')
+	offered_job_list = OfferedJobJoinTable.objects.all()
+
+	available_parent_industry_list = []
+	available_child_industry_list = []
+
+	for alumni_current_industry in alumni_list:
+		if int(alumni_current_industry.job_category.pk) not in available_child_industry_list:
+			available_child_industry_list.append(int(alumni_current_industry.job_category.pk))
+			if int(alumni_current_industry.job_category.parent.pk) not in available_parent_industry_list:
+				available_parent_industry_list.append(int(alumni_current_industry.job_category.parent.pk))
+			
+	for offered_job in offered_job_list:
+		if int(offered_job.offered_job_child_category.pk) not in available_child_industry_list:
+			available_child_industry_list.append(int(offered_job.offered_job_child_category.pk))
+			if int(offered_job.offered_job_parent_category.pk) not in available_parent_industry_list:
+				available_parent_industry_list.append(int(offered_job.offered_job_parent_category.pk))
+
+
 	if request.method == 'POST':
 		form = PostForm(request.POST)
 		if form.is_valid():
 			post_user = form.save(commit=False)
 			post_user.user = current_user
 			post_user.save()
+
+			if post_user.requested_industry is not None:
+				matching_join_table = OfferedJobJoinTable.objects.filter(
+					offered_job_child_category=post_user.requested_industry
+				)
+				recepient_alumni = CustomUser.objects.filter(
+					student_status='卒業生',
+					job_category=post_user.requested_industry
+				)
+				recepient = []
+				for alumni in recepient_alumni:
+					if alumni not in recepient:
+						recepient.append(alumni.email)
+
+				for table in matching_join_table:
+					if table.user not in recepient:
+						recepient.append(table.user.email)
+
+				context={'current_user':current_user,'post': post_user, 'requested_industry': post_user.requested_industry}
+
+				subject = render_to_string('email_template/industry_requested/subject.txt', context)
+				message = render_to_string('email_template/industry_requested/message.txt', context)
+
+				# msg = EmailMessage(subject, message, EMAIL_HOST_USER, bcc=recepient)
+				# msg.send()
+
 			messages.info(request, "質問が投稿されました")
 			return redirect('postIndex')
-#.save(commit=False) this is so helpful...
 
-	context={'form':form}
+	context={
+		'form':form,
+		'parent_category_list': parent_category_list,
+		'available_parent_industry_list': available_parent_industry_list,
+		'available_child_industry_list': available_child_industry_list,
+		}
 	return render(request, 'posts/new.html', context)
 
 @login_required(login_url='login')
@@ -190,12 +256,12 @@ def newMentionedView (request, pk):
 			post_user.user = current_user
 			post_user.mentioned_user = mentioned_user
 			post_user.save()
-			
+
 			context={'current_user':current_user,'post_user': post_user, 'mentioned_user':mentioned_user}
 
 			subject = render_to_string('email_template/mentioned_post/subject.txt', context)
 			message = render_to_string('email_template/mentioned_post/message.txt', context)
-		
+
 			recepient = str(mentioned_user.email)
 			# msg = EmailMessage(subject, message, EMAIL_HOST_USER, [recepient])
 			# msg.send()
@@ -240,7 +306,7 @@ def likeUnlikeCommentView(request, pk):
 
 		subject = render_to_string('email_template/like_comment/subject.txt',context)
 		message = render_to_string('email_template/like_comment/message.txt',context)
-	
+
 		recepient = str(comment.user.email)
 		# msg = EmailMessage(subject, message, EMAIL_HOST_USER, [recepient])
 		# msg.send()
@@ -260,7 +326,7 @@ def commentView (request, pk):
 			comment_instance.user = current_user
 			comment_instance.post = post
 			comment_instance.save()
-			
+
 			if post.user != None:
 				if comment_instance.user != post.user:
 					comment_body = truncate(comment_instance.body, 200)
@@ -268,7 +334,7 @@ def commentView (request, pk):
 
 					subject = render_to_string('email_template/newcomment/subject.txt')
 					message = render_to_string('email_template/newcomment/message.txt',context)
-				
+
 					recepient = str(post.user.email)
 					msg = EmailMessage(subject, message, EMAIL_HOST_USER, [recepient])
 					msg.send()
@@ -311,7 +377,7 @@ def deleteView(request, pk):
 
 	if post.user != request.user:
 		return redirect('postIndex')
-		
+
 	if request.method == 'POST':
 		post.delete()
 		messages.info(request, "質問が削除されました")
@@ -371,7 +437,7 @@ def commentBackView (request, pk):
 					message = render_to_string('email_template/newcomment/message.txt',context)
 					# msg = EmailMessage(subject, message, EMAIL_HOST_USER, [recepient])
 					# msg.send()
-			
+
 			messages.info(request, "コメントへの返信が投稿されました")
 			return redirect('postShow', pk=post.id)
 
@@ -417,44 +483,81 @@ def reportCommentView(request,pk):
 
 	context={'post_or_comment':comment, 'post':post, 'form':form,'current_user':current_user}
 	return render(request, 'contact/report.html', context)
-	
+
 #-----user section------------------------------------------------------
 
 @login_required(login_url='login')
 def userListView(request,pk):
-	user  = CustomUser.objects.get(id=pk)   
+	user  = CustomUser.objects.get(id=pk)
 	context={'user':user}
 	return render(request, 'user/user_list.html', context)
 
 @login_required(login_url='login')
 def userMypageView(request):
-	
+
 	student = request.user
 	context={'student':student}
 	return render(request, 'user/mypage.html', context)
-	
+
 @login_required(login_url='login')
 def userMypageEditView(request):
-	
+
 	student = request.user
 	form = StudentForm(instance=student)
+	formset = OfferedJobFormset(
+		# queryset=OfferedJobJoinTable.objects.filter(user=student),
+		instance=student
+		)
 
 	if request.method == 'POST':
 		form = CustomUserChangeForm(request.POST, request.FILES, instance=student)
+		if student.student_status == '卒業生':
+			formset = OfferedJobFormset(request.POST, instance=student)
+
 		if form.is_valid():
 			form.save()
+			if student.student_status == '卒業生' and formset.is_valid():
+				formset.save()
 			messages.info(request, "プロフィールが更新されました")
 			return redirect('/user/mypage/')
 		else:
 			messages.error(request,'正しくフォームが入力されていないようです...')
+			email = request.user.email
+			context={
+				'form':form,
+				'formset':formset,
+				'email':email,
+				'DATA_UPLOAD_MAX_MEMORY_SIZE':settings.DATA_UPLOAD_MAX_MEMORY_SIZE
+				}
+
+			if student.student_status == '卒業生':
+				job_parent_category = AlumniJobChildCategory.objects.get(customuser=request.user).parent.pk
+				parent_category_list = AlumniJobParentCategory.objects.all()
+				context['job_parent_category'] = job_parent_category
+				context['parent_category_list'] = parent_category_list
+
+			return render(request, 'user/mypage_edit.html', context)
 
 	email = request.user.email
-	context={'form':form, 'email':email, 'DATA_UPLOAD_MAX_MEMORY_SIZE':settings.DATA_UPLOAD_MAX_MEMORY_SIZE}
+
+	context={
+		'form':form,
+		'formset':formset,
+		'email':email,
+		'DATA_UPLOAD_MAX_MEMORY_SIZE':settings.DATA_UPLOAD_MAX_MEMORY_SIZE
+		}
+
+	if student.student_status == '卒業生':
+		job_parent_category = AlumniJobChildCategory.objects.get(customuser=request.user).parent.pk
+		parent_category_list = AlumniJobParentCategory.objects.all()
+		context['job_parent_category'] = job_parent_category
+		context['parent_category_list'] = parent_category_list
+		
 	return render(request, 'user/mypage_edit.html', context)
 
 @login_required(login_url='login')
 def userDeleteView(request):
-	student = request.user		
+	student = request.user
 	if request.method == 'POST':
 		student.delete()
 		messages.info(request, "ユーザーが削除されました")
@@ -520,7 +623,7 @@ def contactFormView(request):
 		return render(request, 'contact/contact_sent.html', {'recepient': recepient})
 
 	return render(request, 'contact/contact_form.html', {'form': cont})
-	
+
 @login_required(login_url='login')
 def adminNotificationView(request):
 	if not request.user.is_staff:
@@ -614,7 +717,7 @@ def crop_image(request, *args, **kwargs):
 			# delete temp file
 			os.remove(url)
 			messages.info(request, "プロフィール画像が更新されました")
-			
+
 		except Exception as e:
 			print("exception: " + str(e))
 			payload['result'] = "error"
@@ -623,23 +726,38 @@ def crop_image(request, *args, **kwargs):
 
 # 下記Narito Blog様を参考に作成(仮登録機能)--https://blog.narito.ninja/detail/42/#url
 class UserCreate(generic.CreateView):
-    """ユーザー仮登録"""
     template_name = 'signup.html'
     form_class = CustomUserCreationForm
+    formset = OfferedJobFormset
 
     def get(self, request, **kwargs):
         # アクティブユーザーでなければログインページ
+        formset = OfferedJobFormset(
+                queryset=OfferedJobJoinTable.objects.none(),
+        )
         if request.user.is_authenticated:
             return redirect('postIndex')
         return super().get(request)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['formset']              = self.formset
+        context['parent_category_list'] = AlumniJobParentCategory.objects.all()
+        return context
+
     def form_valid(self, form):
-        # 仮登録と本登録の切り替えは、is_active属性を使うと簡単です。
-        # 退会処理も、is_activeをFalseにするだけにしておくと捗ります。
-        
         user = form.save(commit=False)
         user.is_active = False
+        formset = OfferedJobFormset(
+                data=self.request.POST,
+                instance=user,
+                queryset=AlumniJobParentCategory.objects.none()
+                )
         user.save()
+
+        if formset.is_valid():
+                formset.save()
+
         if user.student_status == '卒業生':
             context={'user': user}
             subject = render_to_string('email_template/create_alumni/subject.txt', context)
@@ -714,7 +832,7 @@ class UserCreateComplete(generic.TemplateView):
             else:
                 if not user.is_active:
                     # 問題なければ本登録とする
-					
+
                     user.is_active = True
                     user.save()
                     return super().get(request, **kwargs)

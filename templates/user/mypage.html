@@ -23,8 +23,8 @@
 			<h2>{{ student.name }}</h2>
 			{{ student.student_status }}
 			<p>{{ student.entry_year }}年度入学</p>
-			{% if student.industry and student.job_type %}
-				<p>業界：{{ student.industry }}</p>
+			{% if student.job_category and student.job_type %}
+				<p>業界：{{ student.job_category }}</p>
 				<p>職種：{{ student.job_type }}</p>
 			{% endif %}
 			<p style="text-align:left">{{ student.introduction|linebreaksbr }}</p> 

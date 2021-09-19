@@ -1,4 +1,5 @@
 {% extends 'base/base.html' %}
+{% load widget_tweaks %}
 {% load static %}
 
 {% block content %}
@@ -14,37 +15,81 @@
   
           <form method="POST" action="">
             {% csrf_token %}
-              <p>メールアドレス<br>　※各種キャリアメールアドレスやicloud.comのドメインは使用不可な場合があります。gmailなどフリーメールアドレスのご利用を推奨します。</p>
-              {{ form.email }}
+            <hr>
+              <p>メールアドレス</p>
+              {{ form.email | add_class:"form-control" }}
+              <p>　※各種キャリアメールアドレスやicloud.comのドメインは使用不可な場合があります。gmailなどフリーメールアドレスのご利用を推奨します。</p>
+              <hr>
 
               <p>ご本人様のお名前</p>
-              {{ form.real_name }}
+              {{ form.real_name | add_class:"form-control" }}
+              <hr>
               
               <p>ユーザーネーム</p>
-              {{ form.name }}
+              {{ form.name | add_class:"form-control" }}
+              <hr>
 
               <p>パスワード</p>
-              {{ form.password1 }}
+              {{ form.password1 | add_class:"form-control" }}
+              <hr>
 
               <p>パスワード（確認用）</p>
-              {{ form.password2 }}
+              {{ form.password2 | add_class:"form-control" }}
+              <hr>
 
               <p>入学年度（西暦）</p>
-              {{ form.entry_year }}
+              {{ form.entry_year | add_class:"form-control" }}
+              <hr>
 
               <p>在籍状況</p>
-              {{ form.student_status }}
+              {{ form.student_status | add_class:"form-control" }}
+              <hr>
 
-              <p><br>-------下記は卒業生のみご記入ください-------</p>
-
-              <p>業界</p>
-              {{ form.industry }}
-
-              <p>職種</p>
-              {{ form.job_type }}
+              <div id="signup_alumni_form" class="hide">  
+                <div class="job_form">
+                  <p>業界</p>
+                  {{ form.job_parent_category | add_class:"form-control parent-form" }}
+                  <br>
+                  {{ form.job_category | add_class:"hide form-control" }}
+                  <hr>
+                </div>
+  
+                {{ formset.management_form }}
+                {% for line_form in formset %}
+                  <div class="job_form">
+                    {% for hidden in line_form.hidden_fields %} <!-- necessary for some reason... -->
+                        {{ hidden }}
+                    {% endfor %}
+                  {% if forloop.first %}
+                    <details>
+                      <summary>
+                        内定獲得業界 1 
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-question-circle-fill" viewBox="0 0 16 16">
+                          <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.496 6.033h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286a.237.237 0 0 0 .241.247zm2.325 6.443c.61 0 1.029-.394 1.029-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94 0 .533.425.927 1.01.927z"/>
+                        </svg>
+                      </summary>
+                      　ご自身が就活中に内定を獲得された業界を選択してください<br>                    　
+                    </details>
+                  {% else %}
+                    <p>内定獲得業界 {{ forloop.counter }}</p>
+                  {% endif %}
+                    <button type="button" class="btn btn-danger job-form-reset-btn hide">x</button>
+                    {{ line_form.offered_job_parent_category | add_class:"form-control parent-form" }}
+                    <br>
+                    {{ line_form.offered_job_child_category | add_class:"form-control child-form hide" }}
+                    <div class="emptybox"></div>
+                    {{ line_form.DELETE | add_class:"hide" }}
+                  </div>
+                {% endfor %}
+                <hr>
+  
+                <p>職種</p>
+                {{ form.job_type | add_class:"form-control" }}
+                <hr>
+              </div>
 
               {{ form.errors }}
-              <p>※ 卒業生として登録される際には運営による審査が行われます。その間はサービスをご利用できませんのでご了承ください。</p>
+              <p>※ 卒業生として登録される際には、運営によって身元の確認が行われます。その間はサービスをご利用できませんのでご了承ください。</p>
               <p>※ 登録することで、<a href="{% url 'terms_of_use' %}" target="_blank" rel="noopener noreferrer">利用規約</a>と<a href="{% url 'privacy_policy' %}" target="_blank" rel="noopener noreferrer">プライバシーポリシー</a>に同意したものとみなされます。</p>
 
             <input type="submit"  id="submit" name="Create User" value="登録">
@@ -54,4 +99,85 @@
       </div>
     </div>
   </div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script>
+  // 業界選択時の処理
+  const categories = {
+    {% for parent in parent_category_list %}
+      '{{ parent.pk }}' : [
+        {% for category in parent.alumnijobchildcategory_set.all %}
+          {
+            'pk': '{{ category.pk }}',
+            'name': '{{ category.name }}'
+          },
+        {% endfor %}
+      ],
+    {% endfor %}
+  };
+
+  $('.job_form select.parent-form').on('change', function () {
+    const childJobCategoryElem = $(this).siblings('select');
+    const parentJobCategoryElem = $(this);
+
+    childJobCategoryElem.children().remove();
+    childJobCategoryElem.removeClass('hide');
+    $(this).siblings('.job-form-reset-btn').removeClass('hide');
+
+    const parentId = parentJobCategoryElem.val();
+    const categoryList = categories[parentId];
+
+    // 子カテゴリの選択肢を作成、追加。
+    childJobCategoryElem.append($('<option value="">---------</option>'));
+    for (const category of categoryList) {
+      const option = $('<option>');
+      option.val(category['pk']);
+      option.text(category['name']);
+      childJobCategoryElem.append(option);
+    }
+  });
+
+  // reset job select form
+  $(document).on('click', '.job-form-reset-btn', function() {
+    $(this).siblings('input[type="checkbox"]').prop('checked', true);
+    $(this).siblings('select.parent-form').find('option:eq(0)').prop('selected', true);
+    $(this).siblings('select.child-form').addClass('hide');
+    $(this).siblings('select.child-form').children().remove();
+    $(this).addClass('hide');
+  });
+
+  $(document).on('change', 'select.child-form', function() {
+    $(this).siblings('input[type="checkbox"]').prop('checked', false);
+  });
+
+  $('#id_student_status').on('change', function () {
+    if ($(this).val() == '卒業生') {
+      $('#signup_alumni_form').removeClass('hide');
+    } else {
+      if (!$('#signup_alumni_form').hasClass('hide')) {
+        $('#signup_alumni_form').addClass('hide');
+      }
+    }
+  });
+
+
+  // form validation
+  $('input[type="submit"]').on('click', function () {
+    for (i=0; i<3; i++) {
+      if(!$('select.child-form:eq(' + i + ')').hasClass('hide')) {
+        if($('select.child-form:eq(' + i + ')').val() == '') {
+          alert('業界選択欄に入力不足の箇所があります。')
+          return false;
+        }
+      }
+    }
+    if (!$('#id_job_category').hasClass('hide')) {
+      if ($('#id_job_category').val() == '') {
+      alert('業界選択欄に入力不足の箇所があります。')
+      return false;
+      }
+    }
+  });
+
+</script>
 {% endblock %}

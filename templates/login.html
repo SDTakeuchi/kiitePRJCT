@@ -10,9 +10,11 @@
           <form method="POST" action="">
             {% csrf_token %}
             <p>メールアドレス</p>
-            <input name="email" value="123@gmail.com">
+            <input class="form-control" name="email" value="123@gmail.com" autofocus="">
+            <hr>
             <p>パスワード 　※入力済です、そのままログインを押下してください</p>
-            <input type="password" name="password" value="shuheitakeuchi">
+            <input class="form-control" type="password" name="password" value="shuheitakeuchi">
+            <hr>
             <input type="submit" value="ログイン">
           </form>       
           <a href="{% url 'reset_password' %}">パスワードをお忘れですか？</a>
