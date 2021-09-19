@@ -38,7 +38,9 @@ def truncate(string, length, ellipsis='...'):
     return string[:length] + (ellipsis if string[length:] else '')
 
 def homeView (request):
-	return render(request, 'home.html')
+	# home_pic = format_html('<img id="homepic" src="{% static 'images/home-pic4.jpg' %}">')
+	context = {}
+	return render(request, 'home.html', context)
 
 #-----auth section------------------------------------------------------
 
@@ -148,7 +150,7 @@ def indexOthersView (request):
 
 @login_required(login_url='login')
 def showView (request, pk):
-	post = Post.objects.get(id=pk)
+	post = get_object_or_404(Post, id=pk)
 	comments = Comment.objects.filter(post=post).filter(is_reply_to__isnull=True)
 	cmtbks = Comment.objects.filter(post=post).exclude(is_reply_to__isnull=True)
 	context = {'post': post, 'comments':comments, 'cmtbks':cmtbks}
