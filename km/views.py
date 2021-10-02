@@ -12,6 +12,7 @@ from .decorators import unauthenticated_user, allowed_users
 from django.core.mail import EmailMessage
 from kiite_me.settings import EMAIL_HOST_USER
 from . import forms
+import random
 #---------------below are for cropping the image
 from django.core.files.storage import default_storage
 from django.core.files.storage import FileSystemStorage
@@ -38,8 +39,8 @@ def truncate(string, length, ellipsis='...'):
     return string[:length] + (ellipsis if string[length:] else '')
 
 def homeView (request):
-	# home_pic = format_html('<img id="homepic" src="{% static 'images/home-pic4.jpg' %}">')
-	context = {}
+	random_num = random.randint(0,7)
+	context = {'random_num':random_num}
 	return render(request, 'home.html', context)
 
 #-----auth section------------------------------------------------------

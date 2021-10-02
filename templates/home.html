@@ -5,7 +5,25 @@
 
 <!-- home section -->
 <section id="home">
-	<img id="homepic" src="{% static 'images/home-pic4.jpg' %}">
+	
+	{% if random_num == 0 %}
+		<img id="homepic" src="{% static 'images/home-pics/tedtim.jpg' %}">
+	{% elif random_num == 1 %}
+		<img id="homepic" src="{% static 'images/home-pics/CommunicationRoom.jpg' %}">
+	{% elif random_num == 2 %}
+		<img id="homepic" src="{% static 'images/home-pics/campus1.jpg' %}">
+	{% elif random_num == 3 %}
+		<img id="homepic" src="{% static 'images/home-pics/campus2.jpg' %}">
+	{% elif random_num == 4 %}
+		<img id="homepic" src="{% static 'images/home-pics/campus3.jpg' %}">
+	{% elif random_num == 5 %}
+		<img id="homepic" src="{% static 'images/home-pics/room1.jpg' %}">
+	{% elif random_num == 6 %}
+		<img id="homepic" src="{% static 'images/home-pics/trimed2.jpg' %}">
+	{% elif random_num == 7 %}
+		<img id="homepic" src="{% static 'images/home-pics/trimed3.jpg' %}">
+	{% endif %}
+
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12 col-sm-12">
