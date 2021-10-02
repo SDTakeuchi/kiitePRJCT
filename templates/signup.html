@@ -16,13 +16,13 @@
           <form method="POST" action="">
             {% csrf_token %}
             <hr>
+              <p>ご本人様のお名前</p>
+              {{ form.real_name | add_class:"form-control" }}
+              <hr>
+              
               <p>メールアドレス</p>
               {{ form.email | add_class:"form-control" }}
               <p>　※各種キャリアメールアドレスやicloud.comのドメインは使用不可な場合があります。gmailなどフリーメールアドレスのご利用を推奨します。</p>
-              <hr>
-
-              <p>ご本人様のお名前</p>
-              {{ form.real_name | add_class:"form-control" }}
               <hr>
               
               <p>ユーザーネーム</p>
@@ -53,6 +53,10 @@
                   {{ form.job_category | add_class:"hide form-control" }}
                   <hr>
                 </div>
+
+                <p>職種</p>
+                {{ form.job_type | add_class:"form-control" }}
+                <hr>
   
                 {{ formset.management_form }}
                 {% for line_form in formset %}
@@ -81,10 +85,6 @@
                     {{ line_form.DELETE | add_class:"hide" }}
                   </div>
                 {% endfor %}
-                <hr>
-  
-                <p>職種</p>
-                {{ form.job_type | add_class:"form-control" }}
                 <hr>
               </div>
 

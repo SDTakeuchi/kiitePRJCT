@@ -52,6 +52,9 @@
         <br>
         {{ form.job_category | add_class:"form-control" }}
 
+        <p>職種：</p>
+        {{ form.job_type | add_class:"form-control" }}
+
         {{ formset.management_form }}
         {% for line_form in formset %}
           <div class="job_form">
@@ -67,9 +70,6 @@
             {{ line_form.DELETE | add_class:"hide" }}
           </div>
         {% endfor %}
-
-        <p>職種：</p>
-        {{ form.job_type }}
       {% endif %}
       <p>自己紹介：</p>
       {{ form.introduction }}
