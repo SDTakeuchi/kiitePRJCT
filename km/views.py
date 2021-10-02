@@ -274,7 +274,7 @@ def newMentionedView (request, pk):
 
 @login_required(login_url='login')
 def editView (request, pk):
-	post = Post.objects.get(id = pk)
+	post = get_object_or_404(Post, id=pk)
 	form = PostForm(instance=post)
 
 	if post.user != request.user:
@@ -347,7 +347,7 @@ def commentView (request, pk):
 
 @login_required(login_url='login')
 def deleteCommentView(request, pk):
-	comment = Comment.objects.get(id = pk)
+	comment = get_object_or_404(Comment, id=pk)
 	comment.delete()
 	messages.info(request, "コメントが削除されました")
 	return redirect('postShow', pk=comment.post.id)
