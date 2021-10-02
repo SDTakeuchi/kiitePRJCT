@@ -9,15 +9,27 @@ User = get_user_model()
 
 # maybe not needed anymore
 class StudentForm(ModelForm):
+    job_parent_category = forms.ModelChoiceField(
+        label='親カテゴリー',
+        queryset=AlumniJobParentCategory.objects,
+        required=False
+        )
+
     class Meta: 
         model = CustomUser
         fields = '__all__'
         exclude = ['user']
 
 class CustomUserCreationForm(UserCreationForm):
+    job_parent_category = forms.ModelChoiceField(
+        label='親カテゴリー',
+        queryset=AlumniJobParentCategory.objects,
+        required=False
+        )
+
     class Meta(UserCreationForm):
         model = CustomUser
-        fields = ('real_name','name','email','entry_year','industry', 'job_type','student_status')
+        fields = ('real_name','name','email','entry_year','industry', 'job_type','job_parent_category', 'job_category','student_status')
 
     def clean_email(self):
         email = self.cleaned_data['email']
@@ -25,14 +37,37 @@ class CustomUserCreationForm(UserCreationForm):
         return email
 
 class CustomUserChangeForm(UserChangeForm):
+    job_parent_category = forms.ModelChoiceField(
+        label='親カテゴリー',
+        queryset=AlumniJobParentCategory.objects,
+        required=False
+        )
+        
     class Meta:
         model = CustomUser
-        fields = ('real_name','name','email','entry_year','profile_pic','industry', 'job_type', 'introduction','can_ask')
+        fields = ('real_name','name','email','entry_year','profile_pic','industry', 'job_type','job_parent_category', 'job_category', 'introduction','can_ask')
+
+# class OfferedJobForm(UserChangeForm):
+#     job_parent_category = forms.ModelChoiceField(
+#         label='親カテゴリー',
+#         queryset=AlumniJobParentCategory.objects,
+#         required=False
+#         )
+        
+#     class Meta:
+#         model = OfferedJobJoinTable
+#         fields = ('job_parent_category', 'offered_job_category',)
 
 class PostForm(ModelForm):
+    job_parent_category = forms.ModelChoiceField(
+        label='親カテゴリー',
+        queryset=AlumniJobParentCategory.objects,
+        required=False
+        )
+        
     class Meta:
         model = Post
-        fields = ['title','tag', 'body','is_public', 'is_anonymous']
+        fields = ['title','tag', 'body','is_public', 'is_anonymous', 'job_parent_category', 'requested_industry']
 
 class CommentForm(ModelForm):
     class Meta:
@@ -71,3 +106,12 @@ class adminNotificationForm(forms.Form):
 
     def __str__(self):
         return self.title
+
+OfferedJobFormset = forms.inlineformset_factory(
+        parent_model = CustomUser,
+        model = OfferedJobJoinTable,
+        fields = ('offered_job_child_category', 'offered_job_parent_category'),
+        extra = 3,
+        max_num = 3,
+        can_delete=True,
+    )

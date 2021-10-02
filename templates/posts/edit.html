@@ -15,8 +15,15 @@
           {% csrf_token %}
           <p style="margin-top:0px;">質問タイトル</p>
           {{ form.title|add_class:"newpost-title" }}
-          <p>関連タグ</p>
-          {{ form.tag|add_class:"newpost-tag" }}
+
+          <p>関連タグ：<b>{{ post.tag }}</b></p>
+          <input type="hidden" name="tag" value="{{ form.tag.value }}">
+
+          {% if post.requested_industry %}
+            <p>指名業界：<b>{{ post.requested_industry }}</b></p>
+            <input type="hidden" name="requested_industry" value="{{ form.requested_industry.value }}">
+          {% endif %}
+
           <p>質問内容</p>
           {{ form.body|add_class:"newpost-body" }}
           <div class="checkbox">

@@ -521,11 +521,21 @@ footer {
 
 .br-pc { display:block; }
 .br-sp { display:none; }
+
 #id_comment_body{
   width: 380px;
   margin-right: 15px;
   height: clamp(180px,50vw,206px);
 }
+
+.job_form_show_row-box {
+  text-align: right;
+}
+
+#job_form_show_row {
+  display: inline-block;
+}
+
 @media (max-width: 450px) {
   .heading {
     font-size: 40px;
@@ -556,6 +566,10 @@ footer {
     margin: 0px 0px 8px;
   }
   .posts-show-item input[type="text"],.posts-show-item input[type="email"]{width: 100% !important;}
+
+  #job_form_show_row {
+    width: 100%;
+  }
 }
 .pcver {
   display: block;
@@ -784,11 +798,6 @@ footer {
   transition-duration:400ms;
 }
 
-.posts-show-item input[type="submit"]:hover {
-  background: #808080;
-  color: #ffffff;
-} 
-
 .posts-show-item a.choice-no:hover{
   background: #808080;
   color: #ffffff;
@@ -861,14 +870,14 @@ footer {
 }
 
 .posts-index-item p{
-  font-size: 15px;
+  font-size: 14px;
   color: #535353;
   display: inline !important;
 }
 
 .posts-index-item img{
-  width: 49px;
-  height: 49px;
+  width: 44px;
+  height: 44px;
   border-radius: 45%;
   box-shadow: 0 2px 6px #c1ced7;
   vertical-align: middle;
@@ -1153,4 +1162,18 @@ select#id_title {
 .checkbox {
   font-size: 17px;
   padding: 4px 0;
+}
+
+.hide {
+  display: none;
+}
+
+.job-form-reset-btn {
+  margin-left: clamp(80px, 37%, 155px);
+}
+
+#signup_alumni_form .job-form-reset-btn {
+  margin-left: clamp(259px, 87%, 468px);
+  margin-bottom: 5px;
+
 }

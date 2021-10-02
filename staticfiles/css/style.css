@@ -56,7 +56,7 @@ h1,h2,h3,h4 {
 .subheading {
 	font-size: 14px;
 	font-weight: bold;
-	padding-bottom: 60px;
+	padding-bottom: 42px;
 }
 .bold {
 	font-weight: bold;
@@ -69,8 +69,8 @@ p {
 
 #about,
 #team, #contact {
-	padding-top: 100px;
-	padding-bottom: 100px;
+	padding-top: 71px;
+	padding-bottom: 71px;
 }
 
 #about .fa {
@@ -784,11 +784,6 @@ footer {
   transition-duration:400ms;
 }
 
-.posts-show-item input[type="submit"]:hover {
-  background: #808080;
-  color: #ffffff;
-} 
-
 .posts-show-item a.choice-no:hover{
   background: #808080;
   color: #ffffff;
@@ -819,7 +814,7 @@ footer {
 
 .posts-show-item p {
   font-size: 17px;
-  margin: 23px 0;
+  margin: 21px 0;
 }
 
 .post-time {
@@ -861,14 +856,14 @@ footer {
 }
 
 .posts-index-item p{
-  font-size: 15px;
+  font-size: 14px;
   color: #535353;
   display: inline !important;
 }
 
 .posts-index-item img{
-  width: 49px;
-  height: 49px;
+  width: 44px;
+  height: 44px;
   border-radius: 45%;
   box-shadow: 0 2px 6px #c1ced7;
   vertical-align: middle;
@@ -1145,9 +1140,12 @@ select#id_title {
   padding-top: 15px;
   padding-left: 31px;
 }
-
 .cmtbk-indent-box {
   padding-left: 9px;
   padding-bottom: 28px;
   border-left: solid 4px rgb(200, 200, 200);
+}
+.checkbox {
+  font-size: 17px;
+  padding: 4px 0;
 }

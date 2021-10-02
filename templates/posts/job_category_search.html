@@ -1,0 +1,56 @@
+{% extends 'base/base.html' %}
+{% load widget_tweaks %}
+{% load static %}
+
+{% block content %}
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script>
+  const parentCategoryElement = $('#id_job_parent_category')
+  const categoryElement = $('#id_job_category')
+  const categories = {
+    {% for parent in parentcategory_list %}
+      '{{ parent.pk }}' : [
+        {% for category in parent.alumnijobchildcategory_set.all %}
+          {
+            'pk': '{{ category.pk }}',
+            'name': '{{ category.name }}'
+          },
+        {% endfor %}
+      ],
+    {% endfor %}
+  };
+
+  const changeCategory = (select) => {
+    categoryElement.children().remove();
+    categoryElement.removeClass('hide');
+
+    const parentId = parentCategoryElement.val();
+    const categoryList = categories[parentId];
+
+    // 子カテゴリの選択肢を作成、追加。
+    for (const category of categoryList) {
+      const option = $('<option>');
+      option.val(category['pk']);
+      option.text(category['name']);
+      categoryElement.append(option);
+    }
+
+    // 指定があればそのカテゴリを選択する
+    if (select !== undefined) {
+      categoryElement.val(select);
+    }
+  };
+  
+  $('#id_job_parent_category').on('change', () =>{
+      changeCategory();
+    });
+
+  // 入力値に不備があってリロードがかかった時に、ページ表示時点で小カテゴリが絞り込まれるようにする
+  if (parentCategoryElement.val()) {
+    const selectCategory = categoryElement.val();
+    changeCategory(selectCategory);
+  }
+</script>
+{% endblock %}

@@ -5,7 +5,6 @@
 {% block content %}
 <div class="main posts-show">
     <div class="container">
-      <div class="form-heading" style="margin-top:0px">質問作成</div>
       <div class="posts-show-item">
         {% if mentioned_user %}
         <p style="font-size:16px;">送信先 :
@@ -15,11 +14,21 @@
 
         <form action="" method="POST">
           {% csrf_token %}
-          <p style="margin-top:0px;">質問タイトル*</p>
+          <p style="margin-top:0px;">質問タイトル<span style="color:rgb(214, 16, 16);">*</span></p>
           {{ form.title|add_class:"newpost-title" }}
-          <p>関連タグ*</p>
-          {{ form.tag|add_class:"newpost-tag" }}
-          <p>質問内容*</p>
+          <p>関連タグ<span style="color:rgb(214, 16, 16);">*</span></p>
+          {{ form.tag|add_class:"form-control" }}
+
+          <div class="job_form">
+            <p style="display: inline-block;">業界指名</p>
+            <button type="button" class="btn btn-danger job-form-reset-btn hide">x</button>
+            {{ form.job_parent_category | add_class:"form-control parent-form" }}
+            <br>
+            {{ form.requested_industry | add_class:"form-control child-form hide" }}
+            <p style="font-size:14px; margin: 0;">　※ 回答可能な卒業生が登録されている業界のみ選択可能となっています。</p>
+          </div>
+
+          <p>質問内容<span style="color:rgb(214, 16, 16);">*</span></p>
           {{ form.body|add_class:"newpost-body" }}
           <div class="checkbox">
             <label>
@@ -33,7 +42,7 @@
               質問をユーザー名非公開で投稿する
             </label>
           </div>
-          <input type="submit" name="Submit" value="投稿">
+          <input type="submit" class="btn btn-primary" style="height:auto; width:auto; border-radius:5px; border:none;" name="Submit" value="質問を投稿">
         </form>
         {{form.errors}}
         </div>
@@ -41,4 +50,69 @@
       <div class="emptybox"></div>
     </div>
   </div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script>
+  // 業界選択時の処理
+  const categories = {
+    {% for parent in parent_category_list %}
+      '{{ parent.pk }}' : [
+        {% for category in parent.alumnijobchildcategory_set.all %}
+          {
+            'pk': '{{ category.pk }}',
+            'name': '{{ category.name }}'
+          },
+        {% endfor %}
+      ],
+    {% endfor %}
+  };
+
+  const availableParentIndustryList = {{ available_parent_industry_list }}
+  $('.job_form select.parent-form option').each( function( i ) {
+    if (jQuery.inArray(parseInt($(this).val()), availableParentIndustryList) == -1 ) {
+      $(this).prop('disabled', true);
+    }
+  });
+
+  function disbaleUnavailableIndustries() {
+    const availableChildIndustryList = {{ available_child_industry_list }}
+    $('.job_form select.child-form option').each( function( i ) {
+      if (jQuery.inArray(parseInt($(this).val()), availableChildIndustryList) == -1 ) {
+        $(this).prop('disabled', true);
+      }
+    });
+  }
+
+  $('.job_form select.parent-form').on('change', function (){
+    const childJobCategoryElem = $(this).siblings('select');
+    const parentJobCategoryElem = $(this);
+
+    childJobCategoryElem.children().remove();
+    childJobCategoryElem.removeClass('hide');
+
+    const parentId = parentJobCategoryElem.val();
+    const categoryList = categories[parentId];
+
+    // 子カテゴリの選択肢を作成、追加。
+    childJobCategoryElem.append($('<option value="">---------</option>'));
+    for (const category of categoryList) {
+      const option = $('<option>');
+      option.val(category['pk']);
+      option.text(category['name']);
+      childJobCategoryElem.append(option);
+    }
+
+    $(this).siblings('.job-form-reset-btn').removeClass('hide');
+    disbaleUnavailableIndustries()
+  });
+
+  // reset job select form
+  $(document).on('click', '.job-form-reset-btn', function() {
+    $(this).siblings('select.parent-form').find('option:eq(0)').prop('selected', true);
+    $(this).siblings('select.child-form').addClass('hide');
+    $(this).siblings('select.child-form').children().remove();
+    $(this).addClass('hide');
+  });
+
+</script>
 {% endblock %}
