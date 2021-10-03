@@ -17,7 +17,7 @@
             {% csrf_token %}
             <hr>
               <p>ご本人様のお名前</p>
-              {{ form.real_name | add_class:"form-control" }}
+              {{ form.real_name | add_class:"form-control" | attr:"autofocus" }}
               <hr>
               
               <p>メールアドレス</p>
@@ -50,7 +50,7 @@
                   <p>業界</p>
                   {{ form.job_parent_category | add_class:"form-control parent-form" }}
                   <br>
-                  {{ form.job_category | add_class:"hide form-control" }}
+                  {{ form.job_category | add_class:"form-control" | attr:"disabled" }}
                   <hr>
                 </div>
 
@@ -58,29 +58,18 @@
                 {{ form.job_type | add_class:"form-control" }}
                 <hr>
   
+                <p>内定を獲得していた業界</p>
                 {{ formset.management_form }}
                 {% for line_form in formset %}
                   <div class="job_form">
                     {% for hidden in line_form.hidden_fields %} <!-- necessary for some reason... -->
-                        {{ hidden }}
+                      {{ hidden }}
                     {% endfor %}
-                  {% if forloop.first %}
-                    <details>
-                      <summary>
-                        内定獲得業界 1 
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-question-circle-fill" viewBox="0 0 16 16">
-                          <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.496 6.033h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286a.237.237 0 0 0 .241.247zm2.325 6.443c.61 0 1.029-.394 1.029-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94 0 .533.425.927 1.01.927z"/>
-                        </svg>
-                      </summary>
-                      　ご自身が就活中に内定を獲得された業界を選択してください<br>                    　
-                    </details>
-                  {% else %}
-                    <p>内定獲得業界 {{ forloop.counter }}</p>
-                  {% endif %}
-                    <button type="button" class="btn btn-danger job-form-reset-btn hide">x</button>
+                    <button type="button" class="btn btn-danger job-form-reset-btn hide">リセット</button>
+                    <p>{{ forloop.counter }}</p>
                     {{ line_form.offered_job_parent_category | add_class:"form-control parent-form" }}
                     <br>
-                    {{ line_form.offered_job_child_category | add_class:"form-control child-form hide" }}
+                    {{ line_form.offered_job_child_category | add_class:"form-control child-form" | attr:"disabled" }}
                     <div class="emptybox"></div>
                     {{ line_form.DELETE | add_class:"hide" }}
                   </div>
@@ -121,7 +110,7 @@
     const parentJobCategoryElem = $(this);
 
     childJobCategoryElem.children().remove();
-    childJobCategoryElem.removeClass('hide');
+    childJobCategoryElem.removeAttr('disabled');
     $(this).siblings('.job-form-reset-btn').removeClass('hide');
 
     const parentId = parentJobCategoryElem.val();
@@ -141,8 +130,8 @@
   $(document).on('click', '.job-form-reset-btn', function() {
     $(this).siblings('input[type="checkbox"]').prop('checked', true);
     $(this).siblings('select.parent-form').find('option:eq(0)').prop('selected', true);
-    $(this).siblings('select.child-form').addClass('hide');
-    $(this).siblings('select.child-form').children().remove();
+    $(this).siblings('select.child-form').prop('disabled', true);
+    $(this).siblings('select.child-form').children('option:not(option:eq(0))').remove();
     $(this).addClass('hide');
   });
 
@@ -164,17 +153,18 @@
   // form validation
   $('input[type="submit"]').on('click', function () {
     for (i=0; i<3; i++) {
-      if(!$('select.child-form:eq(' + i + ')').hasClass('hide')) {
-        if($('select.child-form:eq(' + i + ')').val() == '') {
-          alert('業界選択欄に入力不足の箇所があります。')
+      const thisRowChildForm = $('select.child-form:eq(' + i + ')');
+      if(typeof thisRowChildForm.attr('disabled') === 'undefined' || thisRowChildForm.attr('disabled') === false) {
+        if(thisRowChildForm.val() == '') {
+          alert('内定を獲得していた業界の' + (i+1) + '列目の子分類が未選択です。');
           return false;
         }
       }
     }
-    if (!$('#id_job_category').hasClass('hide')) {
+    if (typeof $('#id_job_category').attr('disabled') === 'undefined' || $('#id_job_category').attr('disabled') === false) {
       if ($('#id_job_category').val() == '') {
-      alert('業界選択欄に入力不足の箇所があります。')
-      return false;
+        alert('現在の業界の子分類が未選択です。');
+        return false;
       }
     }
   });

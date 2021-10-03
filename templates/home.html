@@ -6,23 +6,16 @@
 <!-- home section -->
 <section id="home">
 	
-	{% if random_num == 0 %}
-		<img id="homepic" src="{% static 'images/home-pics/tedtim.jpg' %}">
-	{% elif random_num == 1 %}
-		<img id="homepic" src="{% static 'images/home-pics/CommunicationRoom.jpg' %}">
-	{% elif random_num == 2 %}
-		<img id="homepic" src="{% static 'images/home-pics/campus1.jpg' %}">
-	{% elif random_num == 3 %}
-		<img id="homepic" src="{% static 'images/home-pics/campus2.jpg' %}">
-	{% elif random_num == 4 %}
-		<img id="homepic" src="{% static 'images/home-pics/campus3.jpg' %}">
-	{% elif random_num == 5 %}
-		<img id="homepic" src="{% static 'images/home-pics/room1.jpg' %}">
-	{% elif random_num == 6 %}
-		<img id="homepic" src="{% static 'images/home-pics/trimed2.jpg' %}">
-	{% elif random_num == 7 %}
-		<img id="homepic" src="{% static 'images/home-pics/trimed3.jpg' %}">
-	{% endif %}
+	<img id="homepic"
+	{% if random_num == 0 %}   src="{% static 'images/home-pics/tedtim.jpg' %}"
+	{% elif random_num == 1 %} src="{% static 'images/home-pics/CommunicationRoom.jpg' %}"
+	{% elif random_num == 2 %} src="{% static 'images/home-pics/campus1.jpg' %}"
+	{% elif random_num == 3 %} src="{% static 'images/home-pics/campus2.jpg' %}"
+	{% elif random_num == 4 %} src="{% static 'images/home-pics/campus3.jpg' %}"
+	{% elif random_num == 5 %} src="{% static 'images/home-pics/room1.jpg' %}"
+	{% elif random_num == 6 %} src="{% static 'images/home-pics/trimed2.jpg' %}"
+	{% elif random_num == 7 %} src="{% static 'images/home-pics/trimed3.jpg' %}"
+	{% endif %}>
 
 	<div class="container">
 		<div class="row">
@@ -30,7 +23,7 @@
 				<hr>
 				<div class="fuchidori">
 					<h3><span class="bold">学習院大学 国社生だけのOB・OG相談サイト</h3>
-					<h1 class="heading">Kiite-me<span class="red">!</span></h1>
+					<h1 class="heading" style="margin-top:1px;">Kiite-me<span class="red">!</span></h1>
 					<!-- <a href="#about" class="smoothScroll btn btn-default">このサイトについて ↓</a> -->
 				</div>	
 			</div>

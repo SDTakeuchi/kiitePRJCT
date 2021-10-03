@@ -47,25 +47,28 @@
       <p>メールアドレス：</p>
       {{ form.email }}
       {% if request.user.student_status == '卒業生' %}
-        <p>業界：</p>
-        {{ form.job_parent_category | add_class:"form-control" }}
-        <br>
-        {{ form.job_category | add_class:"form-control" }}
+        <div class="job_form">
+          <p>業界：</p>
+          {{ form.job_parent_category | add_class:"form-control parent-form" }}
+          <br>
+          {{ form.job_category | add_class:"form-control" }}
+  
+          <p>職種：</p>
+          {{ form.job_type | add_class:"form-control" }}
+        </div>
 
-        <p>職種：</p>
-        {{ form.job_type | add_class:"form-control" }}
-
+        <p>内定を獲得していた業界</p>
         {{ formset.management_form }}
         {% for line_form in formset %}
           <div class="job_form">
             {% for hidden in line_form.hidden_fields %} <!-- necessary for some reason... -->
                 {{ hidden }}
             {% endfor %}
-            <p style="display: inline-block;">内定獲得業界 {{ forloop.counter }}</p>
-            <button type="button" class="btn btn-danger job-form-reset-btn hide">x</button>
+            <button type="button" class="btn btn-danger job-form-reset-btn hide">リセット</button>
+            <p style="display: inline-block;">{{ forloop.counter }}</p>
             {{ line_form.offered_job_parent_category | add_class:"form-control parent-form" }}
             <br>
-            {{ line_form.offered_job_child_category | add_class:"form-control child-form hide" }}
+            {{ line_form.offered_job_child_category | add_class:"form-control child-form" | attr:"disabled" }}
             <div class="emptybox"></div>
             {{ line_form.DELETE | add_class:"hide" }}
           </div>
@@ -114,12 +117,11 @@ if you change code below, make sure you update both pages -->
   for (i=0; i < $('.job_form').length; i++) {
       const currentRow = $('#id_offeredjobjointable_set-' + i + '-offered_job_parent_category').parent('div');
 
-      if (!currentRow.find('option:first-child').is(':selected')) {
+      if ($.isNumeric(currentRow.find('option:selected').val())) {
         const currentRowChildForm = $('#id_offeredjobjointable_set-' + i + '-offered_job_child_category');
         const initCategoryList = categories[currentRow.find('option:selected').val()];
         const initChildVal = currentRowChildForm.find('option:selected').val();
-
-        currentRowChildForm.removeClass('hide');
+        currentRowChildForm.removeAttr('disabled');
         currentRowChildForm.children().remove();
         currentRow.find('button').removeClass('hide');
         for (const category of initCategoryList) {
@@ -149,7 +151,7 @@ if you change code below, make sure you update both pages -->
     const parentJobCategoryElem = $(this);
 
     childJobCategoryElem.children().remove();
-    childJobCategoryElem.removeClass('hide');
+    childJobCategoryElem.removeAttr('disabled');
     $(this).siblings('.job-form-reset-btn').removeClass('hide');
 
     const parentId = parentJobCategoryElem.val();
@@ -157,11 +159,17 @@ if you change code below, make sure you update both pages -->
 
     // 子カテゴリの選択肢を作成、追加。
     childJobCategoryElem.append($('<option value="">---------</option>'));
-    for (const category of categoryList) {
-      const option = $('<option>');
-      option.val(category['pk']);
-      option.text(category['name']);
-      childJobCategoryElem.append(option);
+    if (!$.isNumeric(parentId)) {
+      childJobCategoryElem.prop('disabled', true);
+      $(this).siblings('.job-form-reset-btn').addClass('hide');
+      $(this).siblings('input[type="checkbox"]').prop('checked', true);
+    } else {
+      for (const category of categoryList) {
+        const option = $('<option>');
+        option.val(category['pk']);
+        option.text(category['name']);
+        childJobCategoryElem.append(option);
+      }
     }
   });
 
@@ -169,8 +177,9 @@ if you change code below, make sure you update both pages -->
   $(document).on('click', '.job-form-reset-btn', function() {
     $(this).siblings('input[type="checkbox"]').prop('checked', true);
     $(this).siblings('select.parent-form').find('option:eq(0)').prop('selected', true);
-    $(this).siblings('select.child-form').addClass('hide');
+    $(this).siblings('select.child-form').prop('disabled', true);
     $(this).siblings('select.child-form').children().remove();
+    $(this).siblings('select.child-form').append($('<option value="">---------</option>'));
     $(this).addClass('hide');
   });
 
@@ -181,17 +190,18 @@ if you change code below, make sure you update both pages -->
   // form validation
   $('input[type="submit"]').on('click', function () {
     for (i=0; i<3; i++) {
-      if(!$('select.child-form:eq(' + i + ')').hasClass('hide')) {
-        if($('select.child-form:eq(' + i + ')').val() == '') {
-          alert('業界選択欄に入力不足の箇所があります。')
+      const thisRowChildForm = $('select.child-form:eq(' + i + ')');
+      if(typeof thisRowChildForm.attr('disabled') === 'undefined' || thisRowChildForm.attr('disabled') === false) {
+        if(thisRowChildForm.val() == '') {
+          alert('内定を獲得していた業界の' + (i+1) + '列目の子分類が未選択です。');
           return false;
         }
       }
     }
-    if (!$('#id_job_category').hasClass('hide')) {
+    if (typeof $('#id_job_category').attr('disabled') === 'undefined' || $('#id_job_category').attr('disabled') === false) {
       if ($('#id_job_category').val() == '') {
-      alert('業界選択欄に入力不足の箇所があります。')
-      return false;
+        alert('現在の業界の子分類が未選択です。')
+        return false;
       }
     }
   });

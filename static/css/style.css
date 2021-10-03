@@ -538,6 +538,12 @@ footer {
 }
 
 @media (max-width: 450px) {
+  .fuchidori {
+    position: relative;
+    top: -27px;
+    max-width: 96%;
+  }
+
   .heading {
     font-size: 40px;
   }
@@ -805,8 +811,7 @@ footer {
 }
 
 .posts-show-item select{
-  width: 320px;
-  height: 40px;
+  max-width: 320px;
 }
 
 .posts-show-item textarea{
@@ -1174,7 +1179,6 @@ select#id_title {
 }
 
 #signup_alumni_form .job-form-reset-btn {
-  margin-left: clamp(259px, 87%, 468px);
-  margin-bottom: 5px;
-
+  margin-left: 0;
+  float: right;
 }

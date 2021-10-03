@@ -53,9 +53,7 @@ def signupView (request):
 		if form.is_valid():
 			user = form.save()
 			username = form.cleaned_data.get('name')
-
 			messages.success(request, "ようこそ" + username +"さん、アカウントが作成されました！")
-
 			return redirect('login')
 
 	context={'form':form}

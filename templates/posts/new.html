@@ -21,10 +21,10 @@
 
           <div class="job_form">
             <p style="display: inline-block;">業界指名</p>
-            <button type="button" class="btn btn-danger job-form-reset-btn hide">x</button>
+            <button type="button" class="btn btn-danger job-form-reset-btn hide">リセット</button>
             {{ form.job_parent_category | add_class:"form-control parent-form" }}
             <br>
-            {{ form.requested_industry | add_class:"form-control child-form hide" }}
+            {{ form.requested_industry | add_class:"form-control child-form" | attr:"disabled" }}
             <p style="font-size:14px; margin: 0;">　※ 回答可能な卒業生が登録されている業界のみ選択可能となっています。</p>
           </div>
 
@@ -88,7 +88,7 @@
     const parentJobCategoryElem = $(this);
 
     childJobCategoryElem.children().remove();
-    childJobCategoryElem.removeClass('hide');
+    childJobCategoryElem.removeAttr('disabled');
 
     const parentId = parentJobCategoryElem.val();
     const categoryList = categories[parentId];
@@ -109,9 +109,20 @@
   // reset job select form
   $(document).on('click', '.job-form-reset-btn', function() {
     $(this).siblings('select.parent-form').find('option:eq(0)').prop('selected', true);
-    $(this).siblings('select.child-form').addClass('hide');
-    $(this).siblings('select.child-form').children().remove();
+    $(this).siblings('select.child-form').find('option:eq(0)').prop('selected', true);
+    $(this).siblings('select.child-form').prop('disabled', true);
     $(this).addClass('hide');
+  });
+
+  // form validation
+  $('input[type="submit"]').on('click', function() {
+    if (typeof $('#id_requested_industry').attr('disabled') === 'undefined' || $('#id_requested_industry').attr('disabled') === false) {
+      const requestedIndustryVal = $('#id_requested_industry').val();
+      if (requestedIndustryVal === null || requestedIndustryVal === false) {
+        alert('業界を指定して質問する場合は小分類も選択してください。');
+        return false;
+      }
+    }
   });
 
 </script>
