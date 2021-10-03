@@ -64,8 +64,8 @@
             {% for hidden in line_form.hidden_fields %} <!-- necessary for some reason... -->
                 {{ hidden }}
             {% endfor %}
-            <button type="button" class="btn btn-danger job-form-reset-btn hide">リセット</button>
             <p style="display: inline-block;">{{ forloop.counter }}</p>
+            <button type="button" class="btn btn-danger job-form-reset-btn hide">リセット</button>
             {{ line_form.offered_job_parent_category | add_class:"form-control parent-form" }}
             <br>
             {{ line_form.offered_job_child_category | add_class:"form-control child-form" | attr:"disabled" }}

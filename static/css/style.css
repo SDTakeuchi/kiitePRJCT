@@ -1175,7 +1175,7 @@ select#id_title {
 }
 
 .job-form-reset-btn {
-  margin-left: clamp(80px, 37%, 155px);
+  margin-left: min(37%, 164px);
 }
 
 #signup_alumni_form .job-form-reset-btn {
