@@ -53,11 +53,19 @@
               <a href="{% url 'userList' post.mentioned_user.id %}" style="font-size:14px;">@ {{ post.mentioned_user.name }} さん</a><br>
             {% endif %}
           {% endif %}
-          {% if post.requested_industry %}
-            {% if request.user.job_category == post.requested_industry %}
-            <b class="text-danger">@ {{ post.requested_industry }} 業界</b><br>
+          {% if post.requested_parent_industry %}
+            {% if post.requested_industry %}
+              {% if request.user.job_category == post.requested_industry %}
+              <b class="fs-14 text-danger"># {{ post.requested_industry }} 業界</b><br>
+              {% else %}
+              <b class="fs-14"># {{ post.requested_industry }} 業界</b><br>
+              {% endif %}
             {% else %}
-            <b style="font-size:14px;">@ {{ post.requested_industry }} 業界</b><br>
+              {% if request.user.job_category.parent == post.requested_parent_industry %}
+              <b class="fs-14 text-danger"># {{ post.requested_parent_industry }} 業界</b><br>
+              {% else %}
+              <b class="fs-14"># {{ post.requested_parent_industry }} 業界</b><br>
+              {% endif %}
             {% endif %}
           {% endif %}
           <a href="{% url 'postShow' post.id %}"><b>{{ post.title|truncatechars:45 }}</b></a><br>

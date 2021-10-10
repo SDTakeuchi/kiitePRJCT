@@ -67,7 +67,7 @@ class PostForm(ModelForm):
         
     class Meta:
         model = Post
-        fields = ['title','tag', 'body','is_public', 'is_anonymous', 'job_parent_category', 'requested_industry']
+        fields = ['title','tag', 'body','is_public', 'name_is_shown', 'job_parent_category', 'requested_industry']
 
 class CommentForm(ModelForm):
     class Meta:

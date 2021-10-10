@@ -12,7 +12,7 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AddField(
             model_name='post',
-            name='is_anonymous',
+            name='name_is_shown',
             field=models.BooleanField(default=False),
         ),
         migrations.AddField(

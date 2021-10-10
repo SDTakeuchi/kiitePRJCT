@@ -20,12 +20,16 @@
           {{ form.tag|add_class:"form-control" }}
 
           <div class="job_form">
-            <p style="display: inline-block;">業界指名</p>
+            <p style="display: inline-block;">業界指定</p>
             <button type="button" class="btn btn-danger job-form-reset-btn hide">リセット</button>
+
+            <p class="fs-13" style="margin:0;">大分類</p>
             {{ form.job_parent_category | add_class:"form-control parent-form" }}
             <br>
+            <p class="fs-13" style="margin:0;">小分類</p>
             {{ form.requested_industry | add_class:"form-control child-form" | attr:"disabled" }}
-            <p style="font-size:14px; margin: 0;">　※ 回答可能な卒業生が登録されている業界のみ選択可能となっています。</p>
+            <p class="fs-14" style="margin:0;">　※ 回答可能な卒業生が登録されている業界のみ選択可能となっています。</p>
+            <p class="fs-14" style="margin:0;">　※ 大分類のみ指定することも可能です。</p>
           </div>
 
           <p>質問内容<span style="color:rgb(214, 16, 16);">*</span></p>
@@ -33,13 +37,13 @@
           <div class="checkbox">
             <label>
               {{ form.is_public }}
-              質問を他の在学生にも公開する
+              他の在学生にも質問を公開する
             </label>
           </div>
           <div class="checkbox">
             <label>
-              {{ form.is_anonymous }}
-              質問をユーザー名非公開で投稿する
+              {{ form.name_is_shown }}
+              ユーザー名を公開して質問を投稿する
             </label>
           </div>
           <input type="submit" class="btn btn-primary" style="height:auto; width:auto; border-radius:5px; border:none;" name="Submit" value="質問を投稿">
@@ -112,17 +116,6 @@
     $(this).siblings('select.child-form').find('option:eq(0)').prop('selected', true);
     $(this).siblings('select.child-form').prop('disabled', true);
     $(this).addClass('hide');
-  });
-
-  // form validation
-  $('input[type="submit"]').on('click', function() {
-    if (typeof $('#id_requested_industry').attr('disabled') === 'undefined' || $('#id_requested_industry').attr('disabled') === false) {
-      const requestedIndustryVal = $('#id_requested_industry').val();
-      if (requestedIndustryVal === null || requestedIndustryVal === false) {
-        alert('業界を指定して質問する場合は小分類も選択してください。');
-        return false;
-      }
-    }
   });
 
 </script>

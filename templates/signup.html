@@ -48,8 +48,10 @@
               <div id="signup_alumni_form" class="hide">  
                 <div class="job_form">
                   <p>業界</p>
+                  <p class="fs-13" style="margin:0;">大分類</p>
                   {{ form.job_parent_category | add_class:"form-control parent-form" }}
                   <br>
+                  <p class="fs-13" style="margin:0;">小分類</p>
                   {{ form.job_category | add_class:"form-control" | attr:"disabled" }}
                   <hr>
                 </div>
@@ -67,8 +69,10 @@
                     {% endfor %}
                     <button type="button" class="btn btn-danger job-form-reset-btn hide">リセット</button>
                     <p>{{ forloop.counter }}</p>
+                    <p class="fs-13" style="margin:0;">大分類</p>
                     {{ line_form.offered_job_parent_category | add_class:"form-control parent-form" }}
                     <br>
+                    <p class="fs-13" style="margin:0;">小分類</p>
                     {{ line_form.offered_job_child_category | add_class:"form-control child-form" | attr:"disabled" }}
                     <div class="emptybox"></div>
                     {{ line_form.DELETE | add_class:"hide" }}

@@ -196,32 +196,51 @@ def newView (request):
 			if int(offered_job.offered_job_parent_category.pk) not in available_parent_industry_list:
 				available_parent_industry_list.append(int(offered_job.offered_job_parent_category.pk))
 
-
 	if request.method == 'POST':
 		form = PostForm(request.POST)
 		if form.is_valid():
 			post_user = form.save(commit=False)
 			post_user.user = current_user
 			post_user.save()
+			parent_cateogry = get_object_or_404(
+				AlumniJobParentCategory,
+				pk=request.POST.get('job_parent_category')
+				)
 
-			if post_user.requested_industry is not None:
-				matching_join_table = OfferedJobJoinTable.objects.filter(
-					offered_job_child_category=post_user.requested_industry
-				)
-				recepient_alumni = CustomUser.objects.filter(
-					student_status='卒業生',
-					job_category=post_user.requested_industry
-				)
+			if parent_cateogry is not None:
+				if post_user.requested_industry is not None:
+					matching_join_table = OfferedJobJoinTable.objects.filter(
+						offered_job_child_category=post_user.requested_industry
+					)
+					recepient_alumni = CustomUser.objects.filter(
+						student_status='卒業生',
+						job_category=post_user.requested_industry
+					)
+					requested_industry = post_user.requested_industry
+				elif not post_user.requested_industry:
+					post_user.requested_parent_industry = parent_cateogry
+					post_user.save()
+
+					matching_join_table = OfferedJobJoinTable.objects.filter(
+						offered_job_child_category__parent_id=parent_cateogry.id
+					)
+					recepient_alumni = CustomUser.objects.filter(
+						student_status='卒業生',
+						job_category__parent_id=parent_cateogry.id
+					)
+					requested_industry = parent_cateogry
+
 				recepient = []
+
 				for alumni in recepient_alumni:
-					if alumni not in recepient:
+					if alumni.email not in recepient:
 						recepient.append(alumni.email)
 
 				for table in matching_join_table:
-					if table.user not in recepient:
+					if table.user.email not in recepient:
 						recepient.append(table.user.email)
 
-				context={'current_user':current_user,'post': post_user, 'requested_industry': post_user.requested_industry}
+				context={'current_user':current_user,'post': post_user, 'requested_industry': requested_industry}
 
 				subject = render_to_string('email_template/industry_requested/subject.txt', context)
 				message = render_to_string('email_template/industry_requested/message.txt', context)

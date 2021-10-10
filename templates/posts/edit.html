@@ -19,9 +19,13 @@
           <p>関連タグ：<b>{{ post.tag }}</b></p>
           <input type="hidden" name="tag" value="{{ form.tag.value }}">
 
-          {% if post.requested_industry %}
-            <p>業界：<b>{{ post.requested_industry }}</b></p>
-            <input type="hidden" name="requested_industry" value="{{ form.requested_industry.value }}">
+          {% if post.requested_parent_industry %}
+            {% if post.requested_industry %}
+              <p>業界：<b>{{ post.requested_industry }}</b></p>
+              <input type="hidden" name="requested_industry" value="{{ form.requested_industry.value }}">
+            {% else %}
+              <p>業界：<b>{{ post.requested_parent_industry }}</b></p>
+            {% endif %}
           {% endif %}
 
           <p>質問内容</p>
@@ -29,13 +33,13 @@
           <div class="checkbox">
             <label>
               {{ form.is_public }}
-              質問を他の在学生にも公開する
+              他の在学生にも質問を公開する
             </label>
           </div>
           <div class="checkbox">
             <label>
-              {{ form.is_anonymous }}
-              質問をユーザー名非公開で投稿する
+              {{ form.name_is_shown }}
+              ユーザー名を公開して質問を投稿する
             </label>
           </div>
           <input type="submit" value="更新" name="Submit">

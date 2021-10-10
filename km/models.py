@@ -124,9 +124,10 @@ class Post(models.Model):
     mentioned_user = models.ForeignKey(CustomUser, null=True, blank=True, on_delete= models.SET_NULL, related_name='mentioned_user')
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
-    is_public = models.BooleanField(default=False)
-    is_anonymous = models.BooleanField(default=False)
+    is_public = models.BooleanField()
+    name_is_shown = models.BooleanField()
     requested_industry = models.ForeignKey(AlumniJobChildCategory, on_delete=models.SET_NULL, null=True, blank=True)
+    requested_parent_industry = models.ForeignKey(AlumniJobParentCategory, on_delete=models.SET_NULL, null=True, blank=True)
 
     def get_comments_count(self):
         return Comment.objects.filter(post=self).count()

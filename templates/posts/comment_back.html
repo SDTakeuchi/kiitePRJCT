@@ -6,12 +6,15 @@
     <div class="container">
       <div class="posts-show-item">
         <div class="asker">
-          {% if post.user.name %}
-          <img class="profile-pic" alt="profile image" src="{{ post.user.profile_pic.url }}">
-          <h4><a class="userLink" href="{% url 'userList' post.user.id %}">{{ post.user.name }}</a></h4> <!-- ####### -->
+          {% if post.user.name and post.name_is_shown %}
+            <img class="profile-pic" alt="profile image" src="{{ post.user.profile_pic.url }}">
+            <h4><a class="userLink" href="{% url 'userList' post.user.id %}">{{ post.user.name }}</a></h4>
+          {% elif post.user %}
+            <img class="profile-pic" alt="profile image" src="{% static 'images/profile-icon-png-898.png' %}">
+            <h4>ユーザー名非公開</h4>
           {% else %}
-          <img class="profile-pic" alt="profile image" src="/static/images/profile-icon-png-898.png">
-          <h4>退会済みユーザー</h4>
+            <img class="profile-pic" alt="profile image" src="{% static 'images/profile-icon-png-898.png' %}">
+            <h4>退会済みユーザー</h4>
           {% endif %}
         </div>
         <p>
