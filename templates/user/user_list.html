@@ -11,8 +11,8 @@
 			<h2>{{ user.name }}</h2>
 			{{ user.student_status }}
 			<p>{{ user.entry_year }}年度入学</p>
-			{% if user.student_status == "卒業生" %}
-				<p>業界：{{ user.industry }}</p>
+			{% if user.job_category and user.job_type %}
+				<p>業界：{{ user.job_category }}</p>
 				<p>職種：{{ user.job_type }}</p>
 			{% endif %}
 			<p>{{ user.introduction|linebreaksbr }}</p> 
