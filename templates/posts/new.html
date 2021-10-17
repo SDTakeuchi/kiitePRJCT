@@ -29,7 +29,7 @@
             <p class="fs-13" style="margin:0;">小分類</p>
             {{ form.requested_industry | add_class:"form-control child-form" | attr:"disabled" }}
             <p class="fs-14" style="margin:0;">　※ 回答可能な卒業生が登録されている業界のみ選択可能となっています。</p>
-            <p class="fs-14" style="margin:0;">　※ 大分類のみ指定することも可能です。</p>
+            <p class="fs-14" style="margin:0;">　※ 細かく業界を指定したい場合は小分類まで選択してください。</p>
           </div>
 
           <p>質問内容<span style="color:rgb(214, 16, 16);">*</span></p>
@@ -80,10 +80,14 @@
 
   function disbaleUnavailableIndustries() {
     const availableChildIndustryList = {{ available_child_industry_list }}
+    let index = 0;
     $('.job_form select.child-form option').each( function( i ) {
-      if (jQuery.inArray(parseInt($(this).val()), availableChildIndustryList) == -1 ) {
-        $(this).prop('disabled', true);
+      if (index > 0) {
+        if (jQuery.inArray(parseInt($(this).val()), availableChildIndustryList) == -1 ) {
+          $(this).prop('disabled', true);
+        }
       }
+      index++;
     });
   }
 
