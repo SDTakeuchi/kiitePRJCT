@@ -1,9 +1,8 @@
 from django.core.mail import EmailMessage
-from kiite_me.settings import EMAIL_HOST_USER
+from kiite_me.settings import EMAIL_HOST_USER, STAFF_EMAIL_LIST
 from django.template.loader import render_to_string
 from datetime import datetime
 from km.models import *
-import km.views
 from km.line_notifi import send_msg_to_line
 
 def dailymail():
@@ -15,6 +14,13 @@ def dailymail():
     posts = Post.objects.all().filter(date_created__gte=yesterday2000).filter(date_created__lte=today1959)
 
     context ={'posts':posts}
+    if not posts:
+        recepient = STAFF_EMAIL_LIST
+        subject = "【Kiite-me!】No posts today..."
+        message = "You can delete this email."
+        msg = EmailMessage(subject, message, EMAIL_HOST_USER, bcc=recepient)
+        msg.send()
+        print('message has been sent')
     if posts:
         
         subject = render_to_string('email_template/dailymail/subject.txt', context)
@@ -47,6 +53,7 @@ def dailymail():
         
         msg = EmailMessage(subject, message, EMAIL_HOST_USER, bcc=recepient)
         msg.send()
+        print('message has been sent')
 
         #below for LINE
         msg_for_line = "【Kiite-me!】に本日届いた質問をお送りします！ご確認お願いします！\n"
