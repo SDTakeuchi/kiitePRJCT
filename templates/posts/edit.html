@@ -20,12 +20,10 @@
           <input type="hidden" name="tag" value="{{ form.tag.value }}">
 
           {% if post.requested_parent_industry %}
-            {% if post.requested_industry %}
-              <p>業界：<b>{{ post.requested_industry }}</b></p>
-              <input type="hidden" name="requested_industry" value="{{ form.requested_industry.value }}">
-            {% else %}
-              <p>業界：<b>{{ post.requested_parent_industry }}</b></p>
-            {% endif %}
+            <p>業界：<b>{{ post.requested_parent_industry }}</b></p>
+          {% elif post.requested_industry %}
+            <p>業界：<b>{{ post.requested_industry }}</b></p>
+            <input type="hidden" name="requested_industry" value="{{ form.requested_industry.value }}">
           {% endif %}
 
           <p>質問内容</p>

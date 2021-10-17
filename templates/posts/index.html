@@ -54,18 +54,16 @@
             {% endif %}
           {% endif %}
           {% if post.requested_parent_industry %}
-            {% if post.requested_industry %}
-              {% if request.user.job_category == post.requested_industry %}
-              <b class="fs-14 text-danger"># {{ post.requested_industry }} 業界</b><br>
-              {% else %}
-              <b class="fs-14"># {{ post.requested_industry }} 業界</b><br>
-              {% endif %}
-            {% else %}
-              {% if request.user.job_category.parent == post.requested_parent_industry %}
+            {% if request.user.job_category == post.requested_parent_industry %}
               <b class="fs-14 text-danger"># {{ post.requested_parent_industry }} 業界</b><br>
-              {% else %}
+            {% else %}
               <b class="fs-14"># {{ post.requested_parent_industry }} 業界</b><br>
-              {% endif %}
+            {% endif %}
+          {% elif post.requested_industry %}
+            {% if request.user.job_category.parent == post.requested_industry %}
+              <b class="fs-14 text-danger"># {{ post.requested_industry }} 業界</b><br>
+            {% else %}
+              <b class="fs-14"># {{ post.requested_industry }} 業界</b><br>
             {% endif %}
           {% endif %}
           <a href="{% url 'postShow' post.id %}"><b>{{ post.title|truncatechars:45 }}</b></a><br>

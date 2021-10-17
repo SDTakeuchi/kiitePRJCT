@@ -29,11 +29,11 @@
 
         {% if post.requested_parent_industry %}
           <div style="margin-top:7px;">
-            {% if post.requested_industry %}
-              <b class="fs-16 text-muted"># {{ post.requested_industry }} 業界</b><br>
-            {% else %}
-              <b class="fs-16 text-muted"># {{ post.requested_parent_industry }} 業界</b><br>
-            {% endif %}
+            <b class="fs-16 text-muted"># {{ post.requested_parent_industry }} 業界</b><br>
+          </div>
+        {% elif post.requested_industry %}
+          <div style="margin-top:7px;">
+            <b class="fs-16 text-muted"># {{ post.requested_industry }} 業界</b><br>
           </div>
         {% endif %}
 
