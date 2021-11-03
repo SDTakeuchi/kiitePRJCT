@@ -125,7 +125,7 @@ class Post(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
     is_public = models.BooleanField()
-    name_is_shown = models.BooleanField()
+    user_is_anonymous = models.BooleanField()
     requested_industry = models.ForeignKey(AlumniJobChildCategory, on_delete=models.SET_NULL, null=True, blank=True)
     requested_parent_industry = models.ForeignKey(AlumniJobParentCategory, on_delete=models.SET_NULL, null=True, blank=True)
 

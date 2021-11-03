@@ -7,7 +7,7 @@
     <div class="container">
       <div class="posts-show-item">
         <div class="asker">
-          {% if post.user.name and post.name_is_shown %}
+          {% if post.user.name and post.user_is_anonymous == False %}
             <img class="profile-pic" alt="profile image" src="{{ post.user.profile_pic.url }}">
             <h4><a class="userLink" href="{% url 'userList' post.user.id %}">{{ post.user.name }}</a></h4>
           {% elif post.user %}
