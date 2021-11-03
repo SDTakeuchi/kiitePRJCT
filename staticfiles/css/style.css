@@ -167,11 +167,12 @@ img#homepic{
 }
 
 .fuchidori {
+  background-color: #ffffffb4;
+  border-radius: 6px;
+  padding: 1px 0;
+  margin: auto;
+  max-width: 650px;
   color: #000;
-  text-shadow:1px 1px 0 #FFF, -1px -1px 0 #FFF,
-              -1px 1px 0 #FFF, 1px -1px 0 #FFF,
-              0px 1px 0 #FFF,  0-1px 0 #FFF,
-              -1px 0 0 #FFF, 1px 0 0 #FFF;
 }
 #home hr {
   border: 2px solid #404040;
@@ -521,12 +522,28 @@ footer {
 
 .br-pc { display:block; }
 .br-sp { display:none; }
+
 #id_comment_body{
   width: 380px;
   margin-right: 15px;
   height: clamp(180px,50vw,206px);
 }
+
+.job_form_show_row-box {
+  text-align: right;
+}
+
+#job_form_show_row {
+  display: inline-block;
+}
+
 @media (max-width: 450px) {
+  .fuchidori {
+    position: relative;
+    top: -27px;
+    max-width: 96%;
+  }
+
   .heading {
     font-size: 40px;
   }
@@ -556,6 +573,10 @@ footer {
     margin: 0px 0px 8px;
   }
   .posts-show-item input[type="text"],.posts-show-item input[type="email"]{width: 100% !important;}
+
+  #job_form_show_row {
+    width: 100%;
+  }
 }
 .pcver {
   display: block;
@@ -758,12 +779,8 @@ footer {
 }
 .posts-show-item input[type="submit"]{
   display: block;
-  height: 45px;
   width: 90px;
-  border-radius: 10px;
-  font-weight: 500;
   font-size: 18px;
-  border: 2px solid #808080;
   transition-duration:400ms;
 }
 
@@ -790,8 +807,7 @@ footer {
 }
 
 .posts-show-item select{
-  width: 320px;
-  height: 40px;
+  max-width: 320px;
 }
 
 .posts-show-item textarea{
@@ -1148,4 +1164,29 @@ select#id_title {
 .checkbox {
   font-size: 17px;
   padding: 4px 0;
+}
+
+.hide {
+  display: none;
+}
+
+.job-form-reset-btn {
+  margin-left: min(37%, 164px);
+}
+
+#signup_alumni_form .job-form-reset-btn {
+  margin-left: 0;
+  float: right;
+}
+
+.fs-13 {
+  font-size:13px !important;
+}
+
+.fs-14 {
+  font-size:14px !important;
+}
+
+.fs-16 {
+  font-size:16px !important;
 }

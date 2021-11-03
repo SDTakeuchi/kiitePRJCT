@@ -12,9 +12,18 @@
         
         <form action="{% url 'userDelete' %}" method="POST">
             {% csrf_token %}
-          
-          <input type="submit" value="退会する" name="Confirm">
-          <a href="{% url 'mypage' %}" class="choice-no">キャンセル</a>
+          <div class="row">
+            <div class="col-sm-6 text-center">
+              <div class="btn-withdraw-yes">
+                <input type="submit" class="btn btn-danger" value="退会する" name="Confirm">
+              </div>
+            </div>
+            <div class="col-sm-6 text-center">
+              <div class="btn-withdraw-no">
+                <a href="{% url 'mypage' %}" class="btn btn-default">キャンセル</a>
+              </div>
+            </div>
+          </div>
         </form>
 
         </div>

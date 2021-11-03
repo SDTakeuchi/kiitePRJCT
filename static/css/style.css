@@ -779,12 +779,8 @@ footer {
 }
 .posts-show-item input[type="submit"]{
   display: block;
-  height: 45px;
   width: 90px;
-  border-radius: 10px;
-  font-weight: 500;
   font-size: 18px;
-  border: 2px solid #808080;
   transition-duration:400ms;
 }
 
@@ -1193,4 +1189,27 @@ select#id_title {
 
 .fs-16 {
   font-size:16px !important;
+}
+
+.btn-withdraw-yes {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.btn-withdraw-yes input {
+  display: block;
+  width: min(100%, 490px) !important;
+  height: auto !important;
+  font-size: 16px !important;
+}
+
+.btn-withdraw-no {
+  display: block;
+  width: 100%;
+}
+
+.btn-withdraw-no a {
+  display: block;
+  width: min(100%, 490px);
+  height: 36px;
 }
