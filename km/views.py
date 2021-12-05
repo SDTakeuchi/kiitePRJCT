@@ -1,7 +1,9 @@
+from django.forms.widgets import PasswordInput
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import *
 from .forms import *
 from .filters import PostFilter
+from .lib.util import create_user_notification
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
@@ -23,14 +25,14 @@ import base64
 import requests
 from django.core import files
 from django.conf import settings
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 #--------forNewUser----------------
 from django.template.loader import render_to_string
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.signing import BadSignature, SignatureExpired, loads, dumps
 from django.views import generic
 from django.contrib.auth import get_user_model
-from django.views.generic import TemplateView, DetailView
+from django.views.generic import TemplateView, DetailView, ListView
 import re
 
 TEMP_PROFILE_IMAGE_NAME = "temp_profile_image.png"
@@ -205,7 +207,7 @@ def newView (request):
 			parent_cateogry = get_object_or_404(
 				AlumniJobParentCategory,
 				pk=request.POST.get('job_parent_category')
-				)
+			)
 
 			if parent_cateogry is not None:
 				if post_user.requested_industry is not None:
@@ -245,6 +247,15 @@ def newView (request):
 				subject = render_to_string('email_template/industry_requested/subject.txt', context)
 				message = render_to_string('email_template/industry_requested/message.txt', context)
 
+				create_user_notification(
+					title=subject[11:], # eliminates 【Kiite-me!】
+					body=message,
+					recipients=recepient,
+					related_post=post_user # WARNING this can be a bug
+				)
+
+				message += render_to_string('email_template/base/base_msg.txt')
+
 				# msg = EmailMessage(subject, message, EMAIL_HOST_USER, bcc=recepient)
 				# msg.send()
 
@@ -279,8 +290,16 @@ def newMentionedView (request, pk):
 
 			subject = render_to_string('email_template/mentioned_post/subject.txt', context)
 			message = render_to_string('email_template/mentioned_post/message.txt', context)
-
 			recepient = str(mentioned_user.email)
+
+			create_user_notification(
+				title=subject[11:], # eliminates 【Kiite-me!】
+				body=message,
+				recipients=recepient,
+				related_post=post_user
+			)
+
+			message += render_to_string('email_template/base/base_msg.txt')
 			# msg = EmailMessage(subject, message, EMAIL_HOST_USER, [recepient])
 			# msg.send()
 
@@ -324,8 +343,17 @@ def likeUnlikeCommentView(request, pk):
 
 		subject = render_to_string('email_template/like_comment/subject.txt',context)
 		message = render_to_string('email_template/like_comment/message.txt',context)
-
 		recepient = str(comment.user.email)
+
+		create_user_notification(
+			title=subject[11:], # eliminates 【Kiite-me!】
+			body=message,
+			recipients=recepient,
+			related_post=comment.post
+		)
+
+		message += render_to_string('email_template/base/base_msg.txt')
+
 		# msg = EmailMessage(subject, message, EMAIL_HOST_USER, [recepient])
 		# msg.send()
 
@@ -340,7 +368,7 @@ def commentView (request, pk):
 	if request.method == 'POST':
 		form = CommentForm(request.POST)
 		if form.is_valid():
-			comment_instance = form.save(commit=False)
+			comment_instance      = form.save(commit=False)
 			comment_instance.user = current_user
 			comment_instance.post = post
 			comment_instance.save()
@@ -352,8 +380,16 @@ def commentView (request, pk):
 
 					subject = render_to_string('email_template/newcomment/subject.txt')
 					message = render_to_string('email_template/newcomment/message.txt',context)
-
 					recepient = str(post.user.email)
+
+					create_user_notification(
+						title=subject[11:],
+						body=message,
+						recipients=recepient,
+						related_post=post
+					)
+
+					message += render_to_string('email_template/base/base_msg.txt')
 					msg = EmailMessage(subject, message, EMAIL_HOST_USER, [recepient])
 					msg.send()
 
@@ -438,7 +474,16 @@ def commentBackView (request, pk):
 				recepient = str(Comment.objects.get(id=cmtbk_to_id).user.email)
 				subject = render_to_string('email_template/commentback/subject.txt')
 				message = render_to_string('email_template/commentback/message.txt',context)
-				# msg = EmailMessage(subject, message, EMAIL_HOST_USER, [recepient])
+
+				create_user_notification(
+					title=subject[11:],
+					body=message,
+					recipients=recepient,
+					related_post=post
+				)
+
+				message += render_to_string('email_template/base/base_msg.txt')
+				msg = EmailMessage(subject, message, EMAIL_HOST_USER, [recepient])
 				# msg.send()
 
 			if comment.user is not None:
@@ -446,6 +491,15 @@ def commentBackView (request, pk):
 					recepient = str(comment.user.email)
 					subject = render_to_string('email_template/commentback/subject.txt')
 					message = render_to_string('email_template/commentback/message.txt',context)
+					
+					create_user_notification(
+						title=subject[11:], # eliminates 【Kiite-me!】
+						body=message,
+						recipients=recepient,
+						related_post=post
+					)
+
+					message += render_to_string('email_template/base/base_msg.txt')
 					# msg = EmailMessage(subject, message, EMAIL_HOST_USER, [recepient])
 					# msg.send()
 
@@ -453,6 +507,15 @@ def commentBackView (request, pk):
 					recepient = str(post.user.email)
 					subject = render_to_string('email_template/newcomment/subject.txt')
 					message = render_to_string('email_template/newcomment/message.txt',context)
+
+					create_user_notification(
+						title=subject[11:],
+						body=message,
+						recipients=recepient,
+						related_post=post
+					)
+
+					message += render_to_string('email_template/base/base_msg.txt')
 					# msg = EmailMessage(subject, message, EMAIL_HOST_USER, [recepient])
 					# msg.send()
 
@@ -512,7 +575,6 @@ def userListView(request,pk):
 
 @login_required(login_url='login')
 def userMypageView(request):
-
 	student = request.user
 	context={'student':student}
 	return render(request, 'user/mypage.html', context)
@@ -657,14 +719,19 @@ def adminNotificationView(request):
 		message += '\n\n--\n\n====================================\n● 配信元：キイテミ運営事務局\n\n▼お問い合わせは下記までお願いいたします。\nキイテミ運営事務局\nkiiteme.info@gmail.com\n===================================='#署名
 
 		if str(notiForm['toGroup'].value()) == 'ユーザーの皆様':
-			recepient = CustomUser.objects.filter(is_active__isnull=False).values_list('email', flat=True)
+			recepient_obj_list = CustomUser.objects.filter(is_active__isnull=False)
 		elif str(notiForm['toGroup'].value()) == 'スタッフの皆様':
-			recepient = CustomUser.objects.filter(is_staff=True).values_list('email', flat=True)
+			recepient_obj_list = CustomUser.objects.filter(is_staff=True)
 		else:
-			recepient = CustomUser.objects.filter(student_status__contains=str(notiForm['toGroup'].value()[5:7])).values_list('email', flat=True)
-		recepient = list(recepient)
+			recepient_obj_list = CustomUser.objects.filter(student_status__contains=str(notiForm['toGroup'].value()[5:7]))
+		recepient = list(recepient_obj_list.values_list('email', flat=True))
 		msg = EmailMessage(subject, message, EMAIL_HOST_USER, bcc=recepient)
 		# msg.send()
+		create_user_notification(
+			title = str(notiForm['title'].value()),
+			body = str(notiForm['body'].value()),
+			recipients = recepient_obj_list
+		)
 		return render(request, 'contact/sent_admin_notification.html', {'recepient': recepient})
 
 	return render(request, 'contact/admin_notification.html', {'form': notiForm})
@@ -872,3 +939,39 @@ def story2View(request):
 def storyShowView(request, pk):
 	article = Article.objects.all().get(id = pk)
 	return render(request, 'story/story_show.html',{'article': article})
+
+
+# --------notifi----------------
+
+class UserNotificationView(ListView):
+	template_name = 'user/notifi_list.html'
+	model = UserNotification # object_list
+	ordering = '-date_added'
+
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		context['unread_notifi'] = self.model.objects.filter(
+			is_seen=False,
+			user=self.request.user
+			)
+		return context
+
+	def get_queryset(self, **kwargs):
+		queryset = super().get_queryset(**kwargs)
+		queryset = queryset.filter(user=self.request.user)
+		return queryset
+
+
+def switchNotifiStatusView(request):
+	if request.method == 'POST':
+		notifis = []
+		target_notifi = request.POST.getlist('data[]')
+		for notifi in UserNotification.objects.filter(pk__in=target_notifi):
+			notifi.is_seen = True
+			notifis.append(notifi)
+		try:
+			UserNotification.objects.bulk_update(notifis, fields=['is_seen'])
+		except Exception as e:
+			print(e)
+		finally:
+			return JsonResponse({"message" : "update success"})
