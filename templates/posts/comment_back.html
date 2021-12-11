@@ -42,7 +42,9 @@
       <p id="commentbackhere">コメント</p>
       <form action="" method="POST">
           {% csrf_token %}
-          <textarea name="body" cols="40" rows="10" required="" id="id_comment_body"></textarea>
+          <div style="text-align:center;">
+            <textarea name="body" required id="id_comment_body" style="width: 99%;"></textarea>
+          </div>
           <input type="submit" class="btn btn-primary" value="返信する">
       </form>
 
