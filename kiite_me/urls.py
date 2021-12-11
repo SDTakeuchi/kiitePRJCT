@@ -4,15 +4,15 @@ from django.urls import path
 from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib.auth import views as auth_views
-from km.views import homeView, loginView, signupView, logoutView, indexView,showView, newView, editView, deleteCommentView, editCommentView, deleteView, commentView, userListView, userMypageView, userMypageEditView, termsOfUseView, privacyPolicyView, contactFormView, userDeleteView, commentBackView, adminNotificationView, crop_image, UserCreate, signupAlumni, UserCreateDone, UserCreateComplete, reportPostView, reportCommentView, storyIndexView, story1View, story2View, storyShowView, newMentionedView, likeUnlikeCommentView, indexOthersView
+from km.views import homeView, loginView, signupView, logoutView, indexView,showView, newView, editView, deleteCommentView, editCommentView, deleteView, commentView, userListView, userMypageView, userMypageEditView, termsOfUseView, privacyPolicyView, contactFormView, userDeleteView, commentBackView, adminNotificationView, crop_image, UserCreate, signupAlumni, UserCreateDone, UserCreateComplete, reportPostView, reportCommentView, storyIndexView, story1View, story2View, storyShowView, newMentionedView, likeUnlikeCommentView, indexOthersView, UserNotificationView, switchNotifiStatusView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', homeView, name='home'),
 
     path('signup/', signupView, name='altsignup'),
-    path('login/', loginView, name='login'),
-    path('logout/', logoutView, name='logout'),
+    path('accounts/login/', loginView, name='login'),
+    path('accounts/logout/', logoutView, name='logout'),
 
     path('create/', UserCreate.as_view(), name='signup'),
     path('create_done_alumni/', signupAlumni, name='signupAlumni'),
@@ -39,7 +39,7 @@ urlpatterns = [
     path('user/mypage/', userMypageView, name="mypage" ),
     path('user/mypage/edit/', userMypageEditView, name="mypageEdit" ),
     path('user/delete_user_data', userDeleteView, name="userDelete" ),
-    path('<user_id>/edit/cropImage/', crop_image, name="crop_image" ),
+    path('user/notification', UserNotificationView.as_view(), name="userNotification"),
 
     path('reset_password/', auth_views.PasswordResetView.as_view(template_name="password_reset/password_reset.html"), name="reset_password"),
     path('reset_password_sent/', auth_views.PasswordResetDoneView.as_view(template_name="password_reset/password_reset_done.html"), name="password_reset_done"),
@@ -56,6 +56,9 @@ urlpatterns = [
     path('story/take', story1View, name="story1"),
     path('story/toda', story2View, name="story2"),
     path('story/<str:pk>', storyShowView, name="storyShow"),
+
+    path('<user_id>/edit/cropImage/', crop_image, name="crop_image" ),
+    path('switch_notifi_status/', switchNotifiStatusView, name="switchNotifiStatus")
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

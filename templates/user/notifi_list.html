@@ -1,0 +1,42 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="main posts-index">
+    <div class="container">
+        <div class="form-heading" style="margin-top:0">Notifications</div>
+
+        {% if unread_notifi %}
+            <div style="margin-top: 13px; text-align:center;">
+                <p style="font-size: 15px;">未読のメッセージが {{ unread_notifi |　length }} 件あります</p>
+            </div>
+        {% endif %}
+
+        {% for notifi in object_list %}
+        <div class="posts-index-item" data-notifi-id="{{notifi.id}}" data-is-seen="{{ notifi.is_seen }}">
+            {% if notifi.is_seen == False %}
+                <div class="new-notifi">
+                    <p>New!</p>
+                </div>
+            {% endif %}
+            <p style="font-size:22px; ">{{ notifi.title | linebreaksbr }}<span style="font-size: 12px;"> - {{ notifi.date_added | date:"Y/m/d H:i" }}</span></p>
+            <div style="width: 95%; margin:auto;">
+                {% if notifi.related_post %}
+                    <div class="related-post-section">
+                        <p>関連ページ：<a href="{% url 'postShow' notifi.related_post.id %}" class="fs-14">{{ notifi.related_post.title }}</a></p>
+                    </div>
+                {% endif %}
+                <p>{{ notifi.body | linebreaksbr }}</p>
+                <div class="pull-right">
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+    <div class="emptybox"></div>
+</div>
+
+<script src="{% static 'js/jquery.js' %}"></script>
+<script src="{% static 'js/switch_notifi_status.js' %}"></script>
+{% endblock %}

@@ -23,7 +23,7 @@ class TestViews(TestCase):
 
     def test_login_POST(self):
         response = self.client.get(self.login_url)
-        response = Client().post('/login', {'username': 'takeuchidouglas@gmail.com', 'password': 'shuheitakeuchi'})
+        response = Client().post('/accounts/login', {'username': 'takeuchidouglas@gmail.com', 'password': 'shuheitakeuchi'})
         self.assertEqual(response.status_code, 301)
 
     def test_new_post_POST(self):

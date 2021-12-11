@@ -3,6 +3,7 @@ from django.core.mail import EmailMessage
 from kiite_me.settings import EMAIL_HOST_USER
 from django.template.loader import render_to_string
 from datetime import datetime
+from lib.util import create_user_notification
 from km.models import *
 from kiite_me.settings import STAFF_EMAIL_LIST
 # from km.line_notifi import send_msg_to_line
@@ -55,6 +56,15 @@ class Command(BaseCommand):
             message += render_to_string('email_template/dailymail/lower_message.txt')
             recepient = list(toUser)
 
+            create_user_notification(
+                title=subject[11:], # eliminates 【Kiite-me!】
+                body=message,
+                recipients=recepient,
+                # related_post=post
+            )
+
+            message += render_to_string('email_template/base/base_msg.txt')
+
             msg = EmailMessage(subject, message, EMAIL_HOST_USER, bcc=recepient)
             msg.send()
 
@@ -75,7 +85,7 @@ class Command(BaseCommand):
             msg_for_line += "---------------------------------------"
             # send_msg_to_line(msg_for_line)
 
-        #below for remind mail to ZAIGAKU-SEI not responding to any answers
+        #below for remind mail to grad not responding to any answers
         three_days_before1959 = today1959
         four_days_before2000 = yesterday2000
         i=1
@@ -95,6 +105,16 @@ class Command(BaseCommand):
                     subject = render_to_string('email_template/remind/subject.txt', context)
                     message = render_to_string('email_template/remind/message.txt', context)
                     recepient = str(post.user.email)
+
+                    create_user_notification(
+                        title=subject[11:], # eliminates 【Kiite-me!】
+                        body=message,
+                        recipients=recepient,
+                        related_post=post
+                    )
+
+                    message += render_to_string('email_template/base/base_msg.txt')
+
                     msg = EmailMessage(subject, message, EMAIL_HOST_USER, [recepient], bcc=[EMAIL_HOST_USER])
                     msg.send()
                     print("remind mail has been sent")

@@ -175,3 +175,14 @@ class OfferedJobJoinTable(models.Model):
     
     def __str__(self):
         return '%s - %s (%s)' % (self.user.name, self.offered_job_child_category, self.offered_job_parent_category)
+
+class UserNotification(models.Model):
+    title        = models.CharField(max_length=200)
+    body         = models.TextField()
+    date_added   = models.DateTimeField(auto_now_add=True)
+    user         = models.ForeignKey(CustomUser, blank=True, on_delete=models.CASCADE)
+    is_seen      = models.BooleanField(default=False)
+    related_post = models.ForeignKey(Post, null=True, blank=True, on_delete=models.SET_NULL)
+    
+    def __str__(self):
+        return "{} -> {}".format(self.title, self.user)
