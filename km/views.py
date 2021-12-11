@@ -33,6 +33,7 @@ from django.core.signing import BadSignature, SignatureExpired, loads, dumps
 from django.views import generic
 from django.contrib.auth import get_user_model
 from django.views.generic import TemplateView, DetailView, ListView
+from django.contrib.auth.mixins import LoginRequiredMixin
 import re
 
 TEMP_PROFILE_IMAGE_NAME = "temp_profile_image.png"
@@ -943,10 +944,11 @@ def storyShowView(request, pk):
 
 # --------notifi----------------
 
-class UserNotificationView(ListView):
+class UserNotificationView(LoginRequiredMixin, ListView):
 	template_name = 'user/notifi_list.html'
 	model = UserNotification # object_list
 	ordering = '-date_added'
+	redirect_field_name = 'next'
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
@@ -961,7 +963,7 @@ class UserNotificationView(ListView):
 		queryset = queryset.filter(user=self.request.user)
 		return queryset
 
-
+@login_required(login_url='login')
 def switchNotifiStatusView(request):
 	if request.method == 'POST':
 		notifis = []

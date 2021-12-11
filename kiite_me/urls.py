@@ -11,8 +11,8 @@ urlpatterns = [
     path('', homeView, name='home'),
 
     path('signup/', signupView, name='altsignup'),
-    path('login/', loginView, name='login'),
-    path('logout/', logoutView, name='logout'),
+    path('accounts/login/', loginView, name='login'),
+    path('accounts/logout/', logoutView, name='logout'),
 
     path('create/', UserCreate.as_view(), name='signup'),
     path('create_done_alumni/', signupAlumni, name='signupAlumni'),
