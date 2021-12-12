@@ -35,11 +35,11 @@ from django.contrib.auth import get_user_model
 from django.views.generic import TemplateView, DetailView, ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 import re
+from km.lib import util
+from .constants import constants
 
 TEMP_PROFILE_IMAGE_NAME = "temp_profile_image.png"
 
-def truncate(string, length, ellipsis='...'):
-    return string[:length] + (ellipsis if string[length:] else '')
 
 def homeView (request):
 	random_num = random.randint(0,7)
@@ -65,11 +65,9 @@ def signupView (request):
 
 @unauthenticated_user
 def loginView (request):
-
 	if request.method == 'POST':
 		username = request.POST.get('email')
 		password = request.POST.get('password')
-
 		user = authenticate(request, username=username, password=password)
 
 		if user is not None:
@@ -104,8 +102,8 @@ def indexView (request):
     myFilter = PostFilter(request.GET, queryset=post_list)
     post_list = myFilter.qs
 
-    numOneView = 10
-    paginator = Paginator(post_list, numOneView)
+    NUM_ONE_VIEW = 10
+    paginator = Paginator(post_list, NUM_ONE_VIEW)
     try:
         posts = paginator.page(page)
     except PageNotAnInteger:
@@ -114,12 +112,18 @@ def indexView (request):
         posts = paginator.page(paginator.num_pages)
 
     pageNum = int(page)
-    fromNum = pageNum * numOneView - numOneView + 1
-    toNum = pageNum * numOneView
+    fromNum = pageNum * NUM_ONE_VIEW - NUM_ONE_VIEW + 1
+    toNum = pageNum * NUM_ONE_VIEW
     if toNum > len(post_list):
         toNum = int(len(post_list))
 
-    context = {'posts':posts, 'myFilter':myFilter, 'post_list':post_list, 'fromNum':fromNum, 'toNum':toNum}
+    context = {
+		'posts':posts,
+		'myFilter':myFilter,
+		'post_list':post_list,
+		'fromNum':fromNum,
+		'toNum':toNum
+	}
     return render(request, 'posts/index.html', context)
 
 @login_required(login_url='login')
@@ -152,7 +156,7 @@ def indexOthersView (request):
 
 @login_required(login_url='login')
 def showView (request, pk):
-	post = get_object_or_404(Post, id=pk)
+	post = get_object_or_404(Post.objects.select_related('user'), id=pk)
 	comments = Comment.objects.filter(post=post).filter(is_reply_to__isnull=True)
 	cmtbks = Comment.objects.filter(post=post).exclude(is_reply_to__isnull=True)
 	context = {'post': post, 'comments':comments, 'cmtbks':cmtbks}
@@ -202,27 +206,27 @@ def newView (request):
 	if request.method == 'POST':
 		form = PostForm(request.POST)
 		if form.is_valid():
-			post_user = form.save(commit=False)
-			post_user.user = current_user
-			post_user.save()
+			post = form.save(commit=False)
+			post.user = current_user
+			post.save()
 			parent_cateogry = get_object_or_404(
 				AlumniJobParentCategory,
 				pk=request.POST.get('job_parent_category')
 			)
 
 			if parent_cateogry is not None:
-				if post_user.requested_industry is not None:
+				if post.requested_industry is not None:
 					matching_join_table = OfferedJobJoinTable.objects.filter(
-						offered_job_child_category=post_user.requested_industry
+						offered_job_child_category=post.requested_industry
 					)
 					recepient_alumni = CustomUser.objects.filter(
 						student_status='卒業生',
-						job_category=post_user.requested_industry
+						job_category=post.requested_industry
 					)
-					requested_industry = post_user.requested_industry
-				elif not post_user.requested_industry:
-					post_user.requested_parent_industry = parent_cateogry
-					post_user.save()
+					requested_industry = post.requested_industry
+				elif not post.requested_industry:
+					post.requested_parent_industry = parent_cateogry
+					post.save()
 
 					matching_join_table = OfferedJobJoinTable.objects.filter(
 						offered_job_child_category__parent_id=parent_cateogry.id
@@ -243,7 +247,7 @@ def newView (request):
 					if table.user.email not in recepient:
 						recepient.append(table.user.email)
 
-				context={'current_user':current_user,'post': post_user, 'requested_industry': requested_industry}
+				context={'current_user':current_user,'post': post, 'requested_industry': requested_industry}
 
 				subject = render_to_string('email_template/industry_requested/subject.txt', context)
 				message = render_to_string('email_template/industry_requested/message.txt', context)
@@ -252,7 +256,7 @@ def newView (request):
 					title=subject[11:], # eliminates 【Kiite-me!】
 					body=message,
 					recipients=recepient,
-					related_post=post_user # WARNING this can be a bug
+					related_post=post # WARNING this can be a bug
 				)
 
 				message += render_to_string('email_template/base/base_msg.txt')
@@ -282,12 +286,12 @@ def newMentionedView (request, pk):
 	if request.method == 'POST':
 		form = PostForm(request.POST)
 		if form.is_valid():
-			post_user = form.save(commit=False)
-			post_user.user = current_user
-			post_user.mentioned_user = mentioned_user
-			post_user.save()
+			post = form.save(commit=False)
+			post.user = current_user
+			post.mentioned_user = mentioned_user
+			post.save()
 
-			context={'current_user':current_user,'post_user': post_user, 'mentioned_user':mentioned_user}
+			context={'current_user':current_user,'post_user': post, 'mentioned_user':mentioned_user}
 
 			subject = render_to_string('email_template/mentioned_post/subject.txt', context)
 			message = render_to_string('email_template/mentioned_post/message.txt', context)
@@ -297,7 +301,7 @@ def newMentionedView (request, pk):
 				title=subject[11:], # eliminates 【Kiite-me!】
 				body=message,
 				recipients=recepient,
-				related_post=post_user
+				related_post=post
 			)
 
 			message += render_to_string('email_template/base/base_msg.txt')
@@ -376,7 +380,7 @@ def commentView (request, pk):
 
 			if post.user != None:
 				if comment_instance.user != post.user:
-					comment_body = truncate(comment_instance.body, 200)
+					comment_body = util.truncate(comment_instance.body, 200)
 					context={'post':post,'comment_instance': comment_instance,'comment_body':comment_body}
 
 					subject = render_to_string('email_template/newcomment/subject.txt')
@@ -409,7 +413,7 @@ def deleteCommentView(request, pk):
 
 @login_required(login_url='login')
 def editCommentView(request, pk):
-	comment = Comment.objects.get(id = pk)
+	comment = get_object_or_404(Comment.objects.select_related('post'), id=pk)
 	form = CommentForm(instance=comment)
 	post = comment.post
 
@@ -454,8 +458,8 @@ def commentBackView (request, pk):
 		if form.is_valid():
 			comment_instance = form.save(commit=False)
 			comment_instance.is_reply_to = comment
+			replying_comment = Comment.objects.select_related('user').get(id=cmtbk_to_id)
 			if cmtbk_to_id is not None:
-				replying_comment = Comment.objects.get(id=cmtbk_to_id)
 				if replying_comment.user is not None:
 					comment_instance.body = str(f' > {replying_comment.user.name}さん\r\n') + comment_instance.body
 				else:
@@ -471,8 +475,8 @@ def commentBackView (request, pk):
 			comment_body = '\n'.join(comment_instance.body.splitlines()[1:])
 			context={'post':post,'comment':comment,'comment_instance': comment_instance,'comment_body':comment_body}
 
-			if Comment.objects.get(id=cmtbk_to_id).user is not None:
-				recepient = str(Comment.objects.get(id=cmtbk_to_id).user.email)
+			if replying_comment.user is not None:
+				recepient = str(replying_comment.user.email)
 				subject = render_to_string('email_template/commentback/subject.txt')
 				message = render_to_string('email_template/commentback/message.txt',context)
 
@@ -488,7 +492,7 @@ def commentBackView (request, pk):
 				# msg.send()
 
 			if comment.user is not None:
-				if Comment.objects.get(id=cmtbk_to_id).user != comment.user:
+				if replying_comment.user != comment.user:
 					recepient = str(comment.user.email)
 					subject = render_to_string('email_template/commentback/subject.txt')
 					message = render_to_string('email_template/commentback/message.txt',context)
@@ -621,7 +625,7 @@ def userMypageEditView(request):
 
 	email = request.user.email
 
-	context={
+	context = {
 		'form':form,
 		'formset':formset,
 		'email':email,
@@ -638,9 +642,9 @@ def userMypageEditView(request):
 
 @login_required(login_url='login')
 def userDeleteView(request):
-	student = request.user
+	user = request.user
 	if request.method == 'POST':
-		student.delete()
+		user.delete()
 		messages.info(request, "ユーザーが削除されました")
 		return redirect('home')
 
@@ -654,33 +658,6 @@ def privacyPolicyView(request):
 	return render(request, 'policies/privacy_policy.html')
 
 #----------contact-----------------
-BLACKLIST = [
-	'amparo.maguire',
-	'andersongervasi2985',
-	'andersongervasi',
-	'albertmcclellan3867',
-	'baasiminvestment',
-	'castlesarro8899',
-	'charmainfarm',
-	'coltonclevand',
-	'coltonclevand80154'
-	'coltonbourget',
-	'coltonbourget80365',
-	'contact',
-	'eric.jones.z.mail',
-	'eberlekinard7910',
-	'frank.moye',
-	'jamesfernando87516',
-	'msrk4139',
-	'no-replyVow',
-	'nancyshaylahy',
-	'harleayanderson96425',
-	'oslerprato6887',
-	'shareboss.jp',
-	'tommyfishman35624',
-	'woods.sharon',
-]
-
 def contactFormView(request):
 	cont = forms.ContactForm()
 	blacklistRegex = re.compile('([^@]+)')
@@ -691,7 +668,7 @@ def contactFormView(request):
 		body = str(cont['body'].value())
 		if "http" in body:
 			return render(request, 'contact/contact_sent.html', {'recepient': recepient})
-		if blacklistRegex.search(recepient).group() in BLACKLIST:
+		if blacklistRegex.search(recepient).group() in constants.BLACK_LIST:
 			return render(request, 'contact/contact_sent.html', {'recepient': recepient})
 		subject = '【kiite-me】お問い合わせが送信されました ※自動送信です'
 		message = '速やかに運営事務局よりご返信をお送りします！しばらくお待ちください。\n下記が送信されたメッセージです。\nーーーーーーーーーーーーーーーーーーーーーーーー\n\n'

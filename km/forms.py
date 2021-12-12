@@ -64,7 +64,7 @@ class PostForm(ModelForm):
         queryset=AlumniJobParentCategory.objects,
         required=False
         )
-        
+
     class Meta:
         model = Post
         fields = ['title','tag', 'body','is_public', 'user_is_anonymous', 'job_parent_category', 'requested_industry']

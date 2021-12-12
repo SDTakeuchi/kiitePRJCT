@@ -14,7 +14,7 @@
 
         <form action="" method="POST">
           {% csrf_token %}
-          <p style="margin-top:0px;">質問タイトル<span style="color:rgb(214, 16, 16);">*</span></p>
+          <p style="margin-top:0px;">質問タイトル <span style="color:rgb(214, 16, 16);">*</span></p>
           {{ form.title|add_class:"newpost-title" }}
           <p>関連タグ<span style="color:rgb(214, 16, 16);">*</span></p>
           {{ form.tag|add_class:"form-control" }}
@@ -32,8 +32,8 @@
             <p class="fs-14" style="margin:0;">　※ 細かく業界を指定したい場合は小分類まで選択してください。</p>
           </div>
 
-          <p>質問内容<span style="color:rgb(214, 16, 16);">*</span></p>
-          {{ form.body|add_class:"newpost-body" }}
+          <p>質問内容 <span style="color:rgb(214, 16, 16);">*</span></p>
+          {{ form.body|add_class:"newpost-body form-control" }}
           <div class="checkbox">
             <label>
               {{ form.is_public }}
