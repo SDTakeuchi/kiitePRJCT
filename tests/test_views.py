@@ -6,12 +6,12 @@ import json
 
 class TestViews(TestCase):
     def setUp(self):
-        self.tag = Tag(name="test_tag", ordering_number=100)
-        self.tag.save()
-        self.client = Client()
         self.home_url = reverse('home')
         self.login_url = reverse('login')
         self.new_post_url = reverse('postNew')
+        self.tag = Tag(name="test_tag", ordering_number=100)
+        self.tag.save()
+        self.client = Client()
         self.post1 = Post.objects.create(
             title='Help meeee',
             tag=self.tag,
@@ -26,12 +26,16 @@ class TestViews(TestCase):
         self.assertTemplateUsed(response, 'home.html')
 
     def test_login_POST(self):
-        response = self.client.get(self.login_url)
-        response = Client().post('/accounts/login', {'username': 'takeuchidouglas@gmail.com', 'password': 'shuheitakeuchi'})
-        self.assertEqual(response.status_code, 301)
+        response1 = self.client.get(self.login_url)
+        response2 = self.client.post(
+            '/accounts/login',
+            {'username': 'doug@email.com', 'password': 'strongpassword123123'}
+        )
+        self.assertEqual(response1.status_code, 200)
+        self.assertEqual(response2.status_code, 301)
 
     def test_new_post_POST(self):
-        self.client.login(username='takeuchidouglas@gmail.com', password='shuheitakeuchi')
+        self.client.login(username='doug@email.com', password='strongpassword123123')
         # self.client.force_login(user, backend=None)
         response = self.client.post(self.new_post_url, {
             'title': 'Help me',

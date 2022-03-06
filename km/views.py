@@ -76,13 +76,12 @@ def loginView (request):
 			if article_url is not None:
 				return redirect(article_url)
 			if user.introduction == "まだプロフィールを記入していないようです、、、" or "":
-				messages.success(request,"プロフィールの記入がまだのようです！マイページから記入しましょう！")
+				messages.success(request, "プロフィールの記入がまだのようです！マイページから記入しましょう！")
 			return redirect('/posts/index')
 		else:
 			messages.info(request, "メールアドレスかパスワードが誤っています。")
 
-	context={}
-	return render(request, 'login.html', context)
+	return render(request, 'login.html')
 
 def logoutView (request):
 	logout(request)
@@ -157,13 +156,13 @@ def indexOthersView (request):
 @login_required(login_url='login')
 def showView (request, pk):
 	post = get_object_or_404(Post.objects.select_related('user'), id=pk)
-	comments = Comment.objects.filter(post=post).filter(is_reply_to__isnull=True)
-	cmtbks = Comment.objects.filter(post=post).exclude(is_reply_to__isnull=True)
+	all_comments = Comment.objects.filter(post=post)
+	comments = all_comments.filter(is_reply_to__isnull=True)
+	cmtbks = all_comments.exclude(is_reply_to__isnull=True)
 	context = {'post': post, 'comments':comments, 'cmtbks':cmtbks}
 	if request.user.student_status == '在学生':
-		if post.user != request.user:
-			if post.is_public == False:
-				return redirect('postIndex')
+		if post.user != request.user and post.is_public == False:
+			return redirect('postIndex')
 	return render(request, 'posts/show.html', context)
 
 # class PostDetailView(DetailView):
@@ -267,12 +266,12 @@ def newView (request):
 			messages.info(request, "質問が投稿されました")
 			return redirect('postIndex')
 
-	context={
+	context = {
 		'form':form,
 		'parent_category_list': parent_category_list,
 		'available_parent_industry_list': available_parent_industry_list,
 		'available_child_industry_list': available_child_industry_list,
-		}
+	}
 	return render(request, 'posts/new.html', context)
 
 @login_required(login_url='login')
