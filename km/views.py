@@ -181,6 +181,8 @@ def showView (request, pk):
 
 @login_required(login_url='login')
 def newView (request):
+	# 2022/4/1サービス終了に伴い質問機能を蓋締め
+	return redirect('postIndex')
 	form = PostForm()
 	current_user = request.user
 	parent_category_list = AlumniJobParentCategory.objects.all()
@@ -276,6 +278,8 @@ def newView (request):
 
 @login_required(login_url='login')
 def newMentionedView (request, pk):
+	# 2022/4/1サービス終了に伴い質問機能を蓋締め
+	return redirect('postIndex')
 	mentioned_user = CustomUser.objects.all().get(id = pk)
 	if mentioned_user.can_ask == False:
 		return redirect('postIndex')

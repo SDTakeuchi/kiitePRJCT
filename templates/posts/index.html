@@ -34,6 +34,8 @@
             </a>
           </div>
         </div>
+        {% comment %}
+        <!-- 2022/4/1サービス終了に伴い質問機能を蓋締め -->
         {% if not posts %}
           <a href="{% url 'postNew' %}">
             <h2 style="text-align:center; text-decoration: none; margin-top:13%; color:rgb(133, 133, 133);">Let's ask whatever question you've got!</h2>
@@ -42,6 +44,7 @@
             <a href="{% url 'postNew' %}" class="btn-text-3d" style="text-decoration: none; color:#fff;">質問を作成！</a>
           </div>
         {% endif %}
+        {% endcomment %}
       {% endif %}
 
       {% for post in posts %}
@@ -100,9 +103,13 @@
   </ul>
   {% endif %}
 </div>
+
+{% comment %}
+<!-- 2022/4/1サービス終了に伴い質問機能を蓋締め -->
 {% if posts %}
   {% if request.user.student_status == '在学生' %}
     <div class="newpostlink"><a href="{% url 'postNew' %}" class="btn-text-3d" style="text-decoration: none; color:#fff; width:74px; height:74px; line-height:74px; letter-spacing: 1px; font-size:13px;">質問作成</a></div>
   {% endif %}
 {% endif %}
+{% endcomment %}
 {% endblock %}
