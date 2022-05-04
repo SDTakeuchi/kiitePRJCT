@@ -93,15 +93,16 @@ def logoutView (request):
 
 @login_required(login_url='login')
 def indexView (request):
+    NUM_ONE_VIEW = 10
+
     post_list = Post.objects.all().order_by('-date_created')
     if request.user.student_status == '在学生':
         post_list = post_list.filter(user=request.user)
     page = request.GET.get('page', 1)
 
-    myFilter = PostFilter(request.GET, queryset=post_list)
-    post_list = myFilter.qs
+    post_filter = PostFilter(request.GET, queryset=post_list)
+    post_list = post_filter.qs
 
-    NUM_ONE_VIEW = 10
     paginator = Paginator(post_list, NUM_ONE_VIEW)
     try:
         posts = paginator.page(page)
@@ -110,33 +111,34 @@ def indexView (request):
     except EmptyPage:
         posts = paginator.page(paginator.num_pages)
 
-    pageNum = int(page)
-    fromNum = pageNum * NUM_ONE_VIEW - NUM_ONE_VIEW + 1
-    toNum = pageNum * NUM_ONE_VIEW
-    if toNum > len(post_list):
-        toNum = int(len(post_list))
+    page_num = int(page)
+    from_num = page_num * NUM_ONE_VIEW - NUM_ONE_VIEW + 1
+    to_num = page_num * NUM_ONE_VIEW
+    if to_num > len(post_list):
+        to_num = int(len(post_list))
 
     context = {
 		'posts':posts,
-		'myFilter':myFilter,
+		'post_filter':post_filter,
 		'post_list':post_list,
-		'fromNum':fromNum,
-		'toNum':toNum
+		'from_num':from_num,
+		'to_num':to_num
 	}
     return render(request, 'posts/index.html', context)
 
 @login_required(login_url='login')
 def indexOthersView (request):
+    NUM_ONE_VIEW = 10
+
     post_list = Post.objects.filter(is_public=True).order_by('-date_created')
     if request.user.student_status != '在学生':
         return redirect('postIndex')
     page = request.GET.get('page', 1)
 
-    myFilter = PostFilter(request.GET, queryset=post_list)
-    post_list = myFilter.qs
+    post_filter = PostFilter(request.GET, queryset=post_list)
+    post_list = post_filter.qs
 
-    numOneView = 10
-    paginator = Paginator(post_list, numOneView)
+    paginator = Paginator(post_list, NUM_ONE_VIEW)
     try:
         posts = paginator.page(page)
     except PageNotAnInteger:
@@ -144,13 +146,19 @@ def indexOthersView (request):
     except EmptyPage:
         posts = paginator.page(paginator.num_pages)
 
-    pageNum = int(page)
-    fromNum = pageNum * numOneView - numOneView + 1
-    toNum = pageNum * numOneView
-    if toNum > len(post_list):
-        toNum = int(len(post_list))
+    page_num = int(page)
+    from_num = page_num * NUM_ONE_VIEW - NUM_ONE_VIEW + 1
+    to_num = page_num * NUM_ONE_VIEW
+    if to_num > len(post_list):
+        to_num = int(len(post_list))
 
-    context = {'posts':posts, 'myFilter':myFilter, 'post_list':post_list, 'fromNum':fromNum, 'toNum':toNum}
+    context = {
+		'posts': posts,
+		'post_filter': post_filter,
+		'post_list': post_list,
+		'from_num': from_num,
+		'to_num': to_num
+	}
     return render(request, 'posts/index_others_q.html', context)
 
 @login_required(login_url='login')
@@ -159,7 +167,11 @@ def showView (request, pk):
 	all_comments = Comment.objects.filter(post=post)
 	comments = all_comments.filter(is_reply_to__isnull=True)
 	cmtbks = all_comments.exclude(is_reply_to__isnull=True)
-	context = {'post': post, 'comments':comments, 'cmtbks':cmtbks}
+	context = {
+		'post': post,
+		'comments': comments,
+		'cmtbks': cmtbks
+	}
 	if request.user.student_status == '在学生':
 		if post.user != request.user and post.is_public == False:
 			return redirect('postIndex')
@@ -332,7 +344,10 @@ def editView (request, pk):
 			messages.info(request, "質問が編集されました")
 			return redirect('postShow', pk=pk)
 
-	context={'post':post,'form':form}
+	context={
+		'post': post,
+		'form': form
+	}
 	return render(request, 'posts/edit.html', context)
 
 @login_required(login_url='login')

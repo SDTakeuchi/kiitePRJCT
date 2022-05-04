@@ -12,16 +12,16 @@
 
       {% if request.user.student_status == '卒業生'%}
       <form method="GET">
-        {{ myFilter.form.title.label_tag }}
-        {{ myFilter.form.title }}
+        {{ post_filter.form.title.label_tag }}
+        {{ post_filter.form.title }}
         <div class="kensakutag">
-        {{ myFilter.form.tag.label_tag }}
-        {{ myFilter.form.tag }}
+        {{ post_filter.form.tag.label_tag }}
+        {{ post_filter.form.tag }}
         </div>
         <button id="kensaku" class="btn btn-primary" type="submit">検索</button>
       </form>
       <div class="hitnum">
-        <p>検索結果：{{ post_list|length }} 件 ( {{fromNum}}~{{toNum}}件表示 )</p>
+        <p>検索結果：{{ post_list|length }} 件 ( {{from_num}}~{{to_num}}件表示 )</p>
       </div>
       {% else %}
         <div class="row" style="margin-bottom: 12px;">
