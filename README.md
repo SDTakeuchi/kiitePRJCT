@@ -136,7 +136,10 @@ cd kiitePRJCT
 pip install -r requirements.txt
 python manage.py migrate
 python manage.py runserver
-```
+
+docker build . -t kiite-me-demo
+docker run --name kiite-docker -p 8000:8000 kiite-me-demo
+```イメージの作成に3分から4分ほどかかる
 
 ※requirements.txtをpip installする際にuwsgiのインストールが上手くいかない場合があります。
 その際にはお手数ですが、requirements.txtより「uWSGI==2.0.19.1」の記載を消去していただくとpip installが完了されるようになります。ご確認の程よろしくお願いいたします。
