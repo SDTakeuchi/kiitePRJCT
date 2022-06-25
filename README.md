@@ -3,6 +3,8 @@
 
 # Description
 
+※ [Qiitaでもこちらのプロジェクトに関しての説明の記事を掲載しています。](https://qiita.com/SDTakeuchi/items/0c4b28bbc0b341b7c455)
+
 <h3>【概要】</h3>
 <p>　母校の大学生が同じ学部の先輩や卒業生に知恵袋サイトのような感覚で就活や学校生活の質問ができるサイト</p>
 
@@ -39,17 +41,27 @@
 <p>　　→ ESや履歴書の添削など個人的な質問をしづらい可能性が考えられたため、サイトの機能改修を行った</p>
 <p>　　　それまでは在学生同士でもお互いの質問を閲覧可能な状態だったが、不可な状態に変更。それに伴って卒業生ユーザーの登録に関しては運営が実際の卒業生か確認がとれた者だけに変更した</p>
 
-# DEMO
 
-<p>本番環境：https://kiite-me.site</p>
+# Installation
 
-大変恐縮ではございますが、上記本番環境では学習院大学生のみに登録を限定させていただいております。
+まずはgit cloneしてください。
 
-下記のデモ環境にて同様のサイトをご用意しておりますのでご参照ください。
+```bash
+git clone https://github.com/SDTakeuchi/kiitePRJCT.git
+```
 
-<p>デモ環境：http://18.177.150.91:8000 （ログイン画面でのパスワードはすでに入力しております。）</p>
+その後Dockerfileが存在するディレクトリで下記のコマンドを叩いてください。
 
-<p>なおログイン画面でのメールアドレスを"456@gmail.com"にしていただくと、卒業生ユーザーによるログインに切り替わり、全ての質問が閲覧可能となります。（パスワードは同じです。）</p>
+```bash
+docker build . -t kiite-me-demo
+docker run --name kiite-docker -p 8000:8000 kiite-me-demo
+```
+
+※ イメージの作成に2分から3分ほどかかります。
+
+コンテナが立ち上がった後に`http://localhost:8000/accounts/login/`にアクセスしてログインができます。
+
+デフォルトで入力されている値でログインすれば在学生ユーザーとしてログインしますが、のメールアドレスを"456@gmail.com"にしていただくと、卒業生ユーザーによるログインに切り替わり、全ての質問が閲覧可能となります。（パスワードは同じです。）
 
 # Features
 
@@ -80,69 +92,6 @@
 
 ☆前日の20:00~当日の19:59までに投稿された質問を卒業生ユーザーにお知らせする機能(django-crontabを使用)
 
-# Requirement
-
-- asgiref==3.3.1
-- boto3==1.16.51
-- botocore==1.19.51
-- bottle==0.12.19
-- bottle-websocket==0.2.9
-- certifi==2020.12.5
-- chardet==4.0.0
-- Django==3.1.4
-- django-crontab==0.7.1
-- django-filter==2.4.0
-- django-storages==1.11.1
-- django-widget-tweaks==1.4.8
-- Eel==0.12.4
-- future==0.18.2
-- gevent==21.1.0
-- gevent-websocket==0.10.1
-- greenlet==1.0.0
-- httplib2==0.18.1
-- idna==2.10
-- jmespath==0.10.0
-- oauthlib==3.1.0
-- opencv-python==4.4.0.46
-- Pillow==7.2.0
-- psycopg2==2.8.6
-- python-dateutil==2.8.1
-- python-decouple==3.4
-- pytz==2020.5
-- requests==2.25.1
-- requests-oauthlib==1.3.0
-- s3transfer==0.3.3
-- six==1.15.0
-- sqlparse==0.4.1
-- urllib3==1.26.2
-- uWSGI==2.0.19.1
-- whichcraft==0.6.1
-- whitenoise==5.2.0
-- zope.event==4.5.0
-- zope.interface==5.2.0
-
-
-# Installation
-
-```bash
-pip install -r requirements.txt
-```
-
-# Usage
-
-```bash
-git clone https://github.com/SDTakeuchi/kiitePRJCT.git
-cd kiitePRJCT
-pip install -r requirements.txt
-python manage.py migrate
-python manage.py runserver
-
-docker build . -t kiite-me-demo
-docker run --name kiite-docker -p 8000:8000 kiite-me-demo
-```イメージの作成に3分から4分ほどかかる
-
-※requirements.txtをpip installする際にuwsgiのインストールが上手くいかない場合があります。
-その際にはお手数ですが、requirements.txtより「uWSGI==2.0.19.1」の記載を消去していただくとpip installが完了されるようになります。ご確認の程よろしくお願いいたします。
 
 # Author
 
@@ -186,6 +135,29 @@ Kiite-me! is released under [MIT license](https://en.wikipedia.org/wiki/MIT_Lice
 <p>　●Inviting sponsors</p>
 <p>　　→ Expanding our service across faculties, we assume that the budget will rise to some extent. To continue to provide our service, we will have to ask some company or groups to sponsor us in the future.</p>
 
+# Installation
+
+First git clone the project.
+
+```bash
+git clone https://github.com/SDTakeuchi/kiitePRJCT.git
+```
+
+Then run the scripts below.
+
+```bash
+docker build . -t kiite-me-demo
+docker run --name kiite-docker -p 8000:8000 kiite-me-demo
+```
+
+Building the docker image takes approximately two to three minutes.
+
+After the docker container has started running, you can sign in the service at `http://localhost:8000/accounts/login/`.
+
+Using the default configuration, you can login as graduate user.
+
+Changing the mail address to "456@gmail.com", you can login as aluminium user with the same password.
+
 # DEMO
 
 <p>Actual site：https://kiite-me.site</p>
@@ -217,64 +189,6 @@ Please check out the demo site below instead, thank you.
 
 　※on Demp site and your local environment,you can go to [http://18.177.150.91:8000/signup] to sign up without two-step verification.
 
-# Requirement
-
-- asgiref==3.3.1
-- boto3==1.16.51
-- botocore==1.19.51
-- bottle==0.12.19
-- bottle-websocket==0.2.9
-- certifi==2020.12.5
-- chardet==4.0.0
-- Django==3.1.4
-- django-filter==2.4.0
-- django-storages==1.11.1
-- django-widget-tweaks==1.4.8
-- Eel==0.12.4
-- future==0.18.2
-- gevent==21.1.0
-- gevent-websocket==0.10.1
-- greenlet==1.0.0
-- httplib2==0.18.1
-- idna==2.10
-- jmespath==0.10.0
-- oauthlib==3.1.0
-- opencv-python==4.4.0.46
-- Pillow==7.2.0
-- psycopg2==2.8.6
-- python-dateutil==2.8.1
-- python-decouple==3.4
-- pytz==2020.5
-- requests==2.25.1
-- requests-oauthlib==1.3.0
-- s3transfer==0.3.3
-- six==1.15.0
-- sqlparse==0.4.1
-- urllib3==1.26.2
-- uWSGI==2.0.19.1
-- whichcraft==0.6.1
-- whitenoise==5.2.0
-- zope.event==4.5.0
-- zope.interface==5.2.0
-
-
-# Installation
-
-```bash
-pip install -r requirements.txt
-```
-
-# Usage
-
-```bash
-git clone https://github.com/SDTakeuchi/kiitePRJCT.git
-cd kiitePRJCT
-pip install -r requirements.txt
-python manage.py migrate
-python manage.py runserver
-```
-! There may be issuses when you run "pip install -r requirements.txt".
-  In that case, I kindly ask you to erace "uWSGI==2.0.19.1" in requirements.txt, then re-run "pip install -r requirements.txt".
 
 # Author
 
